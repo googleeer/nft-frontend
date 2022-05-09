@@ -1,0 +1,30 @@
+@import "fonts";
+@import "reset";
+@import "transitions";
+@import "helpers";
+@import "variables";
+
+html {
+  height: -webkit-fill-available;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: CoreSansC, sans-serif;
+  color: white;
+}
+
+html, body {
+  background: black;
+}
+
+#app {
+  flex-grow: 1;
+  font-family: CoreSansC, sans-serif;
+  display: flex;
+  flex-direction: column;
+}

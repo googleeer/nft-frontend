@@ -1,0 +1,15 @@
+@mixin fontFace($name, $file, $weight, $style){
+  @font-face {
+    font-family: "#{$name}";
+    font-weight: $weight;
+    font-style: $style;
+    font-display: swap;
+    src: url('~@/assets/fonts/#{$file}.eot');
+    src: url('~@/assets/fonts/#{$file}.eot?#iefix') format('embedded-opentype'),
+    url('~@/assets/fonts/#{$file}.woff') format('woff'),
+    url('~@/assets/fonts/#{$file}.ttf') format('truetype'),
+  }
+}
+
+@include fontFace(CoreSansC,CoreSansC-45Regular,400,normal);
+@include fontFace(SFPro,SFProDisplay-Regular,400,normal);
