@@ -13,11 +13,13 @@
     "lodash.clonedeep": "^4.5.0",
     "maska": "^1.5.0",
     "pinia": "^2.0.13",
+    "three": "^0.140.2",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@types/lodash.clonedeep": "^4.5.7",
+    "@types/three": "^0.140.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",

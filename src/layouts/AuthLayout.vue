@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div class="flex direction-column container align-center flex-grow-1">
     <img class="logo" src="../assets/images/logo.png" alt="WEEDAR" />
-    <div class="container__form">
+    <div class="container__form flex direction-column flex-grow-1">
       <h1 class="title">{{ title }}</h1>
       <p v-if="text" class="text">{{ text }}</p>
       <slot name="text"></slot>
