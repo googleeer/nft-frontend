@@ -15,11 +15,11 @@ body {
   flex-direction: column;
   justify-content: space-between;
   font-family: CoreSansC, sans-serif;
-  color: white;
+  color: var(--color-white);
 }
 
 html, body {
-  background: black;
+  background-color: var(--color-black);
 }
 
 #app {

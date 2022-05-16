@@ -13,7 +13,6 @@ export default defineComponent({
     errorText: String,
   },
   emits: ["update:modelValue", "update:errorText"],
-
   setup(props, context) {
     const validate = (value = props.modelValue) => {
       if (
@@ -61,7 +60,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .input {
-  border: 1px solid #212121;
+  border: 1px solid var(--color-eerie);
   box-sizing: border-box;
   border-radius: 40px;
   min-width: 335px;
@@ -69,7 +68,7 @@ export default defineComponent({
   transition: all 0.3s ease;
   font-size: 18px;
   line-height: 18px;
-  color: white;
+  color: var(--color-white);
   background: radial-gradient(
     113.12% 113.12% at 50.52% 50.52%,
     #292929 0%,
@@ -82,8 +81,8 @@ export default defineComponent({
       rgba(255, 241, 252, 0.25) 0%,
       rgba(255, 186, 243, 0.25) 100%
     );
-    border: 1px solid #f282ab;
-    color: #f282ab;
+    border: 1px solid var(--color-error);
+    color: var(--color-error);
   }
 
   &::placeholder {
@@ -91,7 +90,7 @@ export default defineComponent({
   }
 
   &:focus {
-    border: 1px solid #ffffff;
+    border: 1px solid var(--color-white);
   }
 
   &__error {
@@ -99,7 +98,7 @@ export default defineComponent({
     left: 0;
     top: calc(100% + 7px);
     right: 0;
-    color: #f282ab;
+    color: var(--color-error);
     font-size: 14px;
     line-height: 150%;
   }
@@ -112,7 +111,7 @@ export default defineComponent({
     bottom: 1px;
     font-size: 18px;
     line-height: 18px;
-    color: white;
+    color: var(--color-white);
     width: 68px;
     padding: 26px 0 20px 24px;
     &:after {

@@ -212,7 +212,7 @@ export default defineComponent({
       #292929 0%,
       #000000 100%
     );
-    border: 1px solid #212121;
+    border: 1px solid var(--color-eerie);
     border-radius: 100%;
     width: 49px;
     height: 49px;
@@ -228,7 +228,7 @@ export default defineComponent({
     }
 
     &.error {
-      border: 1px solid #f282ab;
+      border: 1px solid var(--color-error);
       background: radial-gradient(
         113.12% 113.12% at 50.52% 50.52%,
         rgba(242, 130, 171, 0.25) 0%,
@@ -237,7 +237,7 @@ export default defineComponent({
     }
 
     &.active:not(.error) {
-      border-color: white;
+      border-color: var(--color-white);
     }
 
     &:last-child.active {
@@ -255,7 +255,7 @@ export default defineComponent({
       transform: translateX(-50%);
       width: 14px;
       height: 1px;
-      background-color: white;
+      background-color: var(--color-white);
       bottom: 14px;
     }
   }
@@ -267,7 +267,7 @@ export default defineComponent({
     top: calc(100% + 7px);
     font-size: 14px;
     line-height: 150%;
-    color: #f282ab;
+    color: var(--color-error);
   }
 
   &--wrap {
@@ -284,7 +284,7 @@ export default defineComponent({
 
 .number {
   font-family: CoreSansC, sans-serif;
-  color: white;
+  color: var(--color-white);
   line-height: 21px;
 
   &--wrap {

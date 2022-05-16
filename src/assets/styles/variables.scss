@@ -1,4 +1,14 @@
 :root {
   --color-black: #000000;
+  --color-white: #ffffff;
   --color-gray: #808080;
+  --color-nero: #141414;
+  --color-eerie: #212121;
+  --color-error: #f282ab;
+
+//  z-index
+  --z-idx-main-menu-blur: 2;
+  --z-idx-main-menu: 3;
+  --z-idx-header-items: 4;
+  --z-index-header-logo: 1;
 }

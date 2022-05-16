@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "@/router";
-import { JWT_TOKEN_KEY } from "@/constans/constans";
+import { JWT_TOKEN_KEY } from "@/constants/constants";
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_WEEDAR_API_URL,

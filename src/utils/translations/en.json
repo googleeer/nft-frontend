@@ -1,0 +1,17 @@
+{
+  "menu": {
+    "myNft": "My NFTs",
+    "collections": "Collections",
+    "drops": "Drops",
+    "perks": "Perks"
+  },
+  "profile": {
+    "myWallet": "My Wallet",
+    "connectWallet": "Connect wallet",
+    "settings": "Settings",
+    "faq": "FAQ",
+    "referral": "Referral",
+    "notification": "Notification",
+    "logOut": "Log out"
+  }
+}

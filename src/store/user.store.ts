@@ -7,11 +7,13 @@ export const useUserStore = defineStore("userStore", () => {
     email: "",
     id: 0,
     phone: "",
+    name: null,
   });
-  const setUser = ({ phone, email, id }: User) => {
+  const setUser = ({ phone, email, id, name }: User) => {
     user.phone = phone;
     user.id = id;
     user.email = email;
+    user.name = name;
   };
 
   const userOrders = ref([]);

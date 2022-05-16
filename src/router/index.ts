@@ -1,17 +1,83 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import { JWT_TOKEN_KEY } from "@/constans/constans";
+import { JWT_TOKEN_KEY } from "@/constants/constants";
 import { getCurrentUser } from "@/service/user/user.service";
 import { useAppStateStore } from "@/store/appState.store";
+import { ROUTES } from "@/constants/routes.constants";
+
+declare module "vue-router" {
+  interface RouteMeta {
+    isAuth?: boolean;
+    layout?: string;
+  }
+}
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "home",
+    ...ROUTES.HOME,
     component: HomeView,
     meta: {
       isAuth: true,
+      layout: "base",
     },
+  },
+  {
+    ...ROUTES.MY_NFTS,
+    component: () =>
+      import(/* webpackChunkName: "myNft" */ "../views/MyNftView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
+    ...ROUTES.COLLECTIONS,
+    component: () =>
+      import(
+        /* webpackChunkName: "collections" */ "../views/CollectionsView.vue"
+      ),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
+    ...ROUTES.DROPS,
+    component: () =>
+      import(/* webpackChunkName: "drops" */ "../views/DropsView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
+    ...ROUTES.PERKS,
+    component: () =>
+      import(/* webpackChunkName: "perks" */ "../views/PerksView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
+    ...ROUTES.USER_SETTINGS,
+    component: () =>
+      import(
+        /* webpackChunkName: "userSettings" */ "../views/UserSettingsView.vue"
+      ),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+    children: [
+      {
+        ...ROUTES.USER_SETTINGS_WALLET,
+        component: () =>
+          import(
+            /* webpackChunkName: "userSettingsWallet" */ "../views/userSettings/UserSettingsWalletView.vue"
+          ),
+      },
+    ],
   },
   {
     path: "/test",
@@ -20,14 +86,12 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "sdf" */ "../views/TestView.vue"),
   },
   {
-    path: "/login",
-    name: "login",
+    ...ROUTES.LOGIN,
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/LoginView.vue"),
   },
   {
-    path: "/login/verify",
-    name: "verifyLogin",
+    ...ROUTES.LOGIN_VERIFY,
     component: () =>
       import(
         /* webpackChunkName: "verifyLogin" */ "../views/VerifyLoginView.vue"
@@ -42,6 +106,8 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  linkActiveClass: "active",
+  linkExactActiveClass: "exact-active",
 });
 
 router.beforeResolve((to, from, next) => {

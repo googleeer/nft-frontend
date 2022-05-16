@@ -1,6 +1,6 @@
 import instance from "@/service/api/api.instance";
 import { useUserStore } from "@/store/user.store";
-import { JWT_TOKEN_KEY } from "@/constans/constans";
+import { JWT_TOKEN_KEY } from "@/constants/constants";
 
 export const getCodeByPhone = async (phone: string) => {
   try {
@@ -24,4 +24,10 @@ export const verifyCodeByPhone = async (phone: string, code: string) => {
   } catch (e) {
     return Promise.reject(e);
   }
+};
+
+export const logOut = () => {
+  localStorage.removeItem(JWT_TOKEN_KEY);
+  const userStore = useUserStore();
+  userStore.$reset();
 };

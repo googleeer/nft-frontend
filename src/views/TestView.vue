@@ -165,6 +165,6 @@ export default defineComponent({
   right: 0;
   top: 0;
   padding: 10px;
-  background-color: #212121;
+  background-color: var(--color-eerie);
 }
 </style>
