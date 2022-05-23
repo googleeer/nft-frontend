@@ -15,12 +15,12 @@ export default defineComponent({
   emits: ["update:modelValue", "update:errorText"],
   setup(props, context) {
     const validate = (value = props.modelValue) => {
-      if (
-        value
-          .split("")
-          .filter((_) => _.trim())
-          .join("").length !== 10
-      ) {
+      const { length } = value
+        .split("")
+        .filter((_) => _.trim())
+        .join("");
+
+      if (length <= 7 || length >= 14) {
         context.emit("update:errorText", "Phone number is incorrect!");
       } else {
         context.emit("update:errorText", "");
@@ -43,13 +43,12 @@ export default defineComponent({
       class="input"
       :class="{ error: errorText.length }"
       type="text"
-      v-maska="'### ### ## ##'"
       :value="modelValue"
       @input="onInput($event.target.value)"
       @change="validate()"
       inputmode="numeric"
     />
-    <span class="input__code">+38</span>
+    <span class="input__code">+</span>
     <transition name="fade">
       <span class="input__error" v-if="errorText.length">
         {{ errorText }}
@@ -64,7 +63,7 @@ export default defineComponent({
   box-sizing: border-box;
   border-radius: 40px;
   min-width: 335px;
-  padding: 23px 0 23px 85px;
+  padding: 23px 0 23px 65px;
   transition: all 0.3s ease;
   font-size: 18px;
   line-height: 18px;
@@ -112,7 +111,7 @@ export default defineComponent({
     font-size: 18px;
     line-height: 18px;
     color: var(--color-white);
-    width: 68px;
+    width: 48px;
     padding: 26px 0 20px 24px;
     &:after {
       content: "";

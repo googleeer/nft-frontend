@@ -24,7 +24,7 @@ export default defineComponent({
       if (phoneErrorText.value.length) return;
       isLoading.value = true;
       try {
-        const phone = `+38${phoneValue.value
+        const phone = `+${phoneValue.value
           .split("")
           .filter((_) => !!_.trim())
           .join("")}`;
