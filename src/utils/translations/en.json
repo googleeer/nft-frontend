@@ -13,5 +13,9 @@
     "referral": "Referral",
     "notification": "Notification",
     "logOut": "Log out"
+  },
+  "login": {
+    "title": "Welcome",
+    "text": "Insert your phone number to get the verification code."
   }
 }
