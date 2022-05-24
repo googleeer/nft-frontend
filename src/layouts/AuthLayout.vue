@@ -39,13 +39,10 @@ export default defineComponent({
 .container {
   position: relative;
   width: 100%;
-  //background-image: url("~@/assets/images/bg-logo.svg");
-  //background-repeat: no-repeat;
   padding-top: 133px;
   text-align: center;
   padding-left: 15px;
   padding-right: 15px;
-  background-position: center center;
   &__form {
     max-width: 312px;
     &--title {
@@ -97,9 +94,4 @@ export default defineComponent({
     content: none;
   }
 }
-//.text {
-//  font-size: 20px;
-//  line-height: 150%;
-//  margin-bottom: 30px;
-//}
 </style>
