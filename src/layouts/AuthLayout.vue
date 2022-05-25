@@ -13,7 +13,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper flex justify-center align-center">
+  <div class="wrapper flex justify-center align-center flex-grow-1">
     <div class="flex direction-column container align-center">
       <img class="logo" src="../assets/images/logo.svg" alt="WEEDAR" />
       <div class="container__form flex direction-column flex-grow-1">
@@ -27,15 +27,6 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.wrapper {
-  height: 100vh;
-}
-::v-slotted(form) {
-  justify-content: flex-start;
-  @media screen and (max-width: 768px) {
-    justify-content: space-between;
-  }
-}
 .container {
   position: relative;
   width: 100%;

@@ -56,7 +56,7 @@ export default defineComponent({
   <AuthLayout :title="t('login.title')" :text="t('login.text')">
     <template #form>
       <form
-        class="login flex direction-column align-center form flex-grow-1 justify-between"
+        class="login flex direction-column align-center form flex-grow-1 justify-between-sm"
         @submit.prevent="getCode"
       >
         <PhoneInput
@@ -67,7 +67,7 @@ export default defineComponent({
         <BaseButton
           type="submit"
           :disabled="isLoading"
-          button-text="Get Code"
+          :button-text="t('login.getCode')"
         ></BaseButton>
       </form>
     </template>
