@@ -13,42 +13,76 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="flex direction-column container align-center flex-grow-1">
-    <img class="logo" src="../assets/images/logo.png" alt="WEEDAR" />
-    <div class="container__form flex direction-column flex-grow-1">
-      <h1 class="title">{{ title }}</h1>
-      <p v-if="text" class="text">{{ text }}</p>
-      <slot name="text"></slot>
-      <slot name="form"></slot>
+  <div class="wrapper flex justify-center align-center flex-grow-1">
+    <div class="flex direction-column container align-center">
+      <img class="logo" src="../assets/images/logo.svg" alt="WEEDAR" />
+      <div class="container__form flex direction-column flex-grow-1">
+        <h1 class="container__form--title">{{ title }}</h1>
+        <p v-if="text" class="container__form--text">{{ text }}</p>
+        <slot name="text"></slot>
+        <slot name="form" class="container__form--btn"></slot>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
-  padding-top: 24px;
+  position: relative;
+  width: 100%;
+  padding-top: 133px;
+  text-align: center;
   padding-left: 15px;
   padding-right: 15px;
-  text-align: left;
-
   &__form {
-    max-width: 335px;
+    max-width: 312px;
+    &--title {
+      font-size: 48px;
+      font-weight: 600;
+      padding-bottom: 38px;
+      line-height: 130%;
+      @media screen and (max-width: 768px) {
+        font-size: 32px;
+        line-height: 130%;
+        margin-bottom: 15px;
+      }
+    }
+    &--text {
+      line-height: 150%;
+      font-size: 20px;
+      padding-bottom: 38px;
+      @media screen and (max-width: 768px) {
+        font-size: 20px;
+        line-height: 150%;
+        margin-bottom: 30px;
+      }
+    }
+  }
+  &--btn {
+    max-width: 20px;
+  }
+  ::v-deep(.button) {
+    margin-top: 116px;
   }
 }
 .logo {
-  width: 70px;
-  margin-bottom: 60px;
+  width: 104px;
+  margin-bottom: 77px;
+  @media screen and (max-width: 768px) {
+    width: 70px;
+    margin-bottom: 60px;
+  }
 }
-
-.title {
-  font-size: 32px;
-  line-height: 130%;
-  margin-bottom: 15px;
-}
-
-.text {
-  font-size: 20px;
-  line-height: 150%;
-  margin-bottom: 30px;
+.wrapper::before {
+  content: "";
+  position: absolute;
+  background-image: url("~@/assets/images/bg-logo.svg");
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  @media screen and (max-width: 768px) {
+    content: none;
+  }
 }
 </style>

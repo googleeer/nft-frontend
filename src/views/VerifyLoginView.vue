@@ -5,11 +5,13 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { getCodeByPhone, verifyCodeByPhone } from "@/service/auth/auth.service";
 import AuthLayout from "@/layouts/AuthLayout.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "VerifyLoginView",
   components: { AuthLayout },
   setup() {
+    const { t } = useI18n();
     const router = useRouter();
     const appState = useAppStateStore();
     const { verifiedPhone } = storeToRefs(appState);
@@ -94,21 +96,23 @@ export default defineComponent({
       onInput,
       getChart,
       getCaret,
+      t,
     };
   },
 });
 </script>
 
 <template>
-  <AuthLayout title="Verification">
+  <AuthLayout :title="t('verify.title')">
     <template #text>
-      <p class="text">We sent you an SMS code</p>
+      <p class="text">{{ t("verify.sentSms") }}</p>
       <p class="number--wrap">
-        On number <span class="number">{{ verifiedPhone }}</span>
+        {{ t("verify.onNumber") }}
+        <span class="number">{{ verifiedPhone }}</span>
       </p>
     </template>
     <template #form>
-      <div class="flex direction-column">
+      <div class="flex direction-column justify-between-sm">
         <div class="input--wrap">
           <input
             class="input"
@@ -143,16 +147,15 @@ export default defineComponent({
         <transition name="fade">
           <div class="timer__wrap" v-if="mounted">
             <p class="timer__text">
-              {{
-                timer ? "We sent code again" : "Didn't you receive code here?"
-              }}
+              {{ timer ? t("verify.sentAgain") : t("verify.isReceive") }}
             </p>
             <transition name="fade" mode="out-in">
               <p class="timer__active" key="active" v-if="timer">
-                Resend 00:{{ timer >= 10 ? timer : `0${timer}` }}
+                {{ t("verify.resendTimer") }}
+                {{ timer >= 10 ? timer : `0${timer}` }}
               </p>
               <p v-else key="button" @click="resend" class="timer__button">
-                Resend New Code
+                {{ t("verify.resendNew") }}
               </p>
             </transition>
           </div>

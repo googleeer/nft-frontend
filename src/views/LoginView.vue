@@ -6,11 +6,13 @@ import { getCodeByPhone } from "@/service/auth/auth.service";
 import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import AuthLayout from "@/layouts/AuthLayout";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "LoginView",
   components: { AuthLayout, PhoneInput, BaseButton },
   setup() {
+    const { t } = useI18n();
     const phoneInputRef = ref(null);
     const phoneValue = ref("");
     const phoneErrorText = ref("");
@@ -39,6 +41,7 @@ export default defineComponent({
     };
 
     return {
+      t,
       phoneValue,
       phoneErrorText,
       getCode,
@@ -50,13 +53,10 @@ export default defineComponent({
 </script>
 
 <template>
-  <AuthLayout
-    title="Welcome!"
-    text="Insert your phone number to get the verification code."
-  >
+  <AuthLayout :title="t('login.title')" :text="t('login.text')">
     <template #form>
       <form
-        class="login flex direction-column align-center form flex-grow-1 justify-between"
+        class="login flex direction-column align-center form flex-grow-1 justify-between-sm"
         @submit.prevent="getCode"
       >
         <PhoneInput
@@ -67,7 +67,7 @@ export default defineComponent({
         <BaseButton
           type="submit"
           :disabled="isLoading"
-          button-text="Get Code"
+          :button-text="t('login.getCode')"
         ></BaseButton>
       </form>
     </template>

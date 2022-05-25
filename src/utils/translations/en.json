@@ -13,5 +13,19 @@
     "referral": "Referral",
     "notification": "Notification",
     "logOut": "Log out"
+  },
+  "login": {
+    "title": "Welcome",
+    "text": "Insert your phone number to get the verification code.",
+    "getCode": "Get Code"
+  },
+  "verify": {
+    "title": "Verification",
+    "sentSms": "We sent you an SMS code",
+    "onNumber": "On number",
+    "sentAgain": "We sent code again",
+    "isReceive": "Didn't you receive code here?",
+    "resendTimer": "Resend 00 :",
+    "resendNew": "Resend New Code"
   }
 }
