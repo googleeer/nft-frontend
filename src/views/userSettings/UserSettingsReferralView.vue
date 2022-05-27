@@ -12,7 +12,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper padding-settings">
     <div v-html="t('description')" class="referral"></div>
   </div>
 </template>
@@ -20,8 +20,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   .referral {
-    padding-left: 80px;
-    padding-right: 15px;
     @media screen and (max-width: 768px) {
       padding-top: 36px;
       padding-left: 15px;

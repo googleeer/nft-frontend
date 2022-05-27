@@ -75,6 +75,11 @@
   flex-grow: 1;
 }
 
+.padding-settings{
+  padding-left: 80px;
+  padding-right: 15px;
+}
+
 @media screen and (max-width: 768px) {
   .justify-center-sm {
     justify-content: center;
