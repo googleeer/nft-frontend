@@ -11,6 +11,7 @@ export default defineComponent({
     icon: String,
     text: String,
     withOutBorder: Boolean,
+    borderRadius: String,
   },
   setup() {
     return {};
@@ -20,7 +21,12 @@ export default defineComponent({
 
 <template>
   <RouterLink :to="to" class="link">
-    <SettingsItem :icon="icon" :text="text" :with-out-border="withOutBorder">
+    <SettingsItem
+      :icon="icon"
+      :text="text"
+      :with-out-border="withOutBorder"
+      :border-radius="borderRadius"
+    >
       <SettingsItemArrow />
     </SettingsItem>
   </RouterLink>
@@ -47,7 +53,6 @@ export default defineComponent({
     border-radius: 32px;
     width: 56px;
     height: 40px;
-
     &__svg {
       transition: all 0.3s ease;
     }

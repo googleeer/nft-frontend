@@ -6,15 +6,15 @@ export default defineComponent({
   name: "UserSettingsFaq",
   setup() {
     const show = ref(false);
-    const currentTitle = ref();
+    const currentIndexItem = ref();
     const { t } = useI18n();
-    function showCurrentItem(item: { title: string }) {
-      if (currentTitle.value === item.title) {
-        currentTitle.value = "";
+    const showCurrentItem = (key: number) => {
+      if (currentIndexItem.value === key) {
+        currentIndexItem.value = "";
       } else {
-        currentTitle.value = item.title;
+        currentIndexItem.value = key;
       }
-    }
+    };
     const data = [
       {
         title: "General helpex",
@@ -36,7 +36,7 @@ export default defineComponent({
     return {
       show,
       data,
-      currentTitle,
+      currentIndexItem,
       showCurrentItem,
       t,
     };
@@ -46,13 +46,13 @@ export default defineComponent({
 
 <template>
   <div class="wrapper padding-settings">
-    <h1 class="title">{{ t("settings.title") }}</h1>
-    <p class="desc">{{ t("settings.desc") }}</p>
+    <h1 class="title">{{ t("settings.faq.title") }}</h1>
+    <p class="desc">{{ t("settings.faq.desc") }}</p>
     <div v-for="(item, key) of data" :key="key" class="faq">
       <div
-        @click="showCurrentItem(item)"
+        @click="showCurrentItem(key)"
         class="faq-item"
-        :class="{ active: currentTitle === item.title }"
+        :class="{ active: currentIndexItemx === key }"
       >
         <div class="faq-item-title flex justify-between align-center">
           <p class="faq-item-title-text">
@@ -76,8 +76,8 @@ export default defineComponent({
           </div>
           <span class="faq-item-title-line"></span>
         </div>
-        <transition name="desc">
-          <p class="faq-item-desc" v-if="currentTitle === item.title">
+        <transition name="fade">
+          <p class="faq-item-desc" v-if="currentIndexItem === key">
             {{ item.desc }}
           </p>
         </transition>
@@ -87,25 +87,6 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.desc-leave-active,
-.desc-enter-active {
-  transition: all 0.5s;
-}
-.desc-leave-to {
-  opacity: 0;
-}
-
-//.desc-enter-active,
-//.desc-leave-active {
-//  transition: all 2s;
-//}
-////.desc-enter-to {
-////  transform: translateX(10px);
-////}
-//.desc-leave-to {
-//  //transform: translateX(10px);
-//  opacity: 0;
-//}
 .title {
   font-weight: 600;
   font-size: 32px;
@@ -118,16 +99,17 @@ export default defineComponent({
   padding-bottom: 45px;
 }
 .wrapper {
+  width: 100%;
   @media screen and (max-width: 768px) {
     padding-left: 15px;
   }
 
   .faq {
+    width: 100%;
+    max-width: 720px;
     padding-bottom: 42px;
     &-item {
       position: relative;
-      width: 100%;
-      max-width: 720px;
       &-desc {
         padding-top: 9px;
         padding-bottom: 60px;

@@ -63,25 +63,25 @@ export default defineComponent({
         <div class="settings__menu__item--wrap">
           <SettingsLink
             text="profile.myWallet"
-            icon="settings"
+            icon="wallet.svg"
             :to="{ name: ROUTES.USER_SETTINGS_WALLET.name }"
             class="settings__menu__item"
           />
           <SettingsLink
             text="profile.faq"
-            icon="settings"
+            icon="faq.svg"
             :to="{ name: ROUTES.USER_SETTINGS_FAQ.name }"
             class="settings__menu__item"
           />
           <SettingsLink
             text="profile.referral"
-            icon="settings"
+            icon="referral.svg"
             :to="{ name: ROUTES.USER_SETTINGS_REFERRAL.name }"
             class="settings__menu__item"
           />
           <SettingsCheckbox
             text="profile.notification"
-            icon="settings"
+            icon="notify.svg"
             v-model="checkbox"
             class="settings__menu__item"
           />
@@ -90,7 +90,7 @@ export default defineComponent({
             :with-out-border="true"
             @click="onLogOut"
             text="profile.logOut"
-            icon="logOut"
+            icon="logOut.png"
             class="pointer"
           >
             <SettingsItemArrow />
