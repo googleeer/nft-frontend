@@ -6,7 +6,7 @@ import { ROUTES } from "@/constants/routes.constants";
 import SettingsItem from "@/components/common/SettingsItem.vue";
 import SettingsItemArrow from "@/components/common/SettingsItemArrow.vue";
 import { logOut } from "@/service/auth/auth.service";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
 import SettingsCheckbox from "@/components/common/SettingsCheckbox.vue";
@@ -25,6 +25,7 @@ export default defineComponent({
   setup() {
     const { t } = useI18n();
     const router = useRouter();
+    const route = useRoute();
     const appState = useAppStateStore();
     const userState = useUserStore();
     const { isMobile } = storeToRefs(appState);
@@ -41,6 +42,8 @@ export default defineComponent({
       user,
       checkbox,
       onLogOut,
+      route,
+      router,
     };
   },
 });
@@ -52,30 +55,36 @@ export default defineComponent({
       {{ t("profile.settings") }}
     </h1>
     <div class="flex">
-      <nav class="settings__menu">
+      <nav
+        class="settings__menu"
+        v-if="
+          route.path === ROUTES.USER_SETTINGS.path ||
+          (route.path !== ROUTES.USER_SETTINGS.path && !isMobile)
+        "
+      >
         <MenuUserProfile v-if="isMobile" type="settings" :user="user" />
         <div class="settings__menu__item--wrap">
           <SettingsLink
             text="profile.myWallet"
-            icon="settings"
-            :to="ROUTES.HOME.path"
+            icon="wallet.svg"
+            :to="{ name: ROUTES.USER_SETTINGS_WALLET.name }"
             class="settings__menu__item"
           />
           <SettingsLink
             text="profile.faq"
-            icon="settings"
-            :to="ROUTES.HOME.path"
+            icon="faq.svg"
+            :to="{ name: ROUTES.USER_SETTINGS_FAQ.name }"
             class="settings__menu__item"
           />
           <SettingsLink
             text="profile.referral"
-            icon="settings"
-            :to="ROUTES.HOME.path"
+            icon="referral.svg"
+            :to="{ name: ROUTES.USER_SETTINGS_REFERRAL.name }"
             class="settings__menu__item"
           />
           <SettingsCheckbox
             text="profile.notification"
-            icon="settings"
+            icon="notify.svg"
             v-model="checkbox"
             class="settings__menu__item"
           />
@@ -84,18 +93,35 @@ export default defineComponent({
             :with-out-border="true"
             @click="onLogOut"
             text="profile.logOut"
-            icon="logOut"
+            icon="logOut.png"
             class="pointer"
           >
             <SettingsItemArrow />
           </SettingsItem>
         </div>
       </nav>
+      <div
+        v-if="route.path !== ROUTES.USER_SETTINGS.path"
+        :class="[{ 'mob-padding': isMobile }, { 'desktop-padding': !isMobile }]"
+      >
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.desktop-padding {
+  width: 100%;
+  padding-left: 80px;
+  padding-right: 15px;
+}
+.mob-padding {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0 auto;
+}
 .settings {
   padding-top: 14px;
   background-color: var(--color-black);

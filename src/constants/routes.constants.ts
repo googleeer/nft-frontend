@@ -32,7 +32,15 @@ export const ROUTES = {
     name: "userSettings",
   },
   USER_SETTINGS_WALLET: {
-    path: "/wallet",
+    path: "wallet",
     name: "userSettingsWallet",
+  },
+  USER_SETTINGS_FAQ: {
+    path: "faq",
+    name: "userSettingsFaq",
+  },
+  USER_SETTINGS_REFERRAL: {
+    path: "referral",
+    name: "userSettingsReferral",
   },
 };

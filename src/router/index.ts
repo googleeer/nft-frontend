@@ -77,6 +77,20 @@ const routes: Array<RouteRecordRaw> = [
             /* webpackChunkName: "userSettingsWallet" */ "../views/userSettings/UserSettingsWalletView.vue"
           ),
       },
+      {
+        ...ROUTES.USER_SETTINGS_FAQ,
+        component: () =>
+          import(
+            /* webpackChunkName: "userSettingsFaq" */ "../views/userSettings/UserSettingsFaqView.vue"
+          ),
+      },
+      {
+        ...ROUTES.USER_SETTINGS_REFERRAL,
+        component: () =>
+          import(
+            /* webpackChunkName: "userSettingsReferral" */ "../views/userSettings/UserSettingsReferralView.vue"
+          ),
+      },
     ],
   },
   {
