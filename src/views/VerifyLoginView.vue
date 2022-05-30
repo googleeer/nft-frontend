@@ -225,9 +225,10 @@ export default defineComponent({
     cursor: text;
     font-size: 18px;
     line-height: 25px;
-
-    &:nth-child(3) {
-      margin-right: 19px;
+    @media screen and (min-width: 375px) {
+      &:nth-child(3) {
+        margin-right: 19px;
+      }
     }
 
     &.error {

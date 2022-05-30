@@ -35,7 +35,7 @@ export default defineComponent({
   padding-left: 15px;
   padding-right: 15px;
   &__form {
-    max-width: 312px;
+    max-width: 335px;
     &--title {
       font-size: 48px;
       font-weight: 600;

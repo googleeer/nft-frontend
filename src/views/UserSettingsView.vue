@@ -102,7 +102,7 @@ export default defineComponent({
       </nav>
       <div
         v-if="route.path !== ROUTES.USER_SETTINGS.path"
-        :class="[{ 'mob-padding': isMobile }, { 'desktop-padding': !isMobile }]"
+        class="settings-content"
       >
         <router-view></router-view>
       </div>
@@ -111,16 +111,15 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.desktop-padding {
+.settings-content {
   width: 100%;
   padding-left: 80px;
   padding-right: 15px;
-}
-.mob-padding {
-  width: 100%;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0 auto;
+  }
 }
 .settings {
   padding-top: 14px;
