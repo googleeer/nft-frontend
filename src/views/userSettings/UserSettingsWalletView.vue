@@ -15,7 +15,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper padding-settings">
+  <div class="wrapper">
     <h1 class="title">{{ t("settings.wallet.title") }}</h1>
     <p class="desc">{{ t("settings.wallet.desc") }}</p>
     <SettingsLink
@@ -46,7 +46,9 @@ export default defineComponent({
 .wrapper {
   width: 100%;
   max-width: 529px;
-  margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    margin: 0 auto;
+  }
   .wallet__item {
     max-width: 529px;
     @media screen and (max-width: 768px) {

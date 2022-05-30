@@ -12,7 +12,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper padding-settings">
+  <div class="wrapper">
     <div v-html="t('description')" class="referral"></div>
   </div>
 </template>
