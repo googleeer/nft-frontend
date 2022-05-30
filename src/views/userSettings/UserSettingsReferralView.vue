@@ -20,6 +20,8 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   .referral {
+    width: 100%;
+    max-width: 743px;
     @media screen and (max-width: 768px) {
       padding-top: 36px;
       padding-left: 15px;

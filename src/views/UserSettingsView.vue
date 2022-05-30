@@ -57,7 +57,10 @@ export default defineComponent({
     <div class="flex">
       <nav
         class="settings__menu"
-        v-if="route.path === ROUTES.USER_SETTINGS_REFERRAL.path || !isMobile"
+        v-if="
+          route.path === ROUTES.USER_SETTINGS.path ||
+          (route.path !== ROUTES.USER_SETTINGS.path && !isMobile)
+        "
       >
         <MenuUserProfile v-if="isMobile" type="settings" :user="user" />
         <div class="settings__menu__item--wrap">
@@ -97,12 +100,28 @@ export default defineComponent({
           </SettingsItem>
         </div>
       </nav>
-      <router-view></router-view>
+      <div
+        v-if="route.path !== ROUTES.USER_SETTINGS.path"
+        :class="[{ 'mob-padding': isMobile }, { 'desktop-padding': !isMobile }]"
+      >
+        <router-view></router-view>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.desktop-padding {
+  width: 100%;
+  padding-left: 80px;
+  padding-right: 15px;
+}
+.mob-padding {
+  width: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 0 auto;
+}
 .settings {
   padding-top: 14px;
   background-color: var(--color-black);

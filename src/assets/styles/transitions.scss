@@ -1,7 +1,6 @@
-.fade-enter-active, .fade-leave-active, .desc-leave-active,
-.desc-enter-active {
+.fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }
-.fade-enter, .fade-leave-to, desc-leave-to, desc-enter-to {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }

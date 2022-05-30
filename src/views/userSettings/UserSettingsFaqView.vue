@@ -9,11 +9,9 @@ export default defineComponent({
     const currentIndexItem = ref();
     const { t } = useI18n();
     const showCurrentItem = (key: number) => {
-      if (currentIndexItem.value === key) {
-        currentIndexItem.value = "";
-      } else {
-        currentIndexItem.value = key;
-      }
+      currentIndexItem.value === key
+        ? (currentIndexItem.value = "")
+        : (currentIndexItem.value = key);
     };
     const data = [
       {
@@ -21,7 +19,7 @@ export default defineComponent({
         desc: "As a reminder, you are solely responsible for validating this information and determining what, if any, taxes apply to your NFT sales and/or creator earnings. ",
       },
       {
-        title: "Contact Weedar Suppor",
+        title: "Contact Weedar Support",
         desc: "As a reminder, you are solely responsible for validating this information and determining what, if any, taxes apply to your NFT sales and/or creator earnings. ",
       },
       {
@@ -52,7 +50,7 @@ export default defineComponent({
       <div
         @click="showCurrentItem(key)"
         class="faq-item"
-        :class="{ active: currentIndexItemx === key }"
+        :class="{ active: currentIndexItem === key }"
       >
         <div class="faq-item-title flex justify-between align-center">
           <p class="faq-item-title-text">

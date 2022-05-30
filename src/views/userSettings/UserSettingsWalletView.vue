@@ -45,19 +45,23 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   width: 100%;
-
+  max-width: 529px;
+  margin: 0 auto;
   .wallet__item {
-    position: relative;
     max-width: 529px;
+    @media screen and (max-width: 768px) {
+      margin: 0 auto;
+    }
   }
 
   .wallet__item:not(:last-child) {
     ::v-deep(.item__content) {
+      position: relative;
       &::before {
         position: absolute;
         content: "";
-        bottom: -1px;
-        width: 75%;
+        bottom: -25px;
+        width: 100%;
         z-index: 1;
         border: 1px dashed #1e1e1e;
       }

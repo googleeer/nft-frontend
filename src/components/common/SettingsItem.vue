@@ -12,13 +12,11 @@ export default defineComponent({
   },
   setup(props) {
     const { t } = useI18n();
-    const border = computed(() => {
-      return {
-        border__radius__none: props.borderRadius === "none",
-        border__radius__top: props.borderRadius === "top",
-        border__radius__bottom: props.borderRadius === "bottom",
-      };
-    });
+    const border = computed(() => ({
+      border__radius__none: props.borderRadius === "none",
+      border__radius__top: props.borderRadius === "top",
+      border__radius__bottom: props.borderRadius === "bottom",
+    }));
     return { t, border };
   },
 });
