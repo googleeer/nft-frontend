@@ -1,24 +1,31 @@
-# This is a basic workflow to help you get started with Actions
+name: Sync Upstream
 
-name: SYNC FORK
+env:
+  # Required, URL to upstream (fork base)
+  UPSTREAM_URL: "https://github.com/weedar-projects/nft-frontend"
+  # Required, token to authenticate bot, could use ${{ secrets.GITHUB_TOKEN }} 
+  # Over here, we use a PAT instead to authenticate workflow file changes.
+  WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
+  # Optional, defaults to main
+  UPSTREAM_BRANCH: "develop"
+  # Optional, defaults to UPSTREAM_BRANCH
+  DOWNSTREAM_BRANCH: "develop"
 
+# This runs every day on 1801 UTC
 on:
-  workflow_dispatch:
   schedule:
-  - cron: "0 13 * * 1"
+    - cron: '1 14 * * *'
+  # Allows manual workflow run (must in default branch to work)
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
-      - name: Sync and merge upstream repository with your current repository
-           uses: dabreadman/sync-upstream-repo@v1.2.0.b
-           with:
-               upstream_repo: https://github.com/weedar-projects/nft-frontend
-               upstream_branch: develop
-               downstream_branch:develop
-    # GitHub Bot token
-    token: ${{ secrets.GT-WEEDAR }}
+      - name: GitHub Sync to Upstream Repository
+        uses: dabreadman/sync-upstream-repo@v1.1.0.b
+        with: 
+          upstream_repo: ${{ env.UPSTREAM_URL }}
+          upstream_branch: ${{ env.UPSTREAM_BRANCH }}
+          downstream_branch: ${{ env.DOWNSTREAM_BRANCH }}
+          token: ${{ env.WORKFLOW_TOKEN }}
