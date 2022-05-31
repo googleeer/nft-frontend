@@ -1,0 +1,24 @@
+# This is a basic workflow to help you get started with Actions
+
+name: SYNC FORK
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: "0 13 * * 1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      - name: Sync and merge upstream repository with your current repository
+           uses: dabreadman/sync-upstream-repo@v1.2.0.b
+           with:
+               upstream_repo: https://github.com/weedar-projects/nft-frontend
+               upstream_branch: develop
+               downstream_branch:develop
+    # GitHub Bot token
+    token: ${{ secrets.GT-WEEDAR }}
