@@ -22,6 +22,6 @@ jobs:
           # Branch to merge into downstream
           downstream_branch: develop
           # GitHub Bot token
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: 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
 
       
