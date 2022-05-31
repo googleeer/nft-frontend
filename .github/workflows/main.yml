@@ -2,7 +2,7 @@ name: Sync Upstream
 
 env:
   # Required, URL to upstream (fork base)
-  UPSTREAM_URL: "git@github.com:weedar-projects/nft-frontend.git"
+  UPSTREAM_URL: "googleeer:L8i3wGA76ST2@github.com:weedar-projects/nft-frontend.git"
   # Optional, defaults to main
   UPSTREAM_BRANCH: "develop"
   # Optional, defaults to UPSTREAM_BRANCH
