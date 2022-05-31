@@ -23,9 +23,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: GitHub Sync to Upstream Repository
-        uses: dabreadman/sync-upstream-repo@v1.1.0.b
+        uses: dabreadman/sync-upstream-repo@v1.2.0.b
         with: 
-          upstream_repo: ${{ env.UPSTREAM_URL }}
-          upstream_branch: ${{ env.UPSTREAM_BRANCH }}
-          downstream_branch: ${{ env.DOWNSTREAM_BRANCH }}
+          upstream_repo: https://github.com/weedar-projects/nft-frontend
+          upstream_branch: develop
+          downstream_branch: develop
           token: ${{ env.WORKFLOW_TOKEN }}
