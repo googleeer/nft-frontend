@@ -1,15 +1,8 @@
 name: Sync Upstream
 
 env:
-  # Required, URL to upstream (fork base)
-  UPSTREAM_URL: "https://github.com/weedar-projects/nft-frontend"
-  # Required, token to authenticate bot, could use ${{ secrets.GITHUB_TOKEN }} 
-  # Over here, we use a PAT instead to authenticate workflow file changes.
   WORKFLOW_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
-  # Optional, defaults to main
-  UPSTREAM_BRANCH: "develop"
-  # Optional, defaults to UPSTREAM_BRANCH
-  DOWNSTREAM_BRANCH: "develop"
+
 
 # This runs every day on 1801 UTC
 on:
@@ -25,7 +18,7 @@ jobs:
       - name: GitHub Sync to Upstream Repository
         uses: dabreadman/sync-upstream-repo@v1.2.0.b
         with: 
-          upstream_repo: https://github.com/weedar-projects/nft-frontend
+          upstream_repo: https://github.com/weedar-projects/nft-frontend.git
           upstream_branch: develop
           downstream_branch: develop
           token: ${{ env.WORKFLOW_TOKEN }}
