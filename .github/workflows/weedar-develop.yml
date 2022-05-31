@@ -1,4 +1,4 @@
-name: Sync Fork
+name: SYNC_NFT_DEV
 
 on:
   workflow_dispatch:
@@ -16,12 +16,12 @@ jobs:
         uses: dabreadman/sync-upstream-repo@v1.2.0.b
         with:
           # URL of gitHub public upstream repo
-          upstream_repo: https://github.com/weedar-projects/nft-frontend
+          upstream_repo: https://github.com/weedar-projects/nft-frontend.git
           # Branch to merge from upstream (defaults to downstream branch)
           upstream_branch: develop
           # Branch to merge into downstream
           downstream_branch: develop
           # GitHub Bot token
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WEEDAR_DEVELOP }}
 
       
