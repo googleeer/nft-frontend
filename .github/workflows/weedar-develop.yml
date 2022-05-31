@@ -13,10 +13,10 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Sync and merge upstream repository with your current repository
-        uses: dabreadman/sync-upstream-repo@v1.0.0.b
+        uses: dabreadman/sync-upstream-repo@v1.2.0.b
         with:
           # URL of gitHub public upstream repo
-          upstream_repo: "googleeer:L8i3wGA76ST2@github.com/weedar-projects/nft-frontend.git"
+          upstream_repo: http://github.com/weedar-projects/nft-frontend
           # Branch to merge from upstream (defaults to downstream branch)
           upstream_branch: develop
           # Branch to merge into downstream
