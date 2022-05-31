@@ -3,7 +3,7 @@ name: SYNC_NFT_DEV
 on:
   workflow_dispatch:
   schedule: 
-  - cron: "0 13 * * 1"
+  - cron: "*/30 * * * *"
   
 jobs:
   sync:
