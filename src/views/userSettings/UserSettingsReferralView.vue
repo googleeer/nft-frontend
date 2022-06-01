@@ -31,7 +31,7 @@ export default defineComponent({
       font-size: 16px;
       padding: 12px 0;
       line-height: 150%;
-      color: #ffffff;
+      color: var(--color-white);
       @media screen and (max-width: 768px) {
         font-size: 20px;
         padding-bottom: 7px;

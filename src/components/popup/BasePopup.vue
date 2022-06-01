@@ -49,7 +49,7 @@ export default defineComponent({
     #292929 0%,
     #000000 100%
   );
-  border: 1px solid #212121;
+  border: 1px solid var(--color-eerie);
   border-radius: 24px;
 }
 .popup__cancel {
