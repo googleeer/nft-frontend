@@ -43,8 +43,4 @@ export const ROUTES = {
     path: "referral",
     name: "userSettingsReferral",
   },
-  USER_SETTINGS_WALLET_MASK_POPUP: {
-    path: "wallet/mask",
-    name: "userSettingsWalletMaskPopup",
-  },
 };

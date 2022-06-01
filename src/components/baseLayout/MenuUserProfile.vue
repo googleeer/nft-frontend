@@ -103,7 +103,7 @@ export default defineComponent({
       <SettingsLink
         :with-out-border="true"
         :to="ROUTES.USER_SETTINGS.path"
-        icon="settings.png"
+        icon="settings.svg"
         text="profile.settings"
         class="desktopMenu__settingsLink"
       />
@@ -111,7 +111,7 @@ export default defineComponent({
         @click="onLogOut"
         :with-out-border="true"
         text="profile.logOut"
-        icon="logOut.png"
+        icon="logout.svg"
         class="desktopMenu__logOutLink pointer"
       >
         <SettingsItemArrow />
