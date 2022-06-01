@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, nextTick, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 import SettingsItem from "@/components/common/SettingsItem.vue";
 import SettingsItemArrow from "@/components/common/SettingsItemArrow.vue";
 

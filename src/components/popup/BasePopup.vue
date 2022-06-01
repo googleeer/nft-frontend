@@ -1,58 +1,42 @@
-<template>
-  <div class="wrapper flex flexCenter" @click.stop.self="closeModal('close')">
-    <div :id="modalTeleport" class="popup flex flexCenter direction-column">
-      <span class="popup__cancel" @click.self="closeModal('close')"></span>
-    </div>
-  </div>
-
-  <MetamaskModal :btns="btns" @closeModal="closeModal"></MetamaskModal>
-</template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import MetamaskModal from "@/components/modal/MetamaskModal.vue";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
 export default defineComponent({
   name: "BasePopup",
-  components: { MetamaskModal },
   setup() {
     const appStateStore = useAppStateStore();
-    const btns = [
-      {
-        styleType: "simple",
-        text: "Cancel",
-        textColor: "white",
-        type: "close",
-      },
-      {
-        styleType: "default",
-        text: "install",
-        textColor: "black",
-        type: "install",
-      },
-    ];
-    const closeModal = (type: string) => {
-      if (type === "close" || !type) {
-        appStateStore.setIsShowModal(false);
-      }
-    };
+    const closeModal = () => appStateStore.setIsShowModal(false);
     const appStore = useAppStateStore();
-    const { modalTeleport } = storeToRefs(appStore);
-    return { closeModal, modalTeleport, btns };
+    const { showModal } = storeToRefs(appStore);
+    return { closeModal, showModal };
   },
 });
 </script>
+
+<template>
+  <transition name="fade">
+    <div
+      v-show="showModal"
+      class="wrapper flex flexCenter"
+      @click.stop.self="closeModal()"
+    >
+      <div id="modal" class="popup flex flexCenter direction-column">
+        <span class="popup__cancel" @click.self="closeModal()"></span>
+      </div>
+    </div>
+  </transition>
+</template>
+
 <style scoped lang="scss">
 .wrapper {
   position: fixed;
   inset: 0;
-  z-index: 1;
+  z-index: var(--z-index-modal);
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(27.1828px);
-
-  transition: all 3s ease;
 }
 .popup {
   position: relative;

@@ -55,8 +55,8 @@ export default defineComponent({
         alt="WEEDAR"
         class="layout__logo"
       />
-      <div class="flex">
-        <LocaleSwitcher />
+      <div class="flex layout__header__right">
+        <LocaleSwitcher v-if="!isMobile || (isMobile && isOpenMenu)" />
         <UserAvatar
           class="avatar"
           v-if="!isMobile"
@@ -93,12 +93,20 @@ export default defineComponent({
     }
   }
 
-  &--wrap {
-    padding: 55px 56px 0;
+  &__header {
+    &__right {
+      position: fixed;
+      right: 56px;
+      top: 55px;
 
-    @media screen and (max-width: 768px) {
-      padding: 57px 0 0;
+      @media screen and (max-width: 768px) {
+        position: static;
+      }
     }
+  }
+
+  &--wrap {
+    position: relative;
   }
 
   &__empty {
