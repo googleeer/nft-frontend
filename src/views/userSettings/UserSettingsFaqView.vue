@@ -43,7 +43,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper padding-settings">
+  <div class="wrapper">
     <h1 class="title">{{ t("settings.faq.title") }}</h1>
     <p class="desc">{{ t("settings.faq.desc") }}</p>
     <div v-for="(item, key) of data" :key="key" class="faq">
