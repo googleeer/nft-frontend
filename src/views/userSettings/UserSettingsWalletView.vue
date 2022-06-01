@@ -4,18 +4,23 @@ import SettingsLink from "@/components/common/SettingsLink.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import { useI18n } from "vue-i18n";
 import { useAppStateStore } from "@/store/appState.store";
+import MetamaskModal from "@/components/modal/MetamaskModal.vue";
 
 export default defineComponent({
   name: "UserSettingsWallet",
-  components: { SettingsLink },
+  components: { MetamaskModal, SettingsLink },
   setup() {
     const { t } = useI18n();
     const appStateStore = useAppStateStore();
-    const showModal = (value: string) => {
-      appStateStore.setIsModalTeleport(value);
-      appStateStore.setIsShowModal(true);
+    const changeModalState = (value: boolean) =>
+      appStateStore.setIsShowModal(value);
+
+    const handleModalClick = (type: string) => {
+      if (type === "close") {
+        changeModalState(false);
+      }
     };
-    return { ROUTES, t, showModal };
+    return { ROUTES, t, changeModalState, handleModalClick };
   },
 });
 </script>
@@ -29,7 +34,7 @@ export default defineComponent({
       icon="fox.svg"
       :border-radius="'top'"
       class="wallet__item"
-      @click="showModal('metamask')"
+      @click="changeModalState(true)"
     />
     <SettingsLink
       text="settings.wallet.items.walletConnect"
@@ -43,6 +48,7 @@ export default defineComponent({
       :border-radius="'bottom'"
       class="wallet__item"
     />
+    <MetamaskModal @btnClick="handleModalClick"></MetamaskModal>
   </div>
 </template>
 
