@@ -86,4 +86,22 @@ export default defineComponent({
     border: none;
   }
 }
+.btn {
+  .border__radius__none {
+    border-radius: 0;
+    border: none;
+  }
+
+  .border__radius__top {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border: none;
+  }
+
+  .border__radius__bottom {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border: none;
+  }
+}
 </style>

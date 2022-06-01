@@ -156,7 +156,7 @@ export default defineComponent({
   &--wrap {
     &.desktop {
       position: fixed;
-      top: 11px;
+      top: 41px;
       right: 36px;
       width: 292px;
     }

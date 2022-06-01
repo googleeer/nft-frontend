@@ -3,32 +3,37 @@ import { defineComponent } from "vue";
 import SettingsLink from "@/components/common/SettingsLink.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import { useI18n } from "vue-i18n";
+import { useAppStateStore } from "@/store/appState.store";
 
 export default defineComponent({
   name: "UserSettingsWallet",
   components: { SettingsLink },
   setup() {
     const { t } = useI18n();
-    return { ROUTES, t };
+    const appStateStore = useAppStateStore();
+    const showModal = (value: string) => {
+      appStateStore.setIsModalTeleport(value);
+      appStateStore.setIsShowModal(true);
+    };
+    return { ROUTES, t, showModal };
   },
 });
 </script>
 
 <template>
-  <div class="wrapper padding-settings">
+  <div class="wrapper">
     <h1 class="title">{{ t("settings.wallet.title") }}</h1>
     <p class="desc">{{ t("settings.wallet.desc") }}</p>
     <SettingsLink
       text="settings.wallet.items.metamask"
       icon="fox.svg"
       :border-radius="'top'"
-      :to="{ name: ROUTES.USER_SETTINGS_WALLET.name }"
       class="wallet__item"
+      @click="showModal('metamask')"
     />
     <SettingsLink
       text="settings.wallet.items.walletConnect"
       icon="walletconnect.svg"
-      :to="{ name: ROUTES.USER_SETTINGS_FAQ.name }"
       :border-radius="'none'"
       class="wallet__item"
     />
@@ -36,7 +41,6 @@ export default defineComponent({
       text="settings.wallet.items.coinbaseWallet"
       icon="coinbase.svg"
       :border-radius="'bottom'"
-      :to="{ name: ROUTES.USER_SETTINGS_REFERRAL.name }"
       class="wallet__item"
     />
   </div>
@@ -46,7 +50,9 @@ export default defineComponent({
 .wrapper {
   width: 100%;
   max-width: 529px;
-  margin: 0 auto;
+  @media screen and (max-width: 768px) {
+    margin: 0 auto;
+  }
   .wallet__item {
     max-width: 529px;
     @media screen and (max-width: 768px) {
@@ -62,7 +68,7 @@ export default defineComponent({
         content: "";
         bottom: -25px;
         width: 100%;
-        z-index: 1;
+        z-index: 0;
         border: 1px dashed #1e1e1e;
       }
     }

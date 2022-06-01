@@ -32,6 +32,9 @@
     "wallet": {
       "title": "My wallet",
       "desc": "Connect your wallet",
+      "metamask": {
+        "info": "For the metamask plugin to work you need to install an extension from Google directory"
+      },
       "items": {
         "metamask": "Metamask",
         "walletConnect": "Wallet connect",

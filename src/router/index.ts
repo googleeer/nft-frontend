@@ -91,6 +91,13 @@ const routes: Array<RouteRecordRaw> = [
             /* webpackChunkName: "userSettingsReferral" */ "../views/userSettings/UserSettingsReferralView.vue"
           ),
       },
+      {
+        ...ROUTES.USER_SETTINGS_WALLET_MASK_POPUP,
+        component: () =>
+          import(
+            /* webpackChunkName: "userSettingsWalletMaskPopup" */ "../components/popup/BasePopup.vue"
+          ),
+      },
     ],
   },
   {
