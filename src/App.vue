@@ -28,12 +28,9 @@ export default defineComponent({
     const layout = computed<Component | null>(() =>
       route.meta.layout ? layouts[route.meta.layout] : null,
     );
-    const appStore = useAppStateStore();
-    const { showModal } = storeToRefs(appStore);
     return {
       preloader,
       layout,
-      showModal,
     };
   },
 });
@@ -45,7 +42,7 @@ export default defineComponent({
   <!--      <h1>This is loader ;)</h1>-->
   <!--    </div>-->
   <!--  </transition>-->
-  <BasePopup v-if="showModal"></BasePopup>
+  <BasePopup />
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <component v-if="layout" :is="layout">

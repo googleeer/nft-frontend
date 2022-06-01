@@ -51,17 +51,17 @@ export default defineComponent({
 
 <template>
   <div class="settings flex direction-column fullFlex">
-    <h1 class="settings__title">
-      {{ t("profile.settings") }}
-    </h1>
     <div class="flex">
       <nav
         class="settings__menu"
         v-if="
-          route.path === ROUTES.USER_SETTINGS.path ||
-          (route.path !== ROUTES.USER_SETTINGS.path && !isMobile)
+          route.name === ROUTES.USER_SETTINGS.name ||
+          (route.name !== ROUTES.USER_SETTINGS.name && !isMobile)
         "
       >
+        <h1 class="settings__title">
+          {{ t("profile.settings") }}
+        </h1>
         <MenuUserProfile v-if="isMobile" type="settings" :user="user" />
         <div class="settings__menu__item--wrap">
           <SettingsLink
@@ -104,7 +104,11 @@ export default defineComponent({
         v-if="route.path !== ROUTES.USER_SETTINGS.path"
         class="settings-content"
       >
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     </div>
   </div>
@@ -115,25 +119,36 @@ export default defineComponent({
   width: 100%;
   padding-left: 80px;
   padding-right: 15px;
+  padding-top: 63px;
   @media screen and (max-width: 768px) {
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 0;
     margin: 0 auto;
   }
 }
 .settings {
-  padding-top: 14px;
   background-color: var(--color-black);
+  padding: 133px 56px 0 382px;
+
+  @media screen and (max-width: 768px) {
+    padding: 71px 0 0;
+  }
 
   &__menu {
     width: 100%;
     max-width: 326px;
+    position: fixed;
+    z-index: 1;
+    left: 56px;
+    top: 133px;
 
     @media screen and (max-width: 768px) {
       max-width: 375px;
       margin: 0 auto;
       padding-top: 99px;
       padding-bottom: 14px;
+      position: static;
     }
 
     &__item {
