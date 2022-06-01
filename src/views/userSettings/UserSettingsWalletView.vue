@@ -3,13 +3,19 @@ import { defineComponent } from "vue";
 import SettingsLink from "@/components/common/SettingsLink.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import { useI18n } from "vue-i18n";
+import { useAppStateStore } from "@/store/appState.store";
 
 export default defineComponent({
   name: "UserSettingsWallet",
   components: { SettingsLink },
   setup() {
     const { t } = useI18n();
-    return { ROUTES, t };
+    const appStateStore = useAppStateStore();
+    const showModal = (value: string) => {
+      appStateStore.setIsModalTeleport(value);
+      appStateStore.setIsShowModal(true);
+    };
+    return { ROUTES, t, showModal };
   },
 });
 </script>
@@ -22,13 +28,12 @@ export default defineComponent({
       text="settings.wallet.items.metamask"
       icon="fox.svg"
       :border-radius="'top'"
-      :to="{ name: ROUTES.USER_SETTINGS_WALLET.name }"
       class="wallet__item"
+      @click="showModal('metamask')"
     />
     <SettingsLink
       text="settings.wallet.items.walletConnect"
       icon="walletconnect.svg"
-      :to="{ name: ROUTES.USER_SETTINGS_FAQ.name }"
       :border-radius="'none'"
       class="wallet__item"
     />
@@ -36,7 +41,6 @@ export default defineComponent({
       text="settings.wallet.items.coinbaseWallet"
       icon="coinbase.svg"
       :border-radius="'bottom'"
-      :to="{ name: ROUTES.USER_SETTINGS_REFERRAL.name }"
       class="wallet__item"
     />
   </div>
@@ -64,7 +68,7 @@ export default defineComponent({
         content: "";
         bottom: -25px;
         width: 100%;
-        z-index: 1;
+        z-index: 0;
         border: 1px dashed #1e1e1e;
       }
     }

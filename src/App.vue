@@ -4,9 +4,11 @@ import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
 import { useRoute } from "vue-router";
 import BaseLayout from "@/layouts/BaseLayout.vue";
+import BasePopup from "@/components/popup/BasePopup.vue";
 export default defineComponent({
   name: "App",
   components: {
+    BasePopup,
     BaseLayout,
   },
   setup() {
@@ -26,10 +28,12 @@ export default defineComponent({
     const layout = computed<Component | null>(() =>
       route.meta.layout ? layouts[route.meta.layout] : null,
     );
-
+    const appStore = useAppStateStore();
+    const { showModal } = storeToRefs(appStore);
     return {
       preloader,
       layout,
+      showModal,
     };
   },
 });
@@ -41,6 +45,7 @@ export default defineComponent({
   <!--      <h1>This is loader ;)</h1>-->
   <!--    </div>-->
   <!--  </transition>-->
+  <BasePopup v-if="showModal"></BasePopup>
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <component v-if="layout" :is="layout">
