@@ -94,6 +94,7 @@ export default defineComponent({
   }
 
   &__header {
+    z-index: var(--z-index-header-logo);
     &__right {
       position: fixed;
       right: 56px;
