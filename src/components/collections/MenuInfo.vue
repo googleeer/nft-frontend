@@ -53,7 +53,7 @@ export default defineComponent({
         <p class="collection__menu__drop--title">{{ t("drop.drop") }}</p>
         <slot></slot>
         <BaseButton
-          :button-text="'Open Collection'"
+          :button-text="'Open drop'"
           class="collection__menu__drop--btn"
           :to="{
             name: ROUTES.COLLECTION.name,

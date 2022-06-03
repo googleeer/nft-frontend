@@ -96,7 +96,7 @@ export default defineComponent({
     position: relative;
     &::after {
       position: absolute;
-      content: "Swip to nex collection";
+      content: "Swip to next collection";
       left: 50%;
       margin-left: -85px;
       bottom: 60px;
