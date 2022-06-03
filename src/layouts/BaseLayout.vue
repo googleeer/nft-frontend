@@ -85,7 +85,6 @@ export default defineComponent({
     top: 45px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: var(--z-index-header-logo);
 
     @media screen and (max-width: 768px) {
       height: 15px;
@@ -94,12 +93,11 @@ export default defineComponent({
   }
 
   &__header {
-    z-index: var(--z-index-header-logo);
     &__right {
       position: fixed;
       right: 56px;
       top: 55px;
-
+      z-index: var(--z-index-header-logo);
       @media screen and (max-width: 768px) {
         position: static;
       }
