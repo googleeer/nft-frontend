@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 export default defineComponent({
   name: "BaseButton",
   props: {
@@ -12,15 +12,26 @@ export default defineComponent({
       type: String,
       default: "button",
     },
+    to: [String, Object, undefined] as PropType<
+      string | undefined | { name: string }
+    >,
   },
-  setup() {
-    return {};
+  setup(props) {
+    const currentComponent = props.to ? "RouterLink" : "button";
+    const currentAttribute = props.to ? "" : { disabled: props.disabled };
+
+    return { currentComponent, currentAttribute };
   },
 });
 </script>
 
 <template>
-  <button class="button" :disabled="disabled">
+  <component
+    class="button"
+    v-bind="currentAttribute"
+    :is="currentComponent"
+    :to="to"
+  >
     {{ buttonText }}
     <span class="button__background"></span>
     <span class="button__arrow flex align-center justify-center">
@@ -37,7 +48,7 @@ export default defineComponent({
         />
       </svg>
     </span>
-  </button>
+  </component>
 </template>
 
 <style lang="scss" scoped>
@@ -55,7 +66,7 @@ export default defineComponent({
   background: transparent;
   transition: all 0.3s ease;
   font-family: CoreSansC, sans-serif;
-
+  text-decoration: none;
   &[disabled] {
     pointer-events: none;
     .button__background {

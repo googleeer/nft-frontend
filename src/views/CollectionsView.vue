@@ -10,8 +10,8 @@ export default defineComponent({
   setup() {
     const { t } = useI18n();
     const collections = data[0].collections;
-    const currentItemId = ref(0);
-    return { t, ROUTES, collections, currentItemId };
+    const currentCollectionId = ref(0);
+    return { t, ROUTES, collections, currentCollectionId };
   },
 });
 </script>
@@ -22,9 +22,12 @@ export default defineComponent({
       v-for="item of collections"
       :key="item.id"
       class="flex"
-      :class="{ 'flex-grow-1': currentItemId === item.id }"
+      :class="{ 'flex-grow-1': currentCollectionId === item.id }"
     >
-      <div class="content flex align-end" v-if="currentItemId === item.id">
+      <div
+        class="content flex align-end"
+        v-if="currentCollectionId === item.id"
+      >
         <img :src="require(`@/assets/images/${item.gif}`)" class="bg" />
         <div class="collection-content flex direction-column">
           <img
@@ -36,18 +39,22 @@ export default defineComponent({
           <BaseButton
             :button-text="'Open Collection'"
             class="collection-content-btn"
+            :to="{
+              name: ROUTES.COLLECTION.name,
+              params: { id: currentCollectionId },
+            }"
           ></BaseButton>
         </div>
         <div class="pagination__wrapper flex direction-column align-center">
           <button
             class="pagination__wrapper__prev"
-            :class="{ active: currentItemId === 0 }"
-            @click="currentItemId = 0"
+            :class="{ active: currentCollectionId === 0 }"
+            @click="currentCollectionId = 0"
           ></button>
           <button
             class="pagination__wrapper__next"
-            :class="{ active: currentItemId === 1 }"
-            @click="currentItemId = 1"
+            :class="{ active: currentCollectionId === 1 }"
+            @click="currentCollectionId = 1"
           ></button>
         </div>
       </div>

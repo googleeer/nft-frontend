@@ -42,6 +42,17 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    ...ROUTES.COLLECTION,
+    component: () =>
+      import(
+        /* webpackChunkName: "collection" */ "../views/CollectionView.vue"
+      ),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
     ...ROUTES.DROPS,
     component: () =>
       import(/* webpackChunkName: "drops" */ "../views/DropsView.vue"),

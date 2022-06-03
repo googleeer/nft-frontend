@@ -10,7 +10,8 @@
       "artist": "John Michael",
       "brand": "Channel",
       "logo": "junk.png",
-      "gif": "junkYard.svg"
+      "gif": "junkYard.svg",
+      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection","img": "drop.svg"}]
     },
     {
       "id": 1,
@@ -20,7 +21,10 @@
       "artist": "Daniel Mick",
       "brand": "Channel",
       "logo": "junk.png",
-      "gif": "canabis.png"
+      "gif": "canabis.png",
+      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection",
+        "img": "drop.svg"
+      }]
     }
   ]
   }]
