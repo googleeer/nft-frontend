@@ -167,7 +167,7 @@ export default defineComponent({
     }
     &--desc {
       margin: 33px 50px 36px 49px;
-      font-family: "SFProLight", sans-serif;
+      font-family: "SFPro", sans-serif;
       max-width: 424px;
       font-weight: 300;
       font-size: 16px;
