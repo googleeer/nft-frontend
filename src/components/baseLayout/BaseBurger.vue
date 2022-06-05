@@ -76,7 +76,7 @@ export default defineComponent({
 .burger {
   position: fixed;
   left: 58px;
-  top: 74px;
+  top: 65px;
   z-index: var(--z-idx-header-items);
   background-color: transparent;
   border: none;
