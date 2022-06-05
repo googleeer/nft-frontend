@@ -10,6 +10,7 @@ import UserAvatar from "@/components/baseLayout/UserAvatar.vue";
 import MenuUserProfile from "@/components/baseLayout/MenuUserProfile.vue";
 import { useUserStore } from "@/store/user.store";
 import { useRoute } from "vue-router";
+import { ROUTES } from "@/constants/routes.constants";
 export default defineComponent({
   name: "BaseLayout",
   components: {
@@ -26,10 +27,8 @@ export default defineComponent({
     const route = useRoute();
     const { isMobile } = storeToRefs(appStore);
     const { user } = storeToRefs(userStore);
-
     const isOpenMenu = ref(false);
     const isOpenUserMenu = ref(false);
-
     watch(
       () => route.name,
       () => {
@@ -38,7 +37,14 @@ export default defineComponent({
       },
     );
 
-    return { t, isOpenMenu, isMobile, user, isOpenUserMenu };
+    return {
+      t,
+      isOpenMenu,
+      isMobile,
+      user,
+      isOpenUserMenu,
+      ROUTES,
+    };
   },
 });
 </script>
@@ -50,11 +56,13 @@ export default defineComponent({
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
       <span class="layout__empty"></span>
-      <img
-        src="../assets/images/sm_logo.png"
-        alt="WEEDAR"
-        class="layout__logo"
-      />
+      <router-link to="/">
+        <img
+          src="../assets/images/sm_logo.png"
+          :alt="t('logo')"
+          class="layout__logo"
+        />
+      </router-link>
       <div class="flex layout__header__right">
         <LocaleSwitcher v-if="!isMobile || (isMobile && isOpenMenu)" />
         <UserAvatar
@@ -82,7 +90,7 @@ export default defineComponent({
 .layout {
   &__logo {
     position: fixed;
-    top: 45px;
+    top: 60px;
     left: 50%;
     transform: translateX(-50%);
     z-index: var(--z-index-header-logo);
@@ -97,7 +105,8 @@ export default defineComponent({
     &__right {
       position: fixed;
       right: 56px;
-      top: 55px;
+      top: 45px;
+      z-index: var(--z-index-header-logo);
 
       @media screen and (max-width: 768px) {
         position: static;

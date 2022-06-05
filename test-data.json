@@ -1,0 +1,30 @@
+[
+  {
+  "collections":
+  [
+    {
+      "id": 0,
+      "name": "JUNK YARD",
+      "shortDescription": "Unique Cannabis Collection",
+      "description": "Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually. Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually",
+      "artist": "John Michael",
+      "brand": "Channel",
+      "logo": "junk.png",
+      "gif": "junkYard.svg",
+      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection","img": "drop.png"}]
+    },
+    {
+      "id": 1,
+      "name": "JUNK",
+      "shortDescription": "Collection of Cannabis",
+      "description": "Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually. Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually",
+      "artist": "Daniel Mick",
+      "brand": "Channel",
+      "logo": "junk.png",
+      "gif": "canabis.png",
+      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection",
+        "img": "drop.png"
+      }]
+    }
+  ]
+  }]
