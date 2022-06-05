@@ -23,6 +23,7 @@ export default {
     padding-bottom: 7px;
     font-size: 14px;
     line-height: 110%;
+    font-family: "SFPro", sans-serif;
     &:first-letter {
       text-transform: capitalize;
     }
@@ -40,10 +41,13 @@ export default {
     border-radius: 24px;
     text-align: center;
     @media screen and (max-width: 523px) {
-      padding: 28px 22px;
+      padding: 28px 20px;
     }
     &:not(:first-child) {
       margin-left: 18px;
+      @media screen and (max-width: 768px) {
+        margin-left: 15px;
+      }
     }
   }
 }

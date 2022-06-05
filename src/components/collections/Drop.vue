@@ -23,7 +23,10 @@ export default defineComponent({
   padding-top: 23px;
   padding-bottom: 61px;
   align-self: flex-start;
-
+  @media screen and (max-width: 768px) {
+    padding-top: 11px;
+    padding-bottom: 41px;
+  }
   &__content {
     padding-left: 16px;
 

@@ -4,15 +4,15 @@ import { ROUTES } from "@/constants/routes.constants";
 import CollectionDrop from "@/components/collections/Drop.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
 import data from "../../test-data.json";
-import router from "@/router";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, CollectionDrop },
   setup() {
     const { t } = useI18n();
-    const currentCollectionId = +router.currentRoute.value.params.id;
+    const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const collections = data[0].collections;
     const currentCollection = collections[currentCollectionId];
     const properties = {
@@ -37,6 +37,7 @@ export default defineComponent({
       :properties="properties"
       :drops="drops"
       :collection="currentCollection"
+      :btn-text="'drop.open'"
     >
       <CollectionDrop
         v-for="drop of drops"

@@ -27,6 +27,7 @@ export default defineComponent({
       <div
         class="content flex align-end"
         v-if="currentCollectionId === item.id"
+        :data-content="t('collections.swipe')"
       >
         <img :src="require(`@/assets/images/${item.gif}`)" class="bg" />
         <div class="collection-content flex direction-column">
@@ -37,7 +38,7 @@ export default defineComponent({
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">{{ item.shortDescription }}</p>
           <BaseButton
-            :button-text="'Open Collection'"
+            :button-text="t('collection.open')"
             class="collection-content-btn"
             :to="{
               name: ROUTES.COLLECTION.name,
@@ -96,7 +97,7 @@ export default defineComponent({
     position: relative;
     &::after {
       position: absolute;
-      content: "Swipe to next collection";
+      content: attr(data-content);
       left: 50%;
       margin-left: -85px;
       bottom: 60px;

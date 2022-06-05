@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { computed, defineComponent, PropType } from "vue";
 export default defineComponent({
   name: "BaseButton",
   props: {
@@ -18,8 +18,14 @@ export default defineComponent({
   },
   setup(props) {
     const currentComponent = props.to ? "RouterLink" : "button";
-    const currentAttribute = props.to ? "" : { disabled: props.disabled };
 
+    const currentAttribute = computed(() =>
+      props.to
+        ? ""
+        : {
+            disabled: props.disabled,
+          },
+    );
     return { currentComponent, currentAttribute };
   },
 });
