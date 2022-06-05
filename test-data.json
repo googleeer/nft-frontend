@@ -11,7 +11,7 @@
       "brand": "Channel",
       "logo": "junk.png",
       "gif": "junkYard.svg",
-      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection","img": "drop.svg"}]
+      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection","img": "drop.png"}]
     },
     {
       "id": 1,
@@ -23,7 +23,7 @@
       "logo": "junk.png",
       "gif": "canabis.png",
       "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection",
-        "img": "drop.svg"
+        "img": "drop.png"
       }]
     }
   ]

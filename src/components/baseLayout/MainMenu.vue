@@ -125,7 +125,7 @@ export default defineComponent({
   &__blur {
     position: fixed;
     inset: 0;
-    left: 382px;
+    left: 0px;
     z-index: var(--z-idx-main-menu-blur);
     background: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(27.1828px);

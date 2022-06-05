@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 export default defineComponent({
   name: "AuthLayout",
   props: {
@@ -7,7 +8,8 @@ export default defineComponent({
     text: String,
   },
   setup() {
-    return {};
+    const { t } = useI18n();
+    return { t };
   },
 });
 </script>
@@ -15,7 +17,7 @@ export default defineComponent({
 <template>
   <div class="wrapper flex justify-center align-center flex-grow-1">
     <div class="flex direction-column container align-center">
-      <img class="logo" src="../assets/images/logo.svg" alt="WEEDAR" />
+      <img class="logo" src="../assets/images/logo.svg" :alt="t('logo')" />
       <div class="container__form flex direction-column flex-grow-1">
         <h1 class="container__form--title">{{ title }}</h1>
         <p v-if="text" class="container__form--text">{{ text }}</p>

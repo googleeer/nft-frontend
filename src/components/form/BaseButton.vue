@@ -21,7 +21,9 @@ export default defineComponent({
 
     const currentAttribute = computed(() =>
       props.to
-        ? ""
+        ? {
+            to: props.to,
+          }
         : {
             disabled: props.disabled,
           },
@@ -32,12 +34,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <component
-    class="button"
-    v-bind="currentAttribute"
-    :is="currentComponent"
-    :to="to"
-  >
+  <component class="button" v-bind="currentAttribute" :is="currentComponent">
     {{ buttonText }}
     <span class="button__background"></span>
     <span class="button__arrow flex align-center justify-center">

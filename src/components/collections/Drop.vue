@@ -9,7 +9,7 @@ export default defineComponent({
 
 <template>
   <div class="drop">
-    <img :src="require(`@/assets/images/${drop.img}`)" />
+    <img class="drop__img" :src="require(`@/assets/images/${drop.img}`)" />
     <div class="drop__content">
       <p class="drop__content--name">{{ drop.name }}</p>
       <p class="drop__content--desc">{{ drop.desc }}</p>
@@ -26,6 +26,9 @@ export default defineComponent({
   @media screen and (max-width: 768px) {
     padding-top: 11px;
     padding-bottom: 41px;
+  }
+  &__img {
+    width: 92px;
   }
   &__content {
     padding-left: 16px;

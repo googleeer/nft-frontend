@@ -26,10 +26,9 @@ export default defineComponent({
     const route = useRoute();
     const { isMobile } = storeToRefs(appStore);
     const { user } = storeToRefs(userStore);
-
+    const mainPageUrl = location.origin;
     const isOpenMenu = ref(false);
     const isOpenUserMenu = ref(false);
-
     watch(
       () => route.name,
       () => {
@@ -38,7 +37,7 @@ export default defineComponent({
       },
     );
 
-    return { t, isOpenMenu, isMobile, user, isOpenUserMenu };
+    return { t, isOpenMenu, isMobile, user, isOpenUserMenu, mainPageUrl };
   },
 });
 </script>
@@ -50,11 +49,13 @@ export default defineComponent({
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
       <span class="layout__empty"></span>
-      <img
-        src="../assets/images/sm_logo.png"
-        alt="WEEDAR"
-        class="layout__logo"
-      />
+      <a :href="mainPageUrl">
+        <img
+          src="../assets/images/sm_logo.png"
+          :alt="t('logo')"
+          class="layout__logo"
+        />
+      </a>
       <div class="flex layout__header__right">
         <LocaleSwitcher v-if="!isMobile || (isMobile && isOpenMenu)" />
         <UserAvatar
@@ -82,7 +83,7 @@ export default defineComponent({
 .layout {
   &__logo {
     position: fixed;
-    top: 45px;
+    top: 55px;
     left: 50%;
     transform: translateX(-50%);
     z-index: var(--z-index-header-logo);

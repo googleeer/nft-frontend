@@ -38,6 +38,7 @@ export default defineComponent({
       :drops="drops"
       :collection="currentCollection"
       :btn-text="'drop.open'"
+      :title-last-section="t('drop.drop')"
     >
       <CollectionDrop
         v-for="drop of drops"
@@ -50,9 +51,12 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .collection {
+  @media screen and (max-width: 768px) {
+    max-width: none;
+  }
   &__img--wrap {
     width: 100%;
-    @media screen and (max-width: 523px) {
+    @media screen and (max-width: 768px) {
       display: none;
     }
   }

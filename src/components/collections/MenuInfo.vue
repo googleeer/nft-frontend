@@ -15,6 +15,7 @@ export default defineComponent({
     drops: Object,
     collection: Object,
     btnText: String,
+    titleLastSection: String,
   },
   components: { BaseButton, CollectionProperties },
   setup() {
@@ -56,19 +57,19 @@ export default defineComponent({
         >
           {{ collection.description }}
         </span>
-        <a
-          class="collection__author--desc__link"
+        <span
+          class="collection__author--desc__more"
           @click="readMoreActive = true"
           v-if="!readMoreActive"
         >
           Read More
-        </a>
-        <a
-          class="collection__author--desc__link"
+        </span>
+        <span
+          class="collection__author--desc__more"
           @click="readMoreActive = false"
           v-else
         >
-          Collapse</a
+          Collapse</span
         >
       </div>
       <div class="collection__author__prop--block flex justify-center">
@@ -83,7 +84,7 @@ export default defineComponent({
     </div>
     <div class="collection__drop flex direction-column flex-grow-1">
       <div class="collection__drop__content">
-        <p class="collection__drop__content--title">{{ t("drop.drop") }}</p>
+        <p class="collection__drop__content--title">{{ titleLastSection }}</p>
         <slot></slot>
       </div>
       <BaseButton
@@ -166,25 +167,24 @@ export default defineComponent({
     }
     &--desc {
       margin: 33px 50px 36px 49px;
-      font-family: "SFPro", sans-serif;
+      font-family: "SFProLight", sans-serif;
       max-width: 424px;
-      font-weight: 400;
+      font-weight: 300;
       font-size: 16px;
       line-height: 22px;
       @media screen and (max-width: 768px) {
         margin: 18px 0;
+        max-width: none;
       }
       &__short {
       }
-      &__link {
-        text-decoration: none;
+      &__more {
         color: var(--color-white);
         font-weight: bold;
-        font-size: 18px;
         padding-left: 5px;
         cursor: pointer;
         &:hover {
-          color: #824708;
+          text-decoration: underline;
         }
       }
     }
@@ -217,6 +217,11 @@ export default defineComponent({
     }
     &--btn {
       align-self: center;
+      margin-top: auto;
+      margin-bottom: 62px;
+      @media screen and (max-width: 768px) {
+        margin-bottom: 44px;
+      }
       @media screen and (max-width: 336px) {
         min-width: 315px;
         ::v-deep(.button__background) {
