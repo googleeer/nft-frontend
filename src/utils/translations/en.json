@@ -1,5 +1,6 @@
 {
   "logo": "WEEDAR",
+  "redeem": "Redeem your NFT",
   "menu": {
     "myNft": "My NFTs",
     "collections": "Collections",
@@ -54,6 +55,9 @@
     "drop": "Drop",
     "open": "Open drop"
 },
+  "perk": {
+    "perks": "Perks"
+  },
   "collection": {
     "open": "Open Collection"
   },

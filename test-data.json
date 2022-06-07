@@ -11,7 +11,26 @@
       "brand": "Channel",
       "logo": "junk.png",
       "gif": "junkYard.svg",
-      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection","img": "drop.png"}]
+      "drops": [{ "id":1,"name": "Pinepple Express Drop", "shortDescription":  "Pinepple Express Collection",
+        "img": "drop.png",
+        "description": "Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually. Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually",
+        "perks": [{
+          "id": 0,
+          "img": "brilliant.png"
+        },
+          {
+            "id": 1,
+            "img": "heart.png"
+          },
+          {
+            "id": 2,
+            "img": "brilliant.png"
+          },
+          {
+            "id": 3,
+            "img": "heart.png"
+          }]
+      }]
     },
     {
       "id": 1,
@@ -22,8 +41,9 @@
       "brand": "Channel",
       "logo": "junk.png",
       "gif": "canabis.png",
-      "drops": [{"name": "Pinepple Express Drop", "desc":  "Pinepple Express Collection",
-        "img": "drop.png"
+      "drops": [{ "id":1,"name": "Pinepple Express Drop", "shortDescription":  "Pinepple Express Collection",
+        "img": "drop.png",
+        "description": "Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually. Sometimes in life we have to just go with. Sugar rush is the final design from my dream vs. reality collection. I am a heavy candy addict, which will eventually"
       }]
     }
   ]

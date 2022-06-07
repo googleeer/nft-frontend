@@ -12,10 +12,10 @@ export default defineComponent({
   name: "MenuInfo",
   props: {
     properties: Object,
-    drops: Object,
-    collection: Object,
+    item: Object,
     btnText: String,
     titleLastSection: String,
+    route: Object,
   },
   components: { BaseButton, CollectionProperties },
   setup() {
@@ -37,10 +37,10 @@ export default defineComponent({
       <div>
         <div class="collection__info__content">
           <h1 class="collection__info__content__name">
-            {{ collection.name }}
+            {{ item.name }}
           </h1>
           <p class="collection__info__content__desc--short">
-            {{ collection.shortDescription }}
+            {{ item.shortDescription }}
           </p>
         </div>
       </div>
@@ -48,14 +48,14 @@ export default defineComponent({
     <div class="collection__author flex direction-column align-center">
       <div class="collection__author--desc">
         <span class="collection__author--desc__short" v-if="!readMoreActive"
-          >{{ collection.description.slice(0, 162) }}
+          >{{ item.description.slice(0, 162) }}
         </span>
         <span
           class="collection__author--desc__all"
           :class="{ active: readMoreActive }"
           v-if="readMoreActive"
         >
-          {{ collection.description }}
+          {{ item.description }}
         </span>
         <span
           class="collection__author--desc__more"
@@ -82,18 +82,17 @@ export default defineComponent({
         </CollectionProperties>
       </div>
     </div>
-    <div class="collection__drop flex direction-column flex-grow-1">
-      <div class="collection__drop__content">
-        <p class="collection__drop__content--title">{{ titleLastSection }}</p>
+    <div class="collection__component flex direction-column flex-grow-1">
+      <div class="collection__component__content flex direction-column">
+        <p class="collection__component__content--title">
+          {{ titleLastSection }}
+        </p>
         <slot></slot>
       </div>
       <BaseButton
         :button-text="t(btnText)"
-        class="collection__drop--btn"
-        :to="{
-          name: ROUTES.COLLECTION.name,
-          params: { id: 0 },
-        }"
+        class="collection__component--btn"
+        :to="route"
       ></BaseButton>
     </div>
   </div>
@@ -192,7 +191,7 @@ export default defineComponent({
       width: 100%;
     }
   }
-  &__drop {
+  &__component {
     position: relative;
     padding-top: 26px;
     z-index: 0;
@@ -233,13 +232,12 @@ export default defineComponent({
       font-size: 18px;
     }
     &__content {
-      padding-left: 36px;
-      @media screen and (max-width: 768px) {
-        padding-left: 26px;
-      }
-
       &--title {
         font-size: 18px;
+        padding-left: 36px;
+        @media screen and (max-width: 768px) {
+          padding-left: 26px;
+        }
       }
     }
   }

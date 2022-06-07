@@ -23,6 +23,10 @@ export const ROUTES = {
     path: "/collection/:id",
     name: "collection",
   },
+  DROP: {
+    path: `/collection/:collectionId/drop/:id`,
+    name: "drop",
+  },
   DROPS: {
     path: "/drops",
     name: "drops",
