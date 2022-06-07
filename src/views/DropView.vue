@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
-import CollectionDrop from "@/components/collections/Drop.vue";
+import DropPerks from "@/components/collections/Perks.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
 import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
@@ -9,18 +9,26 @@ import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "CollectionView",
-  components: { MenuInfo, CollectionDrop },
+  components: { MenuInfo, DropPerks },
   setup() {
     const { t } = useI18n();
     const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const collections = data[0].collections;
     const currentCollection = collections[currentCollectionId];
+    const currentDrop = currentCollection.drops[0];
     const properties = {
       artist: currentCollection.artist,
       brand: currentCollection.brand,
     };
     const drops = currentCollection.drops;
-    return { ROUTES, currentCollection, properties, drops, t };
+    return {
+      ROUTES,
+      currentCollection,
+      properties,
+      drops,
+      t,
+      currentDrop,
+    };
   },
 });
 </script>
@@ -36,19 +44,11 @@ export default defineComponent({
     <MenuInfo
       :properties="properties"
       :drops="drops"
-      :item="currentCollection"
-      :btn-text="'drop.open'"
-      :title-last-section="t('drop.drop')"
-      :route="{
-        name: ROUTES.DROP.name,
-        params: { collectionId: currentCollection.id, id: 0 },
-      }"
+      :item="currentDrop"
+      :btn-text="'redeem'"
+      :title-last-section="t('perk.perks')"
     >
-      <CollectionDrop
-        v-for="drop of drops"
-        :key="drop.name"
-        :drop="drop"
-      ></CollectionDrop>
+      <DropPerks :perks="currentDrop.perks"></DropPerks>
     </MenuInfo>
   </div>
 </template>

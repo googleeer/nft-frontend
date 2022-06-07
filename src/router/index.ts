@@ -53,6 +53,15 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    ...ROUTES.DROP,
+    component: () =>
+      import(/* webpackChunkName: "drop" */ "../views/DropView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
     ...ROUTES.DROPS,
     component: () =>
       import(/* webpackChunkName: "drops" */ "../views/DropsView.vue"),
