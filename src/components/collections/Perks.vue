@@ -2,32 +2,41 @@
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "CollectionDrop",
-  props: { drop: Object },
+  name: "DropPerks",
+  props: { perks: Object },
 });
 </script>
 
 <template>
-  <div class="drop">
-    <img class="drop__img" :src="require(`@/assets/images/${drop.img}`)" />
-    <div class="drop__content">
-      <p class="drop__content--name">{{ drop.name }}</p>
-      <p class="drop__content--desc">{{ drop.shortDescription }}</p>
+  <div class="perks">
+    <div class="perks__perk" v-for="perk of perks" :key="perk.id">
+      <img class="drop__img" :src="require(`@/assets/images/${perk.img}`)" />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.perks {
+  display: flex;
+  margin-top: 27px;
+  overflow-x: auto;
+  padding-bottom: 30px;
+  padding-left: 36px;
+  @media screen and (max-width: 768px) {
+    padding-left: 26px;
+  }
+  &__perk:not(:first-child) {
+    margin-left: 12px;
+  }
+}
 .drop {
   display: flex;
   padding-top: 23px;
   padding-bottom: 61px;
   align-self: flex-start;
-  padding-left: 36px;
   @media screen and (max-width: 768px) {
     padding-top: 11px;
     padding-bottom: 41px;
-    padding-left: 26px;
   }
   &__img {
     width: 92px;
