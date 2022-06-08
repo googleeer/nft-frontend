@@ -107,7 +107,7 @@ export default defineComponent({
     }
     .bg {
       width: 100%;
-      height: 100vh;
+      height: 100%;
       position: absolute;
       object-fit: cover;
       opacity: 0.8;
