@@ -2,6 +2,8 @@
   "logo": "WEEDAR",
   "redeem": "Redeem your NFT",
   "ok": "Ok",
+  "desktopBack": "Click to back",
+  "mobileBack": "Swipe to back",
   "menu": {
     "myNft": "My NFTs",
     "collections": "Collections",

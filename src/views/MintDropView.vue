@@ -8,12 +8,14 @@ import DropPerks from "@/components/collections/Perks.vue";
 import SucceedMint from "@/components/modal/SucceedMint.vue";
 import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
+import BackFixed from "@/components/collections/BackFixed.vue";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BaseButton, DropPerks, SucceedMint },
+  components: { BaseButton, DropPerks, SucceedMint, BackFixed },
   setup() {
     const { t } = useI18n();
-    const currentCollectionId = +useRouter().currentRoute.value.params.id;
+    const currentCollectionId =
+      +useRouter().currentRoute.value.params.collectionId;
     const collections = data[0].collections;
     const currentCollection = collections[currentCollectionId];
     const currentDrop = currentCollection.drops[0];
@@ -35,6 +37,7 @@ export default defineComponent({
       currentDrop,
       handleModalClick,
       changeModalState,
+      currentCollection,
     };
   },
 });
@@ -42,6 +45,13 @@ export default defineComponent({
 
 <template>
   <div class="wrapper flex direction-column flex-grow-1">
+    <BackFixed
+      :to="{
+        name: ROUTES.DROP.name,
+        params: { collectionId: currentCollection.id, id: 0 },
+      }"
+      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
+    ></BackFixed>
     <div
       v-for="item of collections"
       :key="item.id"

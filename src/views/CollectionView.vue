@@ -6,10 +6,11 @@ import MenuInfo from "@/components/collections/MenuInfo.vue";
 import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import BackFixed from "@/components/collections/BackFixed.vue";
 
 export default defineComponent({
   name: "CollectionView",
-  components: { MenuInfo, CollectionDrop },
+  components: { MenuInfo, CollectionDrop, BackFixed },
   setup() {
     const { t } = useI18n();
     const currentCollectionId = +useRouter().currentRoute.value.params.id;
@@ -27,6 +28,12 @@ export default defineComponent({
 
 <template>
   <div class="collection flex flex-grow-1">
+    <BackFixed
+      :to="{
+        name: ROUTES.COLLECTIONS.name,
+      }"
+      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
+    ></BackFixed>
     <div class="collection__img--wrap">
       <img
         :src="require(`@/assets/images/${currentCollection.gif}`)"
