@@ -104,10 +104,10 @@ export default defineComponent({
       padding-bottom: 62px;
       z-index: var(--z-index-collections);
       @media screen and (max-width: 768px) {
-        padding: 0 20px 44px;
+        padding: 0 0px 44px;
       }
       @media screen and (max-width: 370px) {
-        padding: 0px 5px 20px;
+        padding: 0px 0px 20px;
       }
       ::v-deep(.perks) {
         overflow-x: auto;
@@ -128,6 +128,7 @@ export default defineComponent({
           padding-top: 19px;
           font-size: 42px;
           max-width: 180px;
+          padding-left: 20px;
         }
       }
       &-desc {
@@ -141,6 +142,12 @@ export default defineComponent({
       &-btn {
         max-width: 335px;
         font-weight: 600;
+        @media screen and (max-width: 768px) {
+          margin-left: 20px;
+        }
+        @media screen and (max-width: 370px) {
+          margin-left: 5px;
+        }
         @media screen and (max-width: 350px) {
           min-width: 310px;
           max-width: 310px;
@@ -161,6 +168,9 @@ export default defineComponent({
         padding-top: 27px;
         font-size: 18px;
         line-height: 130%;
+        @media screen and (max-width: 768px) {
+          padding-left: 20px;
+        }
       }
     }
   }
