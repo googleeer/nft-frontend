@@ -55,8 +55,11 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .collection {
+  max-height: 100vh;
+  overflow-y: auto;
   @media screen and (max-width: 768px) {
     max-width: none;
+    max-height: none;
   }
   &__img--wrap {
     width: 100%;
@@ -67,6 +70,7 @@ export default defineComponent({
   &__img {
     width: 100%;
     height: 100%;
+    max-height: 100vh;
     object-fit: cover;
   }
 }
