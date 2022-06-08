@@ -101,16 +101,30 @@ export default defineComponent({
       left: 50%;
       margin-left: -85px;
       bottom: 60px;
+      z-index: 1;
       @media screen and (max-width: 1000px) {
         content: none;
       }
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: radial-gradient(
+        50% 50% at 50% 50%,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.51) 100%
+      );
+      opacity: 0.55;
     }
     .bg {
       width: 100%;
       height: 100%;
       position: absolute;
       object-fit: cover;
-      opacity: 0.8;
     }
     .collection-content {
       width: 100%;

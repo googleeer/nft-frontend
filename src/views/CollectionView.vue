@@ -63,8 +63,23 @@ export default defineComponent({
   }
   &__img--wrap {
     width: 100%;
+    position: relative;
     @media screen and (max-width: 768px) {
       display: none;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      background: radial-gradient(
+        50% 50% at 50% 50%,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.51) 100%
+      );
+      opacity: 0.55;
     }
   }
   &__img {
