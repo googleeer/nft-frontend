@@ -70,7 +70,7 @@ export default defineComponent({
   }
   &__img {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     object-fit: cover;
   }
 }
