@@ -1,6 +1,7 @@
 {
   "logo": "WEEDAR",
   "redeem": "Redeem your NFT",
+  "ok": "Ok",
   "menu": {
     "myNft": "My NFTs",
     "collections": "Collections",
@@ -51,9 +52,13 @@
   "collections": {
     "swipe": "Swipe to next collection"
   },
-  "drop":{
+  "drop": {
     "drop": "Drop",
-    "open": "Open drop"
+    "open": "Open drop",
+    "shipping": "Space shipping",
+    "mint": "Mint 3 NFT",
+    "succeedMint": "Minting succeed.",
+    "feelFree": "Please, feel free to use NFT."
 },
   "perk": {
     "perks": "Perks"

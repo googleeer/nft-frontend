@@ -1,17 +1,41 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import data from "../../test-data.json";
+import DropPerks from "@/components/collections/Perks.vue";
+import SucceedMint from "@/components/modal/SucceedMint.vue";
+import { useRouter } from "vue-router";
+import { useAppStateStore } from "@/store/appState.store";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BaseButton },
+  components: { BaseButton, DropPerks, SucceedMint },
   setup() {
     const { t } = useI18n();
+    const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const collections = data[0].collections;
-    const currentCollectionId = ref(0);
-    return { t, ROUTES, collections, currentCollectionId };
+    const currentCollection = collections[currentCollectionId];
+    const currentDrop = currentCollection.drops[0];
+
+    const appStateStore = useAppStateStore();
+    const changeModalState = (value: boolean) =>
+      appStateStore.setIsShowModal(value);
+
+    const handleModalClick = (type: string) => {
+      if (type === "close") {
+        changeModalState(false);
+      }
+    };
+    return {
+      t,
+      ROUTES,
+      collections,
+      currentCollectionId,
+      currentDrop,
+      handleModalClick,
+      changeModalState,
+    };
   },
 });
 </script>
@@ -27,36 +51,19 @@ export default defineComponent({
       <div
         class="content flex align-end"
         v-if="currentCollectionId === item.id"
-        :data-content="t('collections.swipe')"
       >
-        <img :src="require(`@/assets/images/${item.gif}`)" class="bg" />
+        <img :src="require(`@/assets/images/mint.png`)" class="bg" />
         <div class="collection-content flex direction-column">
-          <img
-            class="collection-content-img"
-            :src="require(`@/assets/images/${item.logo}`)"
-          />
-          <h1 class="collection-content-name">{{ item.name }}</h1>
-          <p class="collection-content-desc">{{ item.shortDescription }}</p>
+          <h1 class="collection-content-name">{{ t("drop.shipping") }}</h1>
+          <p class="collection-content--perks">Perks</p>
+          <DropPerks :perks="currentDrop.perks"></DropPerks>
+
           <BaseButton
-            :button-text="t('collection.open')"
+            :button-text="t('drop.mint')"
             class="collection-content-btn"
-            :to="{
-              name: ROUTES.COLLECTION.name,
-              params: { id: currentCollectionId },
-            }"
+            @click="changeModalState(true)"
           ></BaseButton>
-        </div>
-        <div class="pagination__wrapper flex direction-column align-center">
-          <button
-            class="pagination__wrapper__prev"
-            :class="{ active: currentCollectionId === 0 }"
-            @click="currentCollectionId = 0"
-          ></button>
-          <button
-            class="pagination__wrapper__next"
-            :class="{ active: currentCollectionId === 1 }"
-            @click="currentCollectionId = 1"
-          ></button>
+          <SucceedMint @btnClick="handleModalClick"></SucceedMint>
         </div>
       </div>
     </div>
@@ -64,47 +71,14 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.pagination__wrapper {
-  width: 100%;
-  max-width: 13px;
-  position: absolute;
-  z-index: var(--z-index-collections);
-  right: 53px;
-  top: 50%;
-  button {
-    outline: none;
-    border: none;
-    margin: 10px;
-    padding: 4.5px;
-  }
-  .active {
-    padding: 6.5px;
-  }
-  &__prev {
-    background: white;
-    border-radius: 100%;
-  }
-  &__next {
-    border-radius: 100%;
-    background: white;
-  }
-}
 .wrapper {
   position: relative;
 
   .content {
+    width: 100%;
     flex-grow: 1;
     position: relative;
-    &::after {
-      position: absolute;
-      content: attr(data-content);
-      left: 50%;
-      margin-left: -85px;
-      bottom: 60px;
-      @media screen and (max-width: 1000px) {
-        content: none;
-      }
-    }
+
     .bg {
       width: 100%;
       height: 100%;
@@ -123,15 +97,25 @@ export default defineComponent({
       @media screen and (max-width: 370px) {
         padding: 0px 5px 20px;
       }
+      ::v-deep(.perks) {
+        overflow-x: auto;
+        padding-left: 0;
+        padding-bottom: 65px;
+        @media screen and (max-width: 768px) {
+          padding-bottom: 15px;
+          margin-bottom: 18px;
+          //max-width: 240px;
+        }
+      }
       &-name {
-        padding-top: 28px;
-        padding-bottom: 9px;
         font-weight: 800;
         font-size: 82px;
         line-height: 110%;
+        max-width: 350px;
         @media screen and (max-width: 768px) {
           padding-top: 19px;
           font-size: 42px;
+          max-width: 180px;
         }
       }
       &-desc {
@@ -144,6 +128,7 @@ export default defineComponent({
       }
       &-btn {
         max-width: 335px;
+        font-weight: 600;
         @media screen and (max-width: 350px) {
           min-width: 310px;
           max-width: 310px;
@@ -159,6 +144,11 @@ export default defineComponent({
           max-width: 92px;
           height: 92px;
         }
+      }
+      &--perks {
+        padding-top: 27px;
+        font-size: 18px;
+        line-height: 130%;
       }
     }
   }

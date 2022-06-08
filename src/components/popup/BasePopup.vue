@@ -51,6 +51,9 @@ export default defineComponent({
   );
   border: 1px solid var(--color-eerie);
   border-radius: 24px;
+  @media screen and (max-width: 768px) {
+    height: 404px;
+  }
 }
 .popup__cancel {
   content: "";

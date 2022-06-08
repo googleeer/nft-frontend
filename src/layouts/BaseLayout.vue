@@ -106,7 +106,9 @@ export default defineComponent({
       position: fixed;
       right: 56px;
       top: 45px;
-      z-index: var(--z-index-header-logo);
+      @media screen and (min-width: 768px) {
+        z-index: var(--z-index-header-logo);
+      }
 
       @media screen and (max-width: 768px) {
         position: static;

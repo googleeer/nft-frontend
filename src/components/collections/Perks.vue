@@ -28,6 +28,22 @@ export default defineComponent({
   &__perk:not(:first-child) {
     margin-left: 12px;
   }
+  &::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 10px;
+  }
+  .drop__img {
+    width: 90px;
+  }
 }
 .drop {
   display: flex;

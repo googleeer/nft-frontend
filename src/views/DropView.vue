@@ -37,7 +37,7 @@ export default defineComponent({
   <div class="collection flex flex-grow-1">
     <div class="collection__img--wrap">
       <img
-        :src="require(`@/assets/images/${currentCollection.gif}`)"
+        :src="require(`@/assets/images/${currentDrop['big-image']}`)"
         class="collection__img"
       />
     </div>
@@ -47,6 +47,10 @@ export default defineComponent({
       :item="currentDrop"
       :btn-text="'redeem'"
       :title-last-section="t('perk.perks')"
+      :route="{
+        name: ROUTES.MINT.name,
+        params: { collectionId: currentCollection.id, id: 0 },
+      }"
     >
       <DropPerks :perks="currentDrop.perks"></DropPerks>
     </MenuInfo>

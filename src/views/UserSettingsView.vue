@@ -93,7 +93,7 @@ export default defineComponent({
             :with-out-border="true"
             @click="onLogOut"
             text="profile.logOut"
-            icon="logOut.png"
+            icon="logout.svg"
             class="pointer"
           >
             <SettingsItemArrow />
