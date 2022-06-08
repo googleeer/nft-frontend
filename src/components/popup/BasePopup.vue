@@ -21,7 +21,7 @@ export default defineComponent({
       class="wrapper flex flexCenter"
       @click.stop.self="closeModal()"
     >
-      <div id="modal" class="popup flex flexCenter direction-column">
+      <div id="modal" class="popup flex justify-center">
         <span class="popup__cancel" @click.self="closeModal()"></span>
       </div>
     </div>
@@ -42,7 +42,6 @@ export default defineComponent({
   position: relative;
   width: 100%;
   max-width: 840px;
-  height: 508px;
   margin: 0 24px;
   background: radial-gradient(
     113.12% 113.12% at 50.52% 50.52%,
@@ -51,9 +50,6 @@ export default defineComponent({
   );
   border: 1px solid var(--color-eerie);
   border-radius: 24px;
-  @media screen and (max-width: 768px) {
-    height: 404px;
-  }
 }
 .popup__cancel {
   content: "";
