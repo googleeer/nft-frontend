@@ -24,8 +24,12 @@ export const ROUTES = {
     name: "collection",
   },
   DROP: {
-    path: `/collection/:collectionId/drop/:id`,
+    path: "/collection/:collectionId/drop/:id",
     name: "drop",
+  },
+  MINT: {
+    path: "/collection/:collectionId/drop/:id/mint",
+    name: "mint",
   },
   DROPS: {
     path: "/drops",
