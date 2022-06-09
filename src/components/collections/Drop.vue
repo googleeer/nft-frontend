@@ -26,7 +26,7 @@ export default defineComponent({
   padding-left: 36px;
   @media screen and (max-width: 768px) {
     padding-top: 11px;
-    padding-bottom: 41px;
+    padding-bottom: 27px;
     padding-left: 26px;
   }
   &__img {
