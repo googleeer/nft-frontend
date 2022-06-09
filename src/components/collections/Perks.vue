@@ -20,7 +20,8 @@ export default defineComponent({
   display: flex;
   margin-top: 27px;
   overflow-x: auto;
-  padding-bottom: 30px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
   padding-left: 36px;
   @media screen and (max-width: 768px) {
     padding-left: 26px;
