@@ -10,6 +10,7 @@ export default defineComponent({
   setup() {
     const { t } = useI18n();
     const collections = data[0].collections;
+    // console.log(data[0].collections?.[0]);
     const currentCollectionId = ref(0);
     return { t, ROUTES, collections, currentCollectionId };
   },

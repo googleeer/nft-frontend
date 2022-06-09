@@ -18,8 +18,8 @@ export default defineComponent({
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
     const collections = data[0].collections;
-    const currentCollection = collections[currentCollectionId];
-    const currentDrop = currentCollection.drops[0];
+    const currentCollection = collections?.[currentCollectionId];
+    const currentDrop = currentCollection?.drops[0];
 
     const appStateStore = useAppStateStore();
     const changeModalState = (value: boolean) =>
