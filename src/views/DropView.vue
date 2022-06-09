@@ -7,6 +7,8 @@ import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
+import { useAppStateStore } from "@/store/appState.store";
+import { storeToRefs } from "pinia";
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, DropPerks, BackFixed },
@@ -22,6 +24,8 @@ export default defineComponent({
       brand: currentCollection.brand,
     };
     const drops = currentCollection.drops;
+    const appStore = useAppStateStore();
+    const { isMobile } = storeToRefs(appStore);
     return {
       ROUTES,
       currentCollection,
@@ -30,6 +34,7 @@ export default defineComponent({
       t,
       currentDrop,
       currentCollectionId,
+      isMobile,
     };
   },
 });
@@ -50,6 +55,7 @@ export default defineComponent({
         class="collection__img"
       />
     </div>
+
     <MenuInfo
       :properties="properties"
       :drops="drops"
@@ -73,6 +79,10 @@ export default defineComponent({
   @media screen and (max-width: 768px) {
     max-width: none;
     max-height: none;
+    .back {
+      top: 77px;
+      position: absolute;
+    }
   }
   &__img--wrap {
     width: 100%;

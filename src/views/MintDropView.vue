@@ -9,6 +9,7 @@ import SucceedMint from "@/components/modal/SucceedMint.vue";
 import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import BackFixed from "@/components/collections/BackFixed.vue";
+import { storeToRefs } from "pinia";
 export default defineComponent({
   name: "CollectionsView",
   components: { BaseButton, DropPerks, SucceedMint, BackFixed },
@@ -29,6 +30,8 @@ export default defineComponent({
         changeModalState(false);
       }
     };
+    const appStore = useAppStateStore();
+    const { isMobile } = storeToRefs(appStore);
     return {
       t,
       ROUTES,
@@ -38,6 +41,7 @@ export default defineComponent({
       handleModalClick,
       changeModalState,
       currentCollection,
+      isMobile,
     };
   },
 });
@@ -51,6 +55,7 @@ export default defineComponent({
         params: { collectionId: currentCollection.id, id: 0 },
       }"
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
+      :class="{ isMob: isMobile }"
     ></BackFixed>
     <div
       v-for="item of collections"
@@ -83,6 +88,21 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   position: relative;
+  .back:not(.isMob) {
+    @media screen and (max-height: 700px) {
+      left: auto;
+      right: 95px;
+      transform: none;
+    }
+  }
+
+  .isMob {
+    @media screen and (max-height: 600px) {
+      left: auto;
+      right: 5px;
+      transform: none;
+    }
+  }
 
   .content {
     width: 100%;

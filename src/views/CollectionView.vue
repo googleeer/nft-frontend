@@ -67,6 +67,10 @@ export default defineComponent({
   @media screen and (max-width: 768px) {
     max-width: none;
     max-height: none;
+    .back {
+      top: 77px;
+      position: absolute;
+    }
   }
   &__img--wrap {
     width: 100%;
