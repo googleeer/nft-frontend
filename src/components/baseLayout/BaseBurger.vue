@@ -76,7 +76,7 @@ export default defineComponent({
 .burger {
   position: fixed;
   left: 58px;
-  top: 65px;
+  top: 50px;
   z-index: var(--z-idx-header-items);
   background-color: transparent;
   border: none;
@@ -85,7 +85,7 @@ export default defineComponent({
 
   @media screen and (max-width: 768px) {
     left: 20px;
-    top: 38px;
+    top: 43px;
   }
 }
 </style>

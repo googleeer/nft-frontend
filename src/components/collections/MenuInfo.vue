@@ -103,7 +103,7 @@ export default defineComponent({
   width: 100%;
   max-width: 523px;
   min-width: 523px;
-  padding-top: 147px;
+  padding-top: 118px;
   @media screen and (max-width: 523px) {
     min-width: auto;
   }

@@ -90,7 +90,7 @@ export default defineComponent({
 .layout {
   &__logo {
     position: fixed;
-    top: 60px;
+    top: 45px;
     left: 50%;
     transform: translateX(-50%);
     z-index: var(--z-index-header-logo);
@@ -98,6 +98,7 @@ export default defineComponent({
     @media screen and (max-width: 768px) {
       height: 15px;
       object-fit: contain;
+      top: 46px;
     }
   }
 
@@ -105,8 +106,10 @@ export default defineComponent({
     &__right {
       position: fixed;
       right: 56px;
-      top: 45px;
-      z-index: var(--z-index-header-logo);
+      top: 30px;
+      @media screen and (min-width: 768px) {
+        z-index: var(--z-index-header-logo);
+      }
 
       @media screen and (max-width: 768px) {
         position: static;

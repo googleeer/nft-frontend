@@ -4,21 +4,15 @@ import PopupBtn from "@/components/popup/PopupBtn.vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-  name: "MetamaskModal",
+  name: "SucceedMint",
   components: { PopupBtn },
   emits: ["btnClick"],
   setup() {
     const { t } = useI18n();
     const buttons = [
       {
-        styleType: "simple",
-        text: "Cancel",
-        textColor: "white",
-        type: "close",
-      },
-      {
         styleType: "default",
-        text: "install",
+        text: `${t("ok")}`,
         textColor: "black",
         type: "install",
       },
@@ -33,11 +27,12 @@ export default defineComponent({
     <div class="popup__content flex direction-column flexCenter">
       <img
         class="popup__content__img"
-        :src="require(`@/assets/images/fox.svg`)"
+        :src="require(`@/assets/images/smile_mint.png`)"
       />
       <h2 class="popup__content__info">
-        {{ t("settings.wallet.metamask.info") }}
+        {{ t("drop.succeedMint") }}
       </h2>
+      <p class="popup__content__desc">{{ t("drop.feelFree") }}</p>
       <div class="popup__content__btns flex justify-center">
         <PopupBtn
           @click="$emit('btnClick', btn.type)"
@@ -56,24 +51,41 @@ export default defineComponent({
 <style scoped lang="scss">
 .popup {
   &__content {
-    padding-top: 107px;
-    padding-bottom: 92px;
+    padding-top: 61px;
+    padding-bottom: 77px;
     @media screen and (max-width: 768px) {
-      padding-top: 72px;
+      padding-top: 53px;
       padding-bottom: 43px;
     }
+
     &__info {
-      padding: 42px 10px 54px;
+      padding: 31px 10px 13px;
       width: 100%;
-      max-width: 412px;
       text-align: center;
-      line-height: 140%;
+      font-weight: 800;
+      font-size: 36px;
+      line-height: 110%;
+      @media screen and (max-width: 768px) {
+        font-size: 24px;
+        padding-bottom: 13px;
+      }
+    }
+
+    &__desc {
+      padding-bottom: 37px;
+      font-size: 18px;
+      line-height: 110%;
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+        padding-bottom: 47px;
+      }
     }
 
     &__img {
       @media screen and (max-width: 768px) {
         width: 100%;
-        max-width: 88px;
+        max-width: 109px;
       }
     }
 
