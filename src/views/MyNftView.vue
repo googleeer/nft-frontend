@@ -27,11 +27,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .wrapper {
   width: 100%;
-  padding-left: 60px;
+  padding-left: 43px;
   padding-top: 105px;
   @media screen and (max-width: 771px) {
     padding-top: 93px;
-    padding-left: 23px;
+    padding-left: 15.5px;
   }
 }
 .page {
@@ -39,8 +39,10 @@ export default defineComponent({
     font-weight: 600;
     font-size: 48px;
     line-height: 130%;
+    padding-left: 17px;
     @media screen and (max-width: 771px) {
       font-size: 32px;
+      padding-left: 7.5px;
     }
     @media screen and (max-width: 372px) {
       text-align: center;
@@ -49,6 +51,10 @@ export default defineComponent({
   &__desc {
     font-size: 20px;
     line-height: 150%;
+    padding-left: 17px;
+    @media screen and (max-width: 771px) {
+      padding-left: 7.5px;
+    }
     @media screen and (max-width: 372px) {
       text-align: center;
     }
@@ -56,10 +62,11 @@ export default defineComponent({
 }
 .nfts {
   width: 100%;
-  max-width: 1392px;
+  max-width: 1426px;
   display: flex;
   flex-wrap: wrap;
   padding-top: 30px;
+
   @media screen and (max-width: 372px) {
     justify-content: center;
   }
