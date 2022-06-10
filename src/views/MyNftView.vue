@@ -1,16 +1,67 @@
 <script lang="ts">
 import { defineComponent } from "vue";
+import NftVisualInfo from "@/components/cta/NftVisualInfo.vue";
+import data from "../../test-data.json";
 
 export default defineComponent({
   name: "MyNftView",
+  components: { NftVisualInfo },
   setup() {
-    return {};
+    const count = 5;
+    const nfts = data[1].mynft;
+    return { count, nfts };
   },
 });
 </script>
 
 <template>
-  <h1>Mt NFTs</h1>
+  <div class="wrapper">
+    <h1 class="page__title">Mt NFTs</h1>
+    <p class="page__desc">{{ count }} NFT in your collection</p>
+    <div class="nfts">
+      <NftVisualInfo :nfts="nfts"></NftVisualInfo>
+    </div>
+  </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.wrapper {
+  width: 100%;
+  padding-left: 60px;
+  padding-top: 105px;
+  @media screen and (max-width: 771px) {
+    padding-top: 93px;
+    padding-left: 23px;
+  }
+}
+.page {
+  &__title {
+    font-weight: 600;
+    font-size: 48px;
+    line-height: 130%;
+    @media screen and (max-width: 771px) {
+      font-size: 32px;
+    }
+    @media screen and (max-width: 372px) {
+      text-align: center;
+    }
+  }
+  &__desc {
+    font-size: 20px;
+    line-height: 150%;
+    @media screen and (max-width: 372px) {
+      text-align: center;
+    }
+  }
+}
+.nfts {
+  width: 100%;
+  max-width: 1392px;
+  display: flex;
+  flex-wrap: wrap;
+  padding-top: 30px;
+  @media screen and (max-width: 372px) {
+    justify-content: center;
+  }
+}
+</style>

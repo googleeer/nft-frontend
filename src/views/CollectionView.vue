@@ -15,12 +15,12 @@ export default defineComponent({
     const { t } = useI18n();
     const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const collections = data[0].collections;
-    const currentCollection = collections[currentCollectionId];
+    const currentCollection = collections?.[currentCollectionId];
     const properties = {
-      artist: currentCollection.artist,
-      brand: currentCollection.brand,
+      artist: currentCollection?.artist,
+      brand: currentCollection?.brand,
     };
-    const drops = currentCollection.drops;
+    const drops = currentCollection?.drops;
     return { ROUTES, currentCollection, properties, drops, t };
   },
 });

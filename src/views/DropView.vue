@@ -17,13 +17,13 @@ export default defineComponent({
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
     const collections = data[0].collections;
-    const currentCollection = collections[currentCollectionId];
-    const currentDrop = currentCollection.drops[0];
+    const currentCollection = collections?.[currentCollectionId];
+    const currentDrop = currentCollection?.drops[0];
     const properties = {
-      artist: currentCollection.artist,
-      brand: currentCollection.brand,
+      artist: currentCollection?.artist,
+      brand: currentCollection?.brand,
     };
-    const drops = currentCollection.drops;
+    const drops = currentCollection?.drops;
     const appStore = useAppStateStore();
     const { isMobile } = storeToRefs(appStore);
     return {

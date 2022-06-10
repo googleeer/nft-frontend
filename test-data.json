@@ -49,4 +49,41 @@
         }]
       }
     ]
-  }]
+  },
+  {
+    "mynft":
+    [
+      {
+        "id": 1,
+    "title": "Space Shipping",
+    "desc": "Pinepple Express Collection",
+    "img": "1.png"
+      },
+      {
+        "id": 2,
+        "title": "Space Shipping",
+        "desc": "Pinepple Express Collection",
+        "img": "2.png"
+      },
+      {
+        "id": 3,
+        "title": "Space Shipping",
+        "desc": "Pinepple Express Collection",
+        "img": "3.png"
+      },
+      {
+        "id": 4,
+        "title": "Space Shipping",
+        "desc": "Pinepple Express Collection",
+        "img": "4.png"
+      },
+
+      {
+        "id": 5,
+        "title": "Space Shipping",
+        "desc": "Pinepple Express Collection",
+        "img": "5.png"
+      }
+    ]
+  }
+]
