@@ -36,7 +36,7 @@ export default defineComponent({
     padding-left: 16px;
 
     &--name {
-      max-width: 156px;
+      max-width: 165px;
       font-weight: 800;
       font-size: 24px;
       line-height: 110%;
