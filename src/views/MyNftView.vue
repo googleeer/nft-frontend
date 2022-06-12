@@ -54,8 +54,10 @@ export default defineComponent({
     font-size: 20px;
     line-height: 150%;
     padding-left: 17px;
+    padding-top: 15px;
     @media screen and (max-width: 771px) {
       padding-left: 7.5px;
+      padding-top: 14px;
     }
     @media screen and (max-width: 372px) {
       text-align: center;
