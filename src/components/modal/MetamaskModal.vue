@@ -65,9 +65,12 @@ export default defineComponent({
     &__info {
       padding: 42px 10px 54px;
       width: 100%;
-      max-width: 412px;
+      max-width: 427px;
       text-align: center;
       line-height: 140%;
+      @media screen and (max-width: 768px) {
+        padding: 40px 33px 40px 31px;
+      }
     }
 
     &__img {
@@ -79,7 +82,6 @@ export default defineComponent({
 
     &__btns {
       width: 100%;
-
       :not(:first-child) {
         margin-left: 10px;
       }
