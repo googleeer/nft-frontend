@@ -68,7 +68,7 @@ export default defineComponent({
     max-width: none;
     max-height: none;
     .back {
-      top: 77px;
+      top: 93px;
       position: absolute;
     }
   }
