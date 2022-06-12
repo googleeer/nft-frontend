@@ -71,6 +71,7 @@ export default defineComponent({
   z-index: var(--z-index-collections);
   right: 53px;
   top: 50%;
+  transform: translateY(-50%);
   button {
     outline: none;
     border: none;
