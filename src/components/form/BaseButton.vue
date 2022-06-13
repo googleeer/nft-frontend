@@ -60,6 +60,7 @@ export default defineComponent({
   z-index: 0;
   font-size: 18px;
   line-height: 18px;
+  font-weight: 600;
   text-align: center;
   color: var(--color-black);
   padding: 26px 0 20px;
