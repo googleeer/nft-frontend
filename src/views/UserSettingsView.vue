@@ -119,12 +119,15 @@ export default defineComponent({
   width: 100%;
   padding-left: 80px;
   padding-right: 15px;
-  padding-top: 63px;
+  padding-top: 94px;
   @media screen and (max-width: 768px) {
-    padding-left: 10px;
+    padding-left: 23px;
     padding-right: 10px;
     padding-top: 0;
     margin: 0 auto;
+  }
+  @media screen and (max-width: 350px) {
+    padding-left: 10px;
   }
 }
 .settings {
@@ -132,7 +135,7 @@ export default defineComponent({
   padding: 133px 56px 0 382px;
 
   @media screen and (max-width: 768px) {
-    padding: 71px 0 0;
+    padding: 93px 0 0;
   }
 
   &__menu {

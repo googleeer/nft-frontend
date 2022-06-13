@@ -98,9 +98,6 @@ export default defineComponent({
 }
 .wrapper {
   width: 100%;
-  @media screen and (max-width: 768px) {
-    padding-left: 15px;
-  }
 
   .faq {
     width: 100%;

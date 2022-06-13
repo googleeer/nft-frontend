@@ -2,22 +2,24 @@
 import { defineComponent } from "vue";
 import NftVisualInfo from "@/components/cta/NftVisualInfo.vue";
 import data from "../../test-data.json";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "MyNftView",
   components: { NftVisualInfo },
   setup() {
+    const { t } = useI18n();
     const count = 5;
     const nfts = data[1].mynft;
-    return { count, nfts };
+    return { count, nfts, t };
   },
 });
 </script>
 
 <template>
   <div class="wrapper">
-    <h1 class="page__title">Mt NFTs</h1>
-    <p class="page__desc">{{ count }} NFT in your collection</p>
+    <h1 class="page__title">{{ t("mynfts.mynft") }}</h1>
+    <p class="page__desc">{{ count }} {{ t("mynfts.nftInCollection") }}</p>
     <div class="nfts">
       <NftVisualInfo :nfts="nfts"></NftVisualInfo>
     </div>
@@ -52,8 +54,10 @@ export default defineComponent({
     font-size: 20px;
     line-height: 150%;
     padding-left: 17px;
+    padding-top: 15px;
     @media screen and (max-width: 771px) {
       padding-left: 7.5px;
+      padding-top: 14px;
     }
     @media screen and (max-width: 372px) {
       text-align: center;

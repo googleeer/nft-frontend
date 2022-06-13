@@ -22,10 +22,7 @@ export default defineComponent({
   .referral {
     width: 100%;
     max-width: 743px;
-    @media screen and (max-width: 768px) {
-      padding-top: 36px;
-      padding-left: 15px;
-    }
+
     ::v-deep(p) {
       font-weight: 400;
       font-size: 16px;

@@ -56,9 +56,7 @@ export default defineComponent({
 .wrapper {
   width: 100%;
   max-width: 529px;
-  @media screen and (max-width: 768px) {
-    margin: 0 auto;
-  }
+
   .wallet__item {
     max-width: 529px;
     @media screen and (max-width: 768px) {
@@ -97,7 +95,11 @@ export default defineComponent({
 .desc {
   font-size: 20px;
   line-height: 150%;
-  padding-top: 24px;
-  padding-bottom: 45px;
+  padding-top: 8px;
+  padding-bottom: 27px;
+  @media screen and (max-width: 768px) {
+    padding-top: 14px;
+    padding-bottom: 29px;
+  }
 }
 </style>
