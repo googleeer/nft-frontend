@@ -21,8 +21,9 @@ export default defineComponent({
   border: none;
   z-index: 0;
   background: transparent;
-  padding: 21.5px 0;
+  padding: 23px 0;
   font-weight: 500;
+  font-family: CoreSansC, sans-serif;
   font-size: 18px;
   &__bg {
     position: absolute;
