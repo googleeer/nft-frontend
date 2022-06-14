@@ -171,12 +171,14 @@ export default defineComponent({
   &__active {
     font-size: 18px;
     line-height: 18px;
+    font-weight: 600;
     text-align: center;
   }
 
   &__button {
     cursor: pointer;
     transition: all 0.3s ease;
+    font-weight: 600;
 
     &:hover {
       text-decoration: underline;
