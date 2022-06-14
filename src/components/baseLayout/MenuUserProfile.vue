@@ -183,8 +183,8 @@ export default defineComponent({
   }
 
   &__phone {
-    font-family: "Avenir", sans-serif;
-    font-weight: 500;
+    font-family: "CoreSansC", sans-serif;
+    font-weight: 400;
     font-size: 14px;
     line-height: 19px;
     color: var(--color-black);
