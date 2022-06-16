@@ -94,6 +94,8 @@ export default defineComponent({
   position: relative;
   font-family: Avenir, sans-serif;
   @media screen and (max-width: 768px) {
+    width: 100%;
+    max-width: 70px;
     position: fixed;
     z-index: var(--z-idx-header-items);
     right: 25px;
