@@ -85,5 +85,34 @@
         "img": "5.png"
       }
     ]
+  },
+  {
+    "myperks":
+    [
+      {
+        "id": 1,
+        "name": "Collector",
+        "youGet": "by back price $5 (not $3)",
+        "desc": "All collectibles (NFT)"
+      },
+      {
+        "id": 2,
+        "name": "Hustler",
+        "youGet": "company owner",
+        "desc": "Lunch with an artist"
+      },
+      {
+        "id": 3,
+        "name": "Collector",
+        "youGet": "by back price $5 (not $3)",
+        "desc": "All collectibles (NFT)"
+      },
+      {
+        "id": 4,
+        "name": "Hustler",
+        "youGet": "company owner",
+        "desc": "Lunch with an artist"
+      }
+    ]
   }
 ]
