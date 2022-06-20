@@ -197,7 +197,6 @@ export default defineComponent({
     @media screen and (max-width: 1346px) {
       max-width: 480px;
       padding-top: 86px;
-      align-items: center;
     }
     &__title {
       padding-left: 12px;
