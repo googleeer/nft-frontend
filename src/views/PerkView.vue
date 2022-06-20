@@ -18,7 +18,11 @@ export default defineComponent({
     const currentPerkId = +useRouter().currentRoute.value.params.id;
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
     console.log(nftsData);
-    return { tab, currentIndex, isMobile, ROUTES, nftsData };
+    const countOfActiveNft = nftsData?.nfts.filter(
+      (item) => item.active,
+    ).length;
+
+    return { tab, currentIndex, isMobile, ROUTES, nftsData, countOfActiveNft };
   },
 });
 </script>
@@ -42,11 +46,14 @@ export default defineComponent({
         </div>
       </div>
       <div class="perk__nfts flex direction-column">
-        <h2 class="perk__nfts__title">Need 4 out of 5 NFTs</h2>
+        <h2 class="perk__nfts__title">
+          Need {{ nftsData.nfts.length - countOfActiveNft }} out of
+          {{ nftsData.nfts.length }} NFTs
+        </h2>
         <div class="perk__nfts__need flex">
           <div
             class="perk__nfts__need--block flex"
-            v-for="nft of nftsData.perks"
+            v-for="nft of nftsData.nfts"
             :key="nft.id"
             :class="{ active: nft.active }"
           >
@@ -211,10 +218,23 @@ export default defineComponent({
 
       @media screen and (max-width: 1346px) {
         flex-wrap: nowrap;
-        overflow-x: scroll;
+        overflow-x: auto;
         width: 100%;
         max-width: none;
         justify-content: flex-start;
+      }
+      &::-webkit-scrollbar {
+        height: 12px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #444444;
+        border-radius: 10px;
       }
       .active {
         position: relative;

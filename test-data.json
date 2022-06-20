@@ -95,7 +95,7 @@
         "youGet": "by back price $5 (not $3)",
         "desc": "All collectibles (NFT)",
         "img": "heart.png",
-        "perks": [{"id":1,"active":true,"img":"nft1.png"},{"id":2,"active":false,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
+        "nfts": [{"id":1,"active":true,"img":"nft1.png"},{"id":2,"active":false,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
       },
       {
         "id": 2,
@@ -103,7 +103,7 @@
         "youGet": "company owner",
         "desc": "Lunch with an artist",
         "img": "brilliant.png",
-        "perks": [{"id":1,"active":false,"img":"nft1.png"},{"id":2,"active":true,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
+        "nfts": [{"id":1,"active":false,"img":"nft1.png"},{"id":2,"active":true,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
 
       },
       {
@@ -112,7 +112,7 @@
         "youGet": "by back price $5 (not $3)",
         "desc": "All collectibles (NFT)",
         "img": "heart.png",
-        "perks": [{"id":1,"active":true,"img":"nft1.png"},{"id":2,"active":true,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
+        "nfts": [{"id":1,"active":true,"img":"nft1.png"},{"id":2,"active":true,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
 
       },
       {
@@ -121,7 +121,7 @@
         "youGet": "company owner",
         "desc": "Lunch with an artist",
         "img": "brilliant.png",
-        "perks": [{"id":1,"active":false,"img":"nft1.png"},{"id":2,"active":false,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":true,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
+        "nfts": [{"id":1,"active":false,"img":"nft1.png"},{"id":2,"active":false,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":true,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
 
       }
     ]
