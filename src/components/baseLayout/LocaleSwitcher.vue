@@ -10,9 +10,6 @@ export default defineComponent({
     const locales = {
       en: "Eng",
       es: "Es",
-      fr: "Fr",
-      de: "De",
-      pt: "Pt",
     };
     const isOpen = ref(false);
     const localesArray = Object.entries(locales);
@@ -58,7 +55,7 @@ export default defineComponent({
     </svg>
     <transition name="fade">
       <ul
-        class="locale__list"
+        class="locale__list flex direction-column align-center"
         v-if="isOpen"
         v-click-outside:[300]="closeLocaleList"
       >
@@ -122,11 +119,39 @@ export default defineComponent({
   top: 100%;
   right: 50%;
   transform: translateX(50%);
-  background-color: black;
-  border-radius: 6px;
+  border-radius: 18px;
+  padding: 20px 0;
+  background: radial-gradient(
+    113.12% 113.12% at 50.52% 50.52%,
+    #292929 0%,
+    #000000 100%
+  );
+  @media screen and (max-width: 768px) {
+    top: calc(100% + 20px);
+  }
+  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */
   &__locale {
+    position: relative;
     margin: 3px 0;
-    padding: 0.5rem 1rem;
+    padding: 8px 5px;
+    text-align: center;
+    display: inline-block;
+    &::after {
+      position: absolute;
+      top: 40px;
+      content: "";
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(
+        307.82deg,
+        #81ff81 -7.19%,
+        #fbfef9 32.88%,
+        #ff8bec 48.41%,
+        #ffffff 75.25%,
+        #3854ff 109.05%
+      );
+      left: 0;
+    }
   }
   &__item {
     font-weight: 500;
