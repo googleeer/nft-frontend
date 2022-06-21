@@ -89,6 +89,15 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    ...ROUTES.PERK,
+    component: () =>
+      import(/* webpackChunkName: "perks" */ "../views/PerkView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
     ...ROUTES.USER_SETTINGS,
     component: () =>
       import(

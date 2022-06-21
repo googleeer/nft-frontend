@@ -3,6 +3,7 @@ import { defineComponent, ref } from "vue";
 import data from "../../test-data.json";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
+import { ROUTES } from "@/constants/routes.constants";
 
 export default defineComponent({
   name: "PerksView",
@@ -21,7 +22,7 @@ export default defineComponent({
         return perks?.filter((item) => item.id == 2);
       }
     };
-    return { tab, currentIndex, perks, filteredData, isMobile };
+    return { tab, currentIndex, perks, filteredData, isMobile, ROUTES };
   },
 });
 </script>
@@ -43,16 +44,27 @@ export default defineComponent({
       class="perks flex justify-center"
       :class="{ 'align-center': !isMobile }"
     >
-      <div class="perk" v-for="(perk, i) of filteredData()" :key="i">
+      <RouterLink
+        :to="{
+          name: ROUTES.PERK.name,
+          params: { id: perk.id },
+        }"
+        class="perk"
+        v-for="(perk, i) of filteredData()"
+        :key="i"
+      >
         <div class="perk__img">
-          <img class="perk__img__icon" src="@/assets/images/perks/heart.png" />
+          <img
+            class="perk__img__icon"
+            :src="require(`@/assets/images/perks/${perk.img}`)"
+          />
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
           <p class="perk__content__desc">{{ perk.desc }}</p>
           <p class="perk__content__action">{{ perk.youGet }}</p>
         </div>
-      </div>
+      </RouterLink>
     </div>
   </div>
 </template>
@@ -112,6 +124,8 @@ export default defineComponent({
   width: 290px;
   height: calc(376px - 182px);
   position: relative;
+  text-decoration: none;
+  color: var(--color-white);
   z-index: 0;
   margin: 50px 15px;
   @media screen and (max-width: 1280px) {

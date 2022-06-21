@@ -39,6 +39,10 @@ export const ROUTES = {
     path: "/perks",
     name: "perks",
   },
+  PERK: {
+    path: "/perks/:id",
+    name: "perk",
+  },
   USER_SETTINGS: {
     path: "/user-settings",
     name: "userSettings",
