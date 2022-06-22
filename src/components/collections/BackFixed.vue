@@ -59,10 +59,13 @@ export default defineComponent({
       position: absolute;
       background-image: url("~@/assets/images/left-arrow.svg");
       background-repeat: no-repeat;
-      left: -34px;
+      left: -32px;
       top: 0;
       bottom: 0;
       background-position: center left;
+      @media screen and (max-width: 768px) {
+        left: -28px;
+      }
     }
   }
 }

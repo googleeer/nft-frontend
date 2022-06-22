@@ -58,7 +58,7 @@ export default defineComponent({
       <span class="layout__empty"></span>
       <router-link to="/">
         <img
-          src="../assets/images/sm_logo.png"
+          src="../assets/images/weedar.svg"
           :alt="t('logo')"
           class="layout__logo"
         />
@@ -90,23 +90,36 @@ export default defineComponent({
 .layout {
   &__logo {
     position: fixed;
-    top: 45px;
+    top: 42px;
     left: 50%;
     transform: translateX(-50%);
     z-index: var(--z-index-header-logo);
 
     @media screen and (max-width: 768px) {
-      height: 15px;
+      width: 129px;
+      height: 23px;
       object-fit: contain;
-      top: 46px;
+      top: 41px;
     }
   }
 
   &__header {
+    position: relative;
+    @media screen and (max-width: 768px) {
+      &::before {
+        content: "";
+        position: fixed;
+        width: 100%;
+        height: 90px;
+        background-color: black;
+        z-index: var(--z-index-header-logo);
+        inset: 0;
+      }
+    }
     &__right {
       position: fixed;
       right: 56px;
-      top: 30px;
+      top: 28px;
       @media screen and (min-width: 768px) {
         z-index: var(--z-index-header-logo);
       }
