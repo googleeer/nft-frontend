@@ -24,7 +24,7 @@ export default defineComponent({
         <svg
           v-if="!isOpen"
           width="34"
-          height="26"
+          height="35"
           viewBox="0 0 34 26"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
