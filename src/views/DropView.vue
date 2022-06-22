@@ -80,8 +80,11 @@ export default defineComponent({
     max-width: none;
     max-height: none;
     .back {
-      top: 77px;
+      top: 94px;
       position: absolute;
+      @media screen and (max-width: 768px) {
+        transform: translateX(-36%);
+      }
     }
   }
   &__img--wrap {
