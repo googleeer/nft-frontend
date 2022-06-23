@@ -58,12 +58,14 @@ export default defineComponent({
     <ul class="mainMenu">
       <li class="mainMenu__item" v-for="link in links" :key="link.name">
         <router-link class="mainMenu__item__link" :to="link.to">
-          {{ t(`menu.${link.name}`) }}
+          <span class="text"
+            >{{ t(`menu.${link.name}`) }}
+            <span class="line"></span>
+          </span>
           <span
             v-if="link.name === 'myNft' && !!nftCount"
             class="nftCount flex flexCenter"
-          >
-            {{ nftCount }}
+            >{{ nftCount }}
           </span>
         </router-link>
       </li>
@@ -110,10 +112,28 @@ export default defineComponent({
       line-height: 130%;
       color: var(--color-white);
       text-decoration: none;
-
+      .text {
+        position: relative;
+      }
       &:hover,
       &.exact-active {
-        text-decoration: underline;
+        .line {
+          position: absolute;
+          display: inline-block;
+          content: "";
+          width: 100%;
+          height: 4px;
+          background: linear-gradient(
+            307.82deg,
+            #81ff81 -7.19%,
+            #fbfef9 32.88%,
+            #ff8bec 48.41%,
+            #ffffff 75.25%,
+            #3854ff 109.05%
+          );
+          bottom: -6px;
+          left: 0;
+        }
       }
 
       @media screen and (max-width: 768px) {
