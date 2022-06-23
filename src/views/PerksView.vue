@@ -152,8 +152,7 @@ export default defineComponent({
     width: 100%;
     max-width: 240px;
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: inline-block;
     padding-left: 34px;
     @media screen and (max-width: 711px) {
       display: inline-block;
@@ -248,6 +247,7 @@ export default defineComponent({
     }
     .perk__content__name {
       padding-top: 28px;
+      display: inline-block;
       @media screen and (max-width: 711px) {
         font-size: 24px;
       }
@@ -280,6 +280,7 @@ export default defineComponent({
     }
     .perk__content__name {
       padding-top: 34px;
+      display: inline-block;
       @media screen and (max-width: 711px) {
         font-size: 24px;
       }
