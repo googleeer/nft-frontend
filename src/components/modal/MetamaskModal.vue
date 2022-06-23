@@ -18,7 +18,7 @@ export default defineComponent({
       },
       {
         styleType: "default",
-        text: "install",
+        text: "Install",
         textColor: "black",
         type: "install",
       },

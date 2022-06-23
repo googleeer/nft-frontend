@@ -19,8 +19,9 @@ export default defineComponent({
         .split("")
         .filter((_) => _.trim())
         .join("");
-
-      if (length <= 7 || length >= 14) {
+      if (length == 0) {
+        context.emit("update:errorText", "Please  provide phone number");
+      } else if (length <= 7 || length >= 14) {
         context.emit("update:errorText", "Phone number is incorrect!");
       } else {
         context.emit("update:errorText", "");
