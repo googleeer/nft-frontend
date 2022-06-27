@@ -63,7 +63,7 @@ export default defineComponent({
   font-weight: 600;
   text-align: center;
   color: var(--color-black);
-  padding: 26px 0 20px;
+  padding: 23px 0 23px;
   border-radius: 40px;
   min-width: 335px;
   border: none;

@@ -180,7 +180,7 @@ export default defineComponent({
   transform: translateY(-50%);
   width: 41px;
   height: 41px;
-  background-image: url("~@/assets/images/nftCount.png");
+  background-image: url("~@/assets/images/nftCount.svg");
   background-size: cover;
   font-size: 18px;
   line-height: 18px;

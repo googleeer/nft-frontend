@@ -31,7 +31,7 @@ export default defineComponent({
     <p class="desc">{{ t("settings.wallet.desc") }}</p>
     <SettingsLink
       text="settings.wallet.items.metamask"
-      icon="fox.svg"
+      icon="metamask.svg"
       :border-radius="'top'"
       class="wallet__item"
       @click="changeModalState(true)"
@@ -44,7 +44,7 @@ export default defineComponent({
     />
     <SettingsLink
       text="settings.wallet.items.coinbaseWallet"
-      icon="coinbase.svg"
+      icon="Coinbase.svg"
       :border-radius="'bottom'"
       class="wallet__item"
     />
