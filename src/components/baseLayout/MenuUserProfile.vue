@@ -111,7 +111,7 @@ export default defineComponent({
         @click="onLogOut"
         :with-out-border="true"
         text="profile.logOut"
-        icon="logout.svg"
+        icon="logOut.svg"
         class="desktopMenu__logOutLink pointer"
       >
         <SettingsItemArrow />
