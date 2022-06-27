@@ -4,14 +4,32 @@ import { useI18n } from "vue-i18n";
 import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import data from "../../test-data.json";
+import { useAppStateStore } from "@/store/appState.store";
+import { getCollections } from "@/service/collections/collection.service";
+import { Collection } from "@/service/collections/collections.type";
+import router from "@/router";
 export default defineComponent({
   name: "CollectionsView",
   components: { BaseButton },
   setup() {
+    const appState = useAppStateStore();
+    appState.setPreloaderValue(true);
+    const collections = ref<Collection[]>([]);
+    getCollections()
+      .then((data) => {
+        collections.value = data;
+      })
+      .catch(() => {
+        router.push(ROUTES.HOME);
+      })
+      .finally(() => appState.setPreloaderValue(false));
     const { t } = useI18n();
-    const collections = data[0].collections;
-    const currentCollectionId = ref(0);
-    return { t, ROUTES, collections, currentCollectionId };
+    // const test = ref([]);
+    // test.value.push(1);
+    // console.log(test.value[0]);
+    const collectionsStatic = data[0].collections;
+    const currentCollectionId = ref(5);
+    return { t, ROUTES, collections, currentCollectionId, collectionsStatic };
   },
 });
 </script>
@@ -19,21 +37,24 @@ export default defineComponent({
 <template>
   <div class="wrapper flex direction-column flex-grow-1">
     <div
-      v-for="item of collections"
+      v-for="(item, key) of collections"
       :key="item.id"
       class="flex"
       :class="{ 'flex-grow-1': currentCollectionId === item.id }"
     >
       <div
         class="content flex align-end"
-        v-if="currentCollectionId === item.id"
+        v-if="item.id === currentCollectionId"
         :data-content="t('collections.swipe')"
       >
-        <img :src="require(`@/assets/images/${item.gif}`)" class="bg" />
+        <img
+          :src="require(`@/assets/images/${collectionsStatic[key].gif}`)"
+          class="bg"
+        />
         <div class="collection-content flex direction-column">
           <img
             class="collection-content-img"
-            :src="require(`@/assets/images/${item.logo}`)"
+            :src="require(`@/assets/images/${collectionsStatic[key].logo}`)"
           />
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">{{ item.shortDescription }}</p>
@@ -48,14 +69,11 @@ export default defineComponent({
         </div>
         <div class="pagination__wrapper flex direction-column align-center">
           <button
-            class="pagination__wrapper__prev"
-            :class="{ active: currentCollectionId === 0 }"
-            @click="currentCollectionId = 0"
-          ></button>
-          <button
-            class="pagination__wrapper__next"
-            :class="{ active: currentCollectionId === 1 }"
-            @click="currentCollectionId = 1"
+            v-for="btn of collections"
+            :key="btn"
+            class="pagination__wrapper__btn"
+            :class="{ active: btn.id === currentCollectionId }"
+            @click="currentCollectionId = btn.id"
           ></button>
         </div>
       </div>
@@ -81,13 +99,9 @@ export default defineComponent({
   .active {
     padding: 6.5px;
   }
-  &__prev {
+  &__btn {
     background: white;
     border-radius: 100%;
-  }
-  &__next {
-    border-radius: 100%;
-    background: white;
   }
 }
 .wrapper {

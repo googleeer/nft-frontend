@@ -74,10 +74,10 @@ export default defineComponent({
       </div>
       <div class="collection__author__prop--block flex justify-center">
         <CollectionProperties
-          v-for="(brand, title) of properties"
-          :key="title"
-          :title="title"
-          :value="brand"
+          v-for="(property, index) of properties"
+          :key="index"
+          :title="property.title"
+          :value="property.value"
         >
         </CollectionProperties>
       </div>
