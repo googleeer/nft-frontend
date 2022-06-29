@@ -32,7 +32,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1 direction-column">
+  <div class="collection flex flex-grow-1 direction-column" v-if="item">
     <div class="collection__info flex align-center">
       <div class="collection__info--img" v-if="isMobile">
         <img src="../../assets/images/junkYard-mini.svg" />

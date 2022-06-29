@@ -40,10 +40,8 @@ export default defineComponent({
       })),
     );
     const drops = currentCollection?.drops;
-    console.log(collection);
     return {
       ROUTES,
-      currentCollection,
       properties,
       drops,
       t,
