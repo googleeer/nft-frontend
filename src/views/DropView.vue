@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import DropPerks from "@/components/collections/Perks.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
@@ -9,16 +9,35 @@ import { useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
+import { Drop } from "@/service/collections/collections.type";
+import { getDrop } from "@/service/collections/collection.service";
+import router from "@/router";
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, DropPerks, BackFixed },
-  setup() {
+  setup: function () {
     const { t } = useI18n();
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
+    const currentDropId = +useRouter().currentRoute.value.params.id;
+    const currentDrop = ref<Drop | null>(null);
+    const drop = ref<Drop | null>(null);
+    const appState = useAppStateStore();
+    appState.setPreloaderValue(true);
+    getDrop(currentDropId)
+      .then((data) => {
+        drop.value = data;
+        console.log(data);
+      })
+      .catch(() => {
+        router.push({
+          name: ROUTES.COLLECTION.name,
+          params: { id: currentCollectionId },
+        });
+      });
     const collections = data[0].collections;
     const currentCollection = collections?.[currentCollectionId];
-    const currentDrop = currentCollection?.drops[0];
+    // const currentDrop = currentCollection?.drops[0];
     const properties = {
       artist: currentCollection?.artist,
       brand: currentCollection?.brand,
@@ -35,6 +54,7 @@ export default defineComponent({
       currentDrop,
       currentCollectionId,
       isMobile,
+      drop,
     };
   },
 });

@@ -33,6 +33,7 @@ export default defineComponent({
   }
   &__img {
     width: 92px;
+    height: 98px;
   }
   &__content {
     padding-left: 16px;

@@ -1,6 +1,7 @@
 import {
   Collection,
   CollectionWithDrops,
+  Drop,
 } from "@/service/collections/collections.type";
 import instance from "@/service/api/api.instance";
 
@@ -18,6 +19,15 @@ export const getCollection = async (
 ): Promise<CollectionWithDrops> => {
   try {
     const res = await instance.get(`/nft-collection/${id}`);
+    return res.data;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
+
+export const getDrop = async (id: number): Promise<Drop> => {
+  try {
+    const res = await instance.get(`/nft-perk/drop/${id}`);
     return res.data;
   } catch (e) {
     return Promise.reject(e);

@@ -68,7 +68,8 @@
   "collection": {
     "open": "Open Collection",
     "brand": "Brand",
-    "artist": "Artist"
+    "artist": "Artist",
+    "soon": "Coming soon"
   },
   "mynfts": {
     "mynft": "My NFTs",

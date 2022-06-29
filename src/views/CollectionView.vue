@@ -19,11 +19,12 @@ export default defineComponent({
     const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const appState = useAppStateStore();
     const collection = ref<CollectionWithDrops | null>(null);
+    const currentDropId = ref(0);
     appState.setPreloaderValue(true);
     getCollection(currentCollectionId)
       .then((data) => {
         collection.value = data;
-        console.log("collection", data);
+        currentDropId.value = data.drops[0].id;
       })
       .catch(() => {
         router.push(ROUTES.COLLECTIONS);
@@ -38,9 +39,17 @@ export default defineComponent({
         value: collection.value?.[key],
       })),
     );
-    console.log("asd", properties.value);
     const drops = currentCollection?.drops;
-    return { ROUTES, currentCollection, properties, drops, t, collection };
+    console.log(collection);
+    return {
+      ROUTES,
+      currentCollection,
+      properties,
+      drops,
+      t,
+      collection,
+      currentDropId,
+    };
   },
 });
 </script>
@@ -66,15 +75,25 @@ export default defineComponent({
       :title-last-section="t('drop.drop')"
       :route="{
         name: ROUTES.DROP.name,
-        params: { collectionId: collection.id, id: 0 },
+        params: { collectionId: collection.id, id: currentDropId },
       }"
     >
       <div class="drops">
-        <CollectionDrop
-          v-for="drop of collection.drops"
-          :key="drop.id"
-          :drop="drop"
-        ></CollectionDrop>
+        <div v-for="drop of collection.drops" :key="drop.id">
+          <CollectionDrop
+            v-if="drop.id === currentDropId"
+            :drop="drop"
+          ></CollectionDrop>
+        </div>
+        <div class="pagination__wrapper flex align-center">
+          <button
+            v-for="(btn, index) of collection.drops"
+            :key="index"
+            class="pagination__wrapper__btn"
+            :class="{ active: btn.id === currentDropId }"
+            @click="currentDropId = btn.id"
+          ></button>
+        </div>
       </div>
     </MenuInfo>
   </div>
@@ -85,20 +104,45 @@ export default defineComponent({
   display: flex;
   width: 100%;
   position: relative;
-  overflow-x: auto;
-  &::-webkit-scrollbar {
-    height: 12px;
+  overflow-x: hidden;
+  .pagination__wrapper {
+    width: 100%;
+    max-width: 13px;
+    position: absolute;
+    z-index: 2;
+    bottom: 25px;
+    right: 50%;
+    transform: translateX(-50%);
+    //right: 53px;
+    //top: 50%;
+    //transform: translateY(-50%);
+    button {
+      outline: none;
+      border: none;
+      margin: 10px;
+      padding: 4.5px;
+    }
+    .active {
+      padding: 6.5px;
+    }
+    &__btn {
+      background: white;
+      border-radius: 100%;
+    }
   }
-
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: #444444;
-    border-radius: 10px;
-  }
+  //&::-webkit-scrollbar {
+  //  height: 12px;
+  //}
+  //
+  //&::-webkit-scrollbar-track {
+  //  background: #f1f1f1;
+  //  border-radius: 10px;
+  //}
+  //
+  //&::-webkit-scrollbar-thumb {
+  //  background: #444444;
+  //  border-radius: 10px;
+  //}
   .drop {
     width: 100%;
     min-width: 100%;
