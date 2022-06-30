@@ -10,4 +10,11 @@ export interface Drop {
   artist: string;
   drops: Array<Drop>;
 }
+export interface Perk {
+  id: number;
+  name: string;
+  description: string;
+  description_es: string;
+  endingDate: string;
+}
 export type CollectionWithDrops = Collection & { drops: Drop[] };

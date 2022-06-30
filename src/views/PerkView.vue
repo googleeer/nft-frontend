@@ -17,7 +17,6 @@ export default defineComponent({
     const perks = data[2].myperks;
     const currentPerkId = +useRouter().currentRoute.value.params.id;
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
-    console.log(nftsData);
     const countOfActiveNft = nftsData?.nfts.filter(
       (item) => item.active,
     ).length;

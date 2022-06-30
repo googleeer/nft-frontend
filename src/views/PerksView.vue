@@ -1,28 +1,57 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import data from "../../test-data.json";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
 import { ROUTES } from "@/constants/routes.constants";
+import { Perk } from "@/service/collections/collections.type";
+import { getPerks } from "@/service/collections/collection.service";
+import router from "@/router";
 
 export default defineComponent({
   name: "PerksView",
   setup() {
     const appStore = useAppStateStore();
+    const appState = useAppStateStore();
     const { isMobile } = storeToRefs(appStore);
     const currentIndex = ref(0);
     const tab = ["all", "active", "inactive"];
-    const perks = data[2].myperks;
+    const perks = ref<Perk[]>([]);
+    appState.setPreloaderValue(true);
+    getPerks()
+      .then((data) => {
+        perks.value = data;
+        console.log(data);
+      })
+      .catch(() => router.push(ROUTES.HOME))
+      .finally(() => appState.setPreloaderValue(false));
+    const staticData = {
+      19: {
+        img: "heart.png",
+        youGet: "by back price $5 (not $3)",
+      },
+      20: {
+        img: "brilliant.png",
+        youGet: "company owner",
+      },
+    };
     const filteredData = () => {
       if (currentIndex.value === 0) {
-        return perks;
+        return perks.value;
       } else if (currentIndex.value === 1) {
-        return perks?.filter((item) => item.id === 1);
+        return perks.value.filter((item) => item.id === 19);
       } else {
-        return perks?.filter((item) => item.id == 2);
+        return perks.value.filter((item) => item.id === 20);
       }
     };
-    return { tab, currentIndex, perks, filteredData, isMobile, ROUTES };
+    return {
+      tab,
+      currentIndex,
+      perks,
+      filteredData,
+      isMobile,
+      ROUTES,
+      staticData,
+    };
   },
 });
 </script>
@@ -43,6 +72,7 @@ export default defineComponent({
     <div
       class="perks flex justify-center"
       :class="{ 'align-center': !isMobile }"
+      v-if="perks"
     >
       <RouterLink
         :to="{
@@ -56,13 +86,13 @@ export default defineComponent({
         <div class="perk__img">
           <img
             class="perk__img__icon"
-            :src="require(`@/assets/images/perks/${perk.img}`)"
+            :src="require(`@/assets/images/perks/${staticData[perk.id].img}`)"
           />
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
-          <p class="perk__content__desc">{{ perk.desc }}</p>
-          <p class="perk__content__action">{{ perk.youGet }}</p>
+          <p class="perk__content__desc">{{ perk.description }}</p>
+          <p class="perk__content__action">{{ staticData[perk.id].youGet }}</p>
         </div>
       </RouterLink>
     </div>
@@ -113,7 +143,7 @@ export default defineComponent({
 }
 .perks {
   width: 100%;
-  justify-content: space-between;
+  //justify-content: space-between;
   flex-wrap: wrap;
   @media screen and (max-width: 1280px) {
     justify-content: center;
@@ -127,10 +157,8 @@ export default defineComponent({
   text-decoration: none;
   color: var(--color-white);
   z-index: 0;
-  margin: 50px 15px;
-  @media screen and (max-width: 1280px) {
-    margin: 50px 33px;
-  }
+  margin: 50px 33px;
+
   @media screen and (max-width: 711px) {
     width: 100%;
     height: 157px;
@@ -171,7 +199,7 @@ export default defineComponent({
         position: absolute;
         content: "";
         width: 100%;
-        max-width: 145px;
+        //max-width: 145px;
         height: 2px;
         background: linear-gradient(
           307.82deg,
@@ -240,15 +268,19 @@ export default defineComponent({
       margin: 7px 0 7px 10px;
       padding: 23px 28px 23px 0px;
     }
+    @media screen and (max-width: 374px) {
+      padding: 23px 10px 23px 0px;
+    }
     @media screen and (max-width: 711px) {
       .perk__content {
-        margin: 0 0 0 175px;
+        margin: 0 0 0 165px;
       }
     }
     .perk__content__name {
       padding-top: 28px;
       display: inline-block;
       @media screen and (max-width: 711px) {
+        padding-top: 0;
         font-size: 24px;
       }
     }
@@ -278,10 +310,14 @@ export default defineComponent({
       margin: 7px 10px 7px 0;
       padding: 33px 0 33px 28px;
     }
+    @media screen and (max-width: 374px) {
+      padding: 33px 0 33px 10px;
+    }
     .perk__content__name {
       padding-top: 34px;
       display: inline-block;
       @media screen and (max-width: 711px) {
+        padding-top: 0;
         font-size: 24px;
       }
     }
