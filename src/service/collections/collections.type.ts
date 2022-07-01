@@ -15,7 +15,7 @@ export interface Perk {
   name: string;
   description: string;
   description_es: string;
-  endingDate: Date;
+  endingDate: string | null;
   slots: number;
   active: boolean;
 }
