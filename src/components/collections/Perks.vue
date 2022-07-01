@@ -10,7 +10,7 @@ export default defineComponent({
 <template>
   <div class="perks">
     <div class="perks__perk" v-for="perk of perks" :key="perk.id">
-      <img class="drop__img" :src="require(`@/assets/images/${perk.img}`)" />
+      <img class="drop__img" src="@/assets/images/brilliant.png" />
     </div>
   </div>
 </template>

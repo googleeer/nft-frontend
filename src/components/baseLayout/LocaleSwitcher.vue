@@ -22,7 +22,6 @@ export default defineComponent({
     const closeLocaleList = () => {
       isOpen.value = false;
     };
-    console.log(getLocaleList.value);
     return {
       locale,
       locales,

@@ -66,7 +66,10 @@
     "perks": "Perks"
   },
   "collection": {
-    "open": "Open Collection"
+    "open": "Open Collection",
+    "brand": "Brand",
+    "artist": "Artist",
+    "soon": "Coming soon"
   },
   "mynfts": {
     "mynft": "My NFTs",

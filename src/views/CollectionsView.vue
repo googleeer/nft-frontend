@@ -1,61 +1,110 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import data from "../../test-data.json";
+import { useAppStateStore } from "@/store/appState.store";
+import { getCollections } from "@/service/collections/collection.service";
+import { Collection } from "@/service/collections/collections.type";
+import router from "@/router";
+import { getLocalisingByKey } from "@/utils/localise";
 export default defineComponent({
   name: "CollectionsView",
   components: { BaseButton },
   setup() {
-    const { t } = useI18n();
-    const collections = data[0].collections;
-    const currentCollectionId = ref(0);
-    return { t, ROUTES, collections, currentCollectionId };
+    const appState = useAppStateStore();
+    appState.setPreloaderValue(true);
+    const currentCollectionId = ref<number>(0);
+
+    const collections = ref<Collection[]>([]);
+    getCollections()
+      .then((data) => {
+        collections.value = data;
+        currentCollectionId.value = data[0].id;
+      })
+      .catch(() => {
+        router.push(ROUTES.HOME);
+      })
+      .finally(() => appState.setPreloaderValue(false));
+    const { t, locale } = useI18n();
+    const collectionsStatic = data[0].collections;
+    const someFun = getLocalisingByKey<Collection>(locale);
+    const isComingSoon = computed(
+      () =>
+        collections.value.find((item) => item.id === currentCollectionId.value)
+          ?.isComingSoon === "true",
+    );
+
+    return {
+      t,
+      ROUTES,
+      collections,
+      currentCollectionId,
+      collectionsStatic,
+      someFun,
+      isComingSoon,
+    };
   },
 });
 </script>
 
 <template>
   <div class="wrapper flex direction-column flex-grow-1">
+    <div class="blur" v-if="isComingSoon"></div>
     <div
-      v-for="item of collections"
+      v-for="(item, key) of collections"
       :key="item.id"
       class="flex"
       :class="{ 'flex-grow-1': currentCollectionId === item.id }"
     >
       <div
         class="content flex align-end"
-        v-if="currentCollectionId === item.id"
+        v-if="item.id === currentCollectionId"
         :data-content="t('collections.swipe')"
       >
-        <img :src="require(`@/assets/images/${item.gif}`)" class="bg" />
+        <img
+          :src="require(`@/assets/images/${collectionsStatic[key].gif}`)"
+          class="bg"
+        />
         <div class="collection-content flex direction-column">
           <img
             class="collection-content-img"
-            :src="require(`@/assets/images/${item.logo}`)"
+            :src="require(`@/assets/images/${collectionsStatic[key].logo}`)"
           />
           <h1 class="collection-content-name">{{ item.name }}</h1>
-          <p class="collection-content-desc">{{ item.shortDescription }}</p>
+          <p class="collection-content-desc">
+            {{ someFun(item, "shortDescription").value }}
+          </p>
           <BaseButton
             :button-text="t('collection.open')"
             class="collection-content-btn"
+            v-if="!isComingSoon"
             :to="{
               name: ROUTES.COLLECTION.name,
               params: { id: currentCollectionId },
             }"
           ></BaseButton>
+          <div
+            v-if="isComingSoon"
+            class="collection-content-soon flex align-center"
+          >
+            <img
+              src="../assets/images/time.svg"
+              class="collection-content-soon--img"
+            />
+            <h2 class="collection-content-soon--text">
+              {{ t("collection.soon") }}
+            </h2>
+          </div>
         </div>
         <div class="pagination__wrapper flex direction-column align-center">
           <button
-            class="pagination__wrapper__prev"
-            :class="{ active: currentCollectionId === 0 }"
-            @click="currentCollectionId = 0"
-          ></button>
-          <button
-            class="pagination__wrapper__next"
-            :class="{ active: currentCollectionId === 1 }"
-            @click="currentCollectionId = 1"
+            v-for="btn of collections"
+            :key="btn"
+            class="pagination__wrapper__btn"
+            :class="{ active: btn.id === currentCollectionId }"
+            @click="currentCollectionId = btn.id"
           ></button>
         </div>
       </div>
@@ -64,11 +113,19 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.blur {
+  position: fixed;
+  inset: 0;
+  left: 0px;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(27.1828px);
+}
 .pagination__wrapper {
   width: 100%;
   max-width: 13px;
   position: absolute;
-  z-index: var(--z-index-collections);
+  z-index: 2;
   right: 53px;
   top: 50%;
   transform: translateY(-50%);
@@ -81,13 +138,9 @@ export default defineComponent({
   .active {
     padding: 6.5px;
   }
-  &__prev {
+  &__btn {
     background: white;
     border-radius: 100%;
-  }
-  &__next {
-    border-radius: 100%;
-    background: white;
   }
 }
 .wrapper {
@@ -131,7 +184,7 @@ export default defineComponent({
       width: 100%;
       padding-left: 59px;
       padding-bottom: 62px;
-      z-index: var(--z-index-collections);
+      z-index: 2;
       @media screen and (max-width: 768px) {
         padding: 0 20px 44px;
       }
@@ -173,6 +226,23 @@ export default defineComponent({
         @media screen and (max-width: 768px) {
           max-width: 92px;
           height: 92px;
+        }
+      }
+      &-soon {
+        &--img {
+          width: 58px;
+          margin-right: 27px;
+          @media screen and (max-width: 768px) {
+            width: 38px;
+          }
+        }
+        &--text {
+          font-size: 46px;
+          line-height: 110%;
+          font-weight: 300;
+          @media screen and (max-width: 768px) {
+            font-size: 24px;
+          }
         }
       }
     }

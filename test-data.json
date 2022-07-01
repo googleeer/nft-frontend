@@ -90,7 +90,7 @@
     "myperks":
     [
       {
-        "id": 1,
+        "id": 19,
         "name": "Collector",
         "youGet": "by back price $5 (not $3)",
         "desc": "All collectibles (NFT)",
@@ -98,7 +98,7 @@
         "nfts": [{"id":1,"active":true,"img":"nft1.png"},{"id":2,"active":false,"img":"nft2.png"},{"id":3,"active":false,"img":"nft3.png"},{"id":4,"active":false,"img":"nft2.png"},{"id":5,"active":false,"img":"nft3.png"}]
       },
       {
-        "id": 2,
+        "id": 20,
         "name": "Hustler",
         "youGet": "company owner",
         "desc": "Lunch with an artist",

@@ -8,13 +8,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="drop">
-    <img class="drop__img" :src="require(`@/assets/images/${drop.img}`)" />
-    <div class="drop__content">
-      <p class="drop__content--name">{{ drop.name }}</p>
-      <p class="drop__content--desc">{{ drop.shortDescription }}</p>
+  <transition name="fade" mode="out-in">
+    <div class="drop">
+      <img class="drop__img" src="@/assets/images/drop.png" />
+      <div class="drop__content">
+        <p class="drop__content--name">{{ drop.name }}</p>
+        <p class="drop__content--desc">{{ drop.shortDescription }}</p>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <style lang="scss" scoped>
@@ -31,6 +33,7 @@ export default defineComponent({
   }
   &__img {
     width: 92px;
+    height: 98px;
   }
   &__content {
     padding-left: 16px;
