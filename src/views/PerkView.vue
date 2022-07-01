@@ -6,35 +6,89 @@ import { ROUTES } from "@/constants/routes.constants";
 import BaseButton from "@/components/form/BaseButton.vue";
 import data from "../../test-data.json";
 import { useRouter } from "vue-router";
+import { Perk } from "@/service/collections/collections.type";
+import { getPerk } from "@/service/collections/collection.service";
+import router from "@/router";
+import { getLocalisingByKey } from "@/utils/localise";
+import { useI18n } from "vue-i18n";
+import CountDown from "@/components/timer/CountDown.vue";
 export default defineComponent({
   name: "PerkView",
-  components: { BaseButton },
+  components: { BaseButton, CountDown },
+  emits: ["auctionInactive"],
   setup() {
     const appStore = useAppStateStore();
+    const { locale } = useI18n();
     const { isMobile } = storeToRefs(appStore);
+    const inactiveButton = ref(false);
     const currentIndex = ref(0);
     const tab = ["all", "active", "inactive"];
-    const perks = data[2].myperks;
     const currentPerkId = +useRouter().currentRoute.value.params.id;
+    const perk = ref<Perk | null>(null);
+    appStore.setPreloaderValue(true);
+    const auctionInactive = () => {
+      inactiveButton.value = true;
+    };
+    getPerk(currentPerkId)
+      .then((data) => {
+        perk.value = data;
+        console.log(data);
+      })
+      .catch(() => router.push({ name: ROUTES.PERKS.name }))
+      .finally(() => appStore.setPreloaderValue(false));
+    const perks = data[2].myperks;
+    const staticData = {
+      19: {
+        img: "heart.png",
+        youGet: "by back price $5 (not $3)",
+      },
+      20: {
+        img: "brilliant.png",
+        youGet: "company owner",
+      },
+    };
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
     const countOfActiveNft = nftsData?.nfts.filter(
       (item) => item.active,
     ).length;
-
-    return { tab, currentIndex, isMobile, ROUTES, nftsData, countOfActiveNft };
+    const someFun = getLocalisingByKey<Perk>(locale);
+    return {
+      tab,
+      currentIndex,
+      isMobile,
+      ROUTES,
+      nftsData,
+      countOfActiveNft,
+      perk,
+      staticData,
+      someFun,
+      inactiveButton,
+      auctionInactive,
+    };
   },
 });
 </script>
 
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="perk">
     <div class="perk flex align-center justify-between">
-      <h1 class="perk__name">{{ nftsData.name }}</h1>
+      <div class="flex direction-column perk__left">
+        <h1 class="perk__name">{{ perk.name }}</h1>
+        <CountDown
+          @auctionInactive="auctionInactive()"
+          :end-date="perk.endingDate"
+          class="desktop"
+        />
+      </div>
       <div class="perk__content flex direction-column align-center">
         <img class="perk__content__img" src="@/assets/images/heart-big.png" />
         <div class="perk__content__info flex direction-column align-center">
-          <p class="perk__content__info__get">{{ nftsData.desc }}</p>
-          <p class="perk__content__info__condition">{{ nftsData.youGet }}</p>
+          <p class="perk__content__info__get">
+            {{ someFun(perk, "description").value }}
+          </p>
+          <p class="perk__content__info__condition">
+            {{ staticData[perk.id].youGet }}
+          </p>
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
@@ -63,6 +117,7 @@ export default defineComponent({
           </div>
         </div>
       </div>
+      <CountDown :end-date="perk.endingDate" class="mob" />
     </div>
   </div>
 </template>
@@ -76,20 +131,82 @@ export default defineComponent({
   box-sizing: border-box;
   @media screen and (max-width: 1346px) {
     padding: 120px 0 0;
+    .desktop {
+      display: none;
+    }
+  }
+  @media screen and (min-width: 1347px) {
+    .mob {
+      display: none;
+    }
+  }
+  .mob {
+    margin-top: 48px;
   }
 }
 .perk {
+  &__left {
+    height: 100%;
+    max-height: 100px;
+  }
+  &__timer {
+    width: 100%;
+    position: relative;
+    max-width: 328px;
+    margin: 75px auto 0px;
+    background: radial-gradient(
+      113.12% 113.12% at 50.52% 50.52%,
+      #292929 0%,
+      #000000 100%
+    );
+    border: 1px solid #212121;
+    border-radius: 40px;
+    &__title {
+      width: 100%;
+      max-width: 156px;
+      position: absolute;
+      top: -15px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 8px 18px;
+      background-image: url("~@/assets/images/bg-title.svg");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center;
+      text-align: center;
+      color: var(--color-black);
+    }
+    &__time {
+      width: 100%;
+      text-align: center;
+      padding: 30px 57px 13px;
+
+      &--count {
+        font-size: 24px;
+        line-height: 40px;
+      }
+      &--title {
+        font-size: 12px;
+        line-height: 24px;
+        opacity: 0.65;
+      }
+      &--hrs {
+      }
+    }
+  }
   @media screen and (max-width: 1346px) {
     flex-direction: column;
   }
   &__name {
     width: 100%;
-    max-width: 332px;
+    max-width: 400px;
     display: inline;
     position: relative;
     font-weight: 600;
     font-size: 74px;
     line-height: 130%;
+    white-space: nowrap;
     @media screen and (max-width: 1346px) {
       padding-bottom: 40px;
       font-weight: 800;
@@ -99,7 +216,7 @@ export default defineComponent({
     }
     &::after {
       position: absolute;
-      top: 100px;
+      top: 114px;
       content: "";
       width: 100%;
       height: 6px;

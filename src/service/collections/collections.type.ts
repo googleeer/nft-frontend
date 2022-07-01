@@ -15,6 +15,8 @@ export interface Perk {
   name: string;
   description: string;
   description_es: string;
-  endingDate: string;
+  endingDate: Date;
+  slots: number;
+  active: boolean;
 }
 export type CollectionWithDrops = Collection & { drops: Drop[] };

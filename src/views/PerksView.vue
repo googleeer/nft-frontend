@@ -6,31 +6,34 @@ import { ROUTES } from "@/constants/routes.constants";
 import { Perk } from "@/service/collections/collections.type";
 import { getPerks } from "@/service/collections/collection.service";
 import router from "@/router";
-
+import { getLocalisingByKey } from "@/utils/localise";
+import { useI18n } from "vue-i18n";
+import Slots from "@/components/perks/Slots.vue";
 export default defineComponent({
   name: "PerksView",
+  components: { Slots },
   setup() {
     const appStore = useAppStateStore();
-    const appState = useAppStateStore();
+    const { locale } = useI18n();
     const { isMobile } = storeToRefs(appStore);
     const currentIndex = ref(0);
     const tab = ["all", "active", "inactive"];
     const perks = ref<Perk[]>([]);
-    appState.setPreloaderValue(true);
+    appStore.setPreloaderValue(true);
     getPerks()
       .then((data) => {
         perks.value = data;
         console.log(data);
       })
       .catch(() => router.push(ROUTES.HOME))
-      .finally(() => appState.setPreloaderValue(false));
+      .finally(() => appStore.setPreloaderValue(false));
     const staticData = {
       19: {
-        img: "heart.png",
+        img: "perkBg.svg",
         youGet: "by back price $5 (not $3)",
       },
       20: {
-        img: "brilliant.png",
+        img: "perkBg.svg",
         youGet: "company owner",
       },
     };
@@ -38,11 +41,13 @@ export default defineComponent({
       if (currentIndex.value === 0) {
         return perks.value;
       } else if (currentIndex.value === 1) {
-        return perks.value.filter((item) => item.id === 19);
+        return perks.value.filter((item) => item.active);
       } else {
-        return perks.value.filter((item) => item.id === 20);
+        return perks.value.filter((item) => !item.active);
       }
     };
+    const someFun = getLocalisingByKey<Perk>(locale);
+
     return {
       tab,
       currentIndex,
@@ -51,6 +56,7 @@ export default defineComponent({
       isMobile,
       ROUTES,
       staticData,
+      someFun,
     };
   },
 });
@@ -84,14 +90,13 @@ export default defineComponent({
         :key="i"
       >
         <div class="perk__img">
-          <img
-            class="perk__img__icon"
-            :src="require(`@/assets/images/perks/${staticData[perk.id].img}`)"
-          />
+          <Slots :slots="perk.slots"></Slots>
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
-          <p class="perk__content__desc">{{ perk.description }}</p>
+          <p class="perk__content__desc">
+            {{ someFun(perk, "description").value }}
+          </p>
           <p class="perk__content__action">{{ staticData[perk.id].youGet }}</p>
         </div>
       </RouterLink>
@@ -173,6 +178,9 @@ export default defineComponent({
       &__icon {
         width: 100%;
         max-width: 157px;
+        ::v-deep(path) {
+          stroke-opacity: 1;
+        }
       }
     }
   }

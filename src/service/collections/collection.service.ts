@@ -47,6 +47,7 @@ export const getPerks = async (): Promise<Perk[]> => {
 export const getPerk = async (id: number): Promise<Perk> => {
   try {
     const res = await instance.get(`/nft-perk/${id}`);
+    res.data.endingDate = new Date(res.data.endingDate);
     return res.data;
   } catch (e) {
     return Promise.reject(e);
