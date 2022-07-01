@@ -7,6 +7,7 @@ import CollectionProperties from "@/components/collections/Properties.vue";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAppStateStore } from "@/store/appState.store";
+import { getLocalisingByKey } from "@/utils/localise";
 
 export default defineComponent({
   name: "MenuInfo",
@@ -19,17 +20,19 @@ export default defineComponent({
   },
   components: { BaseButton, CollectionProperties },
   setup() {
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const appState = useAppStateStore();
     const { isMobile } = storeToRefs(appState);
     const readMoreActive = ref(false);
-    return { ROUTES, t, isMobile, readMoreActive };
+    const someFun = getLocalisingByKey<object>(locale);
+
+    return { ROUTES, t, isMobile, readMoreActive, someFun };
   },
 });
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1 direction-column">
+  <div class="collection flex flex-grow-1 direction-column" v-if="item">
     <div class="collection__info flex align-center">
       <div class="collection__info--img" v-if="isMobile">
         <img src="../../assets/images/junkYard-mini.svg" />
@@ -40,7 +43,7 @@ export default defineComponent({
             {{ item.name }}
           </h1>
           <p class="collection__info__content__desc--short">
-            {{ item.shortDescription }}
+            {{ someFun(item, "shortDescription").value }}
           </p>
         </div>
       </div>
@@ -48,14 +51,14 @@ export default defineComponent({
     <div class="collection__author flex direction-column align-center">
       <div class="collection__author--desc">
         <span class="collection__author--desc__short" v-if="!readMoreActive"
-          >{{ item.description.slice(0, 162) }}
+          >{{ someFun(item, "description").value.slice(0, 162) }}
         </span>
         <span
           class="collection__author--desc__all"
           :class="{ active: readMoreActive }"
           v-if="readMoreActive"
         >
-          {{ item.description }}
+          {{ someFun(item, "description").value }}
         </span>
         <span
           class="collection__author--desc__more"
@@ -74,10 +77,10 @@ export default defineComponent({
       </div>
       <div class="collection__author__prop--block flex justify-center">
         <CollectionProperties
-          v-for="(brand, title) of properties"
-          :key="title"
-          :title="title"
-          :value="brand"
+          v-for="(property, index) of properties"
+          :key="index"
+          :title="property.title"
+          :value="property.value"
         >
         </CollectionProperties>
       </div>

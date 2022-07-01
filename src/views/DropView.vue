@@ -1,47 +1,60 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import DropPerks from "@/components/collections/Perks.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
-import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { useAppStateStore } from "@/store/appState.store";
+import { Drop } from "@/service/collections/collections.type";
+import { getDrop } from "@/service/collections/collection.service";
 import { storeToRefs } from "pinia";
+import router from "@/router";
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, DropPerks, BackFixed },
-  setup() {
-    const { t } = useI18n();
+  setup: function () {
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
-    const collections = data[0].collections;
-    const currentCollection = collections?.[currentCollectionId];
-    const currentDrop = currentCollection?.drops[0];
-    const properties = {
-      artist: currentCollection?.artist,
-      brand: currentCollection?.brand,
-    };
-    const drops = currentCollection?.drops;
-    const appStore = useAppStateStore();
-    const { isMobile } = storeToRefs(appStore);
+    const appState = useAppStateStore();
+    const currentDropId = +useRouter().currentRoute.value.params.id;
+    const currentDrop = ref<object>();
+    const { t } = useI18n();
+    const { isMobile } = storeToRefs(appState);
+    const drop = ref<Drop | null>(null);
+    appState.setPreloaderValue(true);
+    getDrop(currentDropId)
+      .then((data) => {
+        drop.value = data;
+      })
+      .catch(() => {
+        router.push({
+          name: ROUTES.COLLECTION.name,
+          params: { id: currentCollectionId },
+        });
+      });
+    const properties = computed(() =>
+      (["brand", "artist"] as (keyof Drop)[]).map((key) => ({
+        title: t(`collection.${key}`),
+        value: drop.value?.[key],
+      })),
+    );
     return {
       ROUTES,
-      currentCollection,
-      properties,
-      drops,
       t,
       currentDrop,
       currentCollectionId,
       isMobile,
+      drop,
+      properties,
     };
   },
 });
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1">
+  <div class="collection flex flex-grow-1" v-if="drop">
     <BackFixed
       :to="{
         name: ROUTES.COLLECTION.name,
@@ -50,24 +63,19 @@ export default defineComponent({
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
     ></BackFixed>
     <div class="collection__img--wrap">
-      <img
-        :src="require(`@/assets/images/${currentDrop['big-image']}`)"
-        class="collection__img"
-      />
+      <img src="@/assets/images/big-drop.png" class="collection__img" />
     </div>
-
     <MenuInfo
       :properties="properties"
-      :drops="drops"
-      :item="currentDrop"
+      :item="drop"
       :btn-text="'redeem'"
       :title-last-section="t('perk.perks')"
       :route="{
         name: ROUTES.MINT.name,
-        params: { collectionId: currentCollection.id, id: 0 },
+        params: { collectionId: currentCollectionId, id: drop.id },
       }"
     >
-      <DropPerks :perks="currentDrop.perks"></DropPerks>
+      <DropPerks :perks="drop.perks"></DropPerks>
     </MenuInfo>
   </div>
 </template>
