@@ -20,14 +20,14 @@ export default defineComponent({
     const appStore = useAppStateStore();
     const { locale } = useI18n();
     const { isMobile } = storeToRefs(appStore);
-    const inactiveButton = ref(false);
+    const inactiveTimer = ref(false);
     const currentIndex = ref(0);
     const tab = ["all", "active", "inactive"];
     const currentPerkId = +useRouter().currentRoute.value.params.id;
     const perk = ref<Perk | null>(null);
     appStore.setPreloaderValue(true);
     const auctionInactive = () => {
-      inactiveButton.value = true;
+      inactiveTimer.value = true;
     };
     getPerk(currentPerkId)
       .then((data) => {
@@ -62,7 +62,7 @@ export default defineComponent({
       perk,
       staticData,
       someFun,
-      inactiveButton,
+      inactiveTimer,
       auctionInactive,
     };
   },
@@ -75,6 +75,7 @@ export default defineComponent({
       <div class="flex direction-column perk__left">
         <h1 class="perk__name">{{ perk.name }}</h1>
         <CountDown
+          v-if="perk.endingDate && !inactiveTimer"
           @auctionInactive="auctionInactive()"
           :end-date="perk.endingDate"
           class="desktop"

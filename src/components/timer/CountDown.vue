@@ -1,12 +1,5 @@
 <script lang="ts">
-import {
-  computed,
-  defineComponent,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-} from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 export default defineComponent({
   name: "PerkView",
   props: { endDate: String },
@@ -15,7 +8,6 @@ export default defineComponent({
     const endTime = ref(0);
 
     const interval = ref(0);
-    const test = ref(10);
     const currentDate = ref("0");
 
     const getDiffTime = (endingDate: any) => {
@@ -32,26 +24,19 @@ export default defineComponent({
         timeObj.value.mm = minutes < 10 ? "0" + minutes : minutes;
         timeObj.value.hh = hours < 10 ? "0" + hours : hours;
         timeObj.value.dd = days < 10 ? "0" + days : days;
-        --test.value;
+        if (endTime.value <= 0) {
+          context.emit("auctionInactive", true);
+          clearInterval(interval.value);
+        }
       }, 1000);
     };
-
-    const auctionInactive = computed(() => {
-      return test.value <= 0;
-    });
-
-    watch(auctionInactive, (auctionInactive) => {
-      context.emit("auctionInactive", auctionInactive);
-    });
 
     onMounted(() => {
       const endingDate = props?.endDate?.toString();
       currentDate.value = new Date().toString();
       endTime.value =
         Date.parse(endingDate || "0") - Date.parse(currentDate.value);
-      if (endTime.value >= 0) {
-        getDiffTime(endingDate);
-      }
+      getDiffTime(endingDate);
     });
 
     onBeforeUnmount(() => {
@@ -66,7 +51,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="timer flex align-center direction-column" v-if="endDate">
+  <div class="timer flex align-center direction-column">
     <div class="timer__title">Auction ending in</div>
     <div class="timer__time flex justify-between">
       <div class="timer__time--day flex direction-column">
