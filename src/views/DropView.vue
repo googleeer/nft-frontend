@@ -7,8 +7,8 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { useAppStateStore } from "@/store/appState.store";
-import { Drop } from "@/service/collections/collections.type";
-import { getDrop } from "@/service/collections/collection.service";
+import { Drop } from "@/service/drop/drop.type";
+import { getDrop } from "@/service/drop/drop.service";
 import { storeToRefs } from "pinia";
 import router from "@/router";
 export default defineComponent({
