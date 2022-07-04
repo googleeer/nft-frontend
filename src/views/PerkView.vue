@@ -37,16 +37,16 @@ export default defineComponent({
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
     const perks = data[2].myperks;
-    const staticData = {
-      19: {
-        img: "heart.png",
-        youGet: "by back price $5 (not $3)",
-      },
-      20: {
-        img: "brilliant.png",
-        youGet: "company owner",
-      },
-    };
+    // const staticData = {
+    //   19: {
+    //     img: "heart.png",
+    //     youGet: "by back price $5 (not $3)",
+    //   },
+    //   20: {
+    //     img: "brilliant.png",
+    //     youGet: "company owner",
+    //   },
+    // };
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
     const countOfActiveNft = nftsData?.nfts.filter(
       (item) => item.active,
@@ -60,7 +60,7 @@ export default defineComponent({
       nftsData,
       countOfActiveNft,
       perk,
-      staticData,
+
       someFun,
       inactiveTimer,
       auctionInactive,
@@ -87,9 +87,7 @@ export default defineComponent({
           <p class="perk__content__info__get">
             {{ someFun(perk, "description").value }}
           </p>
-          <p class="perk__content__info__condition">
-            {{ staticData[perk.id].youGet }}
-          </p>
+          <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
@@ -100,20 +98,20 @@ export default defineComponent({
         </div>
       </div>
       <div class="perk__nfts flex direction-column">
-        <h2 class="perk__nfts__title">
-          Need {{ nftsData.nfts.length - countOfActiveNft }} out of
-          {{ nftsData.nfts.length }} NFTs
-        </h2>
+        <!--        <h2 class="perk__nfts__title">-->
+        <!--          Need {{ nftsData.nfts.length - countOfActiveNft }} out of-->
+        <!--          {{ nftsData.nfts.length }} NFTs-->
+        <!--        </h2>-->
         <div class="perk__nfts__need flex">
           <div
             class="perk__nfts__need--block flex"
-            v-for="nft of nftsData.nfts"
+            v-for="nft of perk.drops"
             :key="nft.id"
             :class="{ active: nft.active }"
           >
             <img
               class="perk__nfts__need--img"
-              :src="require(`@/assets/images/perks/${nft.img}`)"
+              src="../assets/images/perks/nft1.png"
             />
           </div>
         </div>
