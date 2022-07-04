@@ -2,12 +2,13 @@
 import { defineComponent } from "vue";
 import PopupBtn from "@/components/popup/PopupBtn.vue";
 import { useI18n } from "vue-i18n";
+import { useAppStateStore } from "@/store/appState.store";
 
 export default defineComponent({
   name: "SucceedMint",
   components: { PopupBtn },
   emits: ["btnClick"],
-  setup() {
+  setup(props, context) {
     const { t } = useI18n();
     const buttons = [
       {
@@ -17,7 +18,12 @@ export default defineComponent({
         type: "install",
       },
     ];
-    return { t, buttons };
+    const closePopup = (btn: any) => {
+      context.emit("btnClick", btn.type);
+      const appStore = useAppStateStore();
+      appStore.setIsShowModal(false);
+    };
+    return { t, buttons, closePopup };
   },
 });
 </script>
@@ -35,7 +41,7 @@ export default defineComponent({
       <p class="popup__content__desc">{{ t("drop.feelFree") }}</p>
       <div class="popup__content__btns flex justify-center">
         <PopupBtn
-          @click="$emit('btnClick', btn.type)"
+          @click="closePopup(btn)"
           :styleType="btn.styleType"
           :text="btn.text"
           :text-color="btn.textColor"

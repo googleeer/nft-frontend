@@ -1,8 +1,9 @@
 <script lang="ts">
 import { defineComponent } from "vue";
-
+import Slots from "@/components/perks/Slots.vue";
 export default defineComponent({
   name: "DropPerks",
+  components: { Slots },
   props: { perks: Object },
 });
 </script>
@@ -10,7 +11,7 @@ export default defineComponent({
 <template>
   <div class="perks">
     <div class="perks__perk" v-for="perk of perks" :key="perk.id">
-      <img class="drop__img" src="@/assets/images/brilliant.png" />
+      <Slots :slots="perk.slots"></Slots>
     </div>
   </div>
 </template>
@@ -44,6 +45,15 @@ export default defineComponent({
   }
   .drop__img {
     width: 90px;
+  }
+  &__perk {
+    ::v-deep(.slots) > svg {
+      width: 90px;
+      height: 90px;
+    }
+    ::v-deep(.slots) > img {
+      width: 54px;
+    }
   }
 }
 .drop {

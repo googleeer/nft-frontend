@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
@@ -10,14 +10,37 @@ import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { storeToRefs } from "pinia";
+import { getMint, putActivate } from "@/service/mint/mint.service";
+import router from "@/router";
+import { Mint } from "@/service/mint/mint.type";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BaseButton, DropPerks, SucceedMint, BackFixed },
+  components: { BackFixed, BaseButton, DropPerks, SucceedMint }, //BaseButton, DropPerks, SucceedMint,
   setup() {
     const { t } = useI18n();
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
+    const currentDropId = +useRouter().currentRoute.value.params.id;
+    const appState = useAppStateStore();
+    console.log(currentDropId);
+    const mint = ref<Mint>();
+    appState.setPreloaderValue(true);
+
+    getMint(currentDropId)
+      .then((data) => {
+        mint.value = data;
+
+        console.log(data);
+      })
+      .catch(() =>
+        router.push({ name: ROUTES.DROP.name, params: { id: currentDropId } }),
+      )
+      .finally(() => {
+        appState.setPreloaderValue(false);
+      });
+
     const collections = data[0].collections;
+    console.log(collections);
     const currentCollection = collections?.[currentCollectionId];
     const currentDrop = currentCollection?.drops[0];
 
@@ -30,8 +53,13 @@ export default defineComponent({
         changeModalState(false);
       }
     };
-    const appStore = useAppStateStore();
-    const { isMobile } = storeToRefs(appStore);
+    const visibleBtn = ref(true);
+    const { isMobile } = storeToRefs(appState);
+    const activate = () => {
+      putActivate(currentDropId);
+      appState.setIsShowModal(true);
+      visibleBtn.value = false;
+    };
     return {
       t,
       ROUTES,
@@ -42,41 +70,41 @@ export default defineComponent({
       changeModalState,
       currentCollection,
       isMobile,
+      mint,
+      currentDropId,
+      putActivate,
+      activate,
+      visibleBtn,
     };
   },
 });
 </script>
 
 <template>
-  <div class="wrapper flex direction-column flex-grow-1">
+  <div class="wrapper flex direction-column flex-grow-1" v-if="mint">
     <BackFixed
       :to="{
         name: ROUTES.DROP.name,
-        params: { collectionId: currentCollection.id, id: 0 },
+        params: { collectionId: currentCollectionId, id: currentDropId },
       }"
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
       :class="{ isMob: isMobile }"
     ></BackFixed>
-    <div
-      v-for="item of collections"
-      :key="item.id"
-      class="flex"
-      :class="{ 'flex-grow-1': currentCollectionId === item.id }"
-    >
-      <div
-        class="content flex align-end"
-        v-if="currentCollectionId === item.id"
-      >
+    <div class="flex flex-grow-1">
+      <div class="content flex align-end">
         <img :src="require(`@/assets/images/mint.png`)" class="bg" />
         <div class="collection-content flex direction-column">
-          <h1 class="collection-content-name">{{ t("drop.shipping") }}</h1>
-          <p class="collection-content--perks">Perks</p>
-          <DropPerks :perks="currentDrop.perks"></DropPerks>
-
+          <h1 class="collection-content-name">{{ mint.drop.name }}</h1>
+          <p class="collection-content&#45;&#45;perks">Perks</p>
+          <DropPerks :perks="mint.userPerks"></DropPerks>
           <BaseButton
-            :button-text="t('drop.mint')"
+            v-if="mint.mintCount && visibleBtn"
+            :button-text="{
+              key: 'drop.mint',
+              params: { count: `${mint.mintCount}` },
+            }"
             class="collection-content-btn"
-            @click="changeModalState(true)"
+            @click="activate()"
           ></BaseButton>
           <SucceedMint @btnClick="handleModalClick"></SucceedMint>
         </div>
@@ -146,7 +174,7 @@ export default defineComponent({
         @media screen and (max-width: 768px) {
           padding-bottom: 15px;
           margin-bottom: 18px;
-          //max-width: 240px;
+          padding-left: 20px;
         }
       }
       &-name {
