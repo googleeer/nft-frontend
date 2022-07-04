@@ -27,16 +27,7 @@ export default defineComponent({
       })
       .catch(() => router.push(ROUTES.HOME))
       .finally(() => appStore.setPreloaderValue(false));
-    const staticData = {
-      19: {
-        img: "perkBg.svg",
-        youGet: "by back price $5 (not $3)",
-      },
-      20: {
-        img: "perkBg.svg",
-        youGet: "company owner",
-      },
-    };
+
     const filteredData = () => {
       if (currentIndex.value === 0) {
         return perks.value;
@@ -55,7 +46,6 @@ export default defineComponent({
       filteredData,
       isMobile,
       ROUTES,
-      staticData,
       someFun,
     };
   },
@@ -97,7 +87,7 @@ export default defineComponent({
           <p class="perk__content__desc">
             {{ someFun(perk, "description").value }}
           </p>
-          <p class="perk__content__action">{{ staticData[perk.id].youGet }}</p>
+          <!--          <p class="perk__content__action">{{ staticData[perk.id].youGet }}</p>-->
         </div>
       </RouterLink>
     </div>
@@ -163,7 +153,6 @@ export default defineComponent({
   color: var(--color-white);
   z-index: 0;
   margin: 50px 33px;
-
   @media screen and (max-width: 711px) {
     width: 100%;
     height: 157px;
@@ -171,6 +160,13 @@ export default defineComponent({
     display: flex;
     justify-content: flex-end;
     max-width: 375px;
+    ::v-deep(svg) {
+      width: 157px;
+      height: 157px;
+    }
+    ::v-deep(img) {
+      width: 100px;
+    }
     .perk__img {
       width: 100%;
       max-width: 157px;

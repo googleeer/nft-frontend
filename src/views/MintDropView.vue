@@ -15,7 +15,7 @@ import router from "@/router";
 import { Mint } from "@/service/mint/mint.type";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BackFixed, BaseButton, DropPerks, SucceedMint }, //BaseButton, DropPerks, SucceedMint,
+  components: { BackFixed, BaseButton, DropPerks, SucceedMint },
   setup() {
     const { t } = useI18n();
     const currentCollectionId =
