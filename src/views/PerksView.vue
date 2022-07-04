@@ -87,7 +87,7 @@ export default defineComponent({
           <p class="perk__content__desc">
             {{ someFun(perk, "description").value }}
           </p>
-          <!--          <p class="perk__content__action">{{ staticData[perk.id].youGet }}</p>-->
+          <p class="perk__content__action">company owner</p>
         </div>
       </RouterLink>
     </div>
