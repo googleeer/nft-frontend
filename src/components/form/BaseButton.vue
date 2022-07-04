@@ -1,9 +1,12 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 export default defineComponent({
   name: "BaseButton",
   props: {
-    buttonText: String,
+    buttonText: [Object, String] as PropType<
+      string | { key: string; params: Record<string, string> }
+    >,
     disabled: {
       type: Boolean,
       default: false,
@@ -17,8 +20,14 @@ export default defineComponent({
     >,
   },
   setup(props) {
+    const { t } = useI18n();
+    console.log(props.buttonText);
     const currentComponent = props.to ? "RouterLink" : "button";
-
+    const text = computed(() => {
+      return typeof props.buttonText === "object"
+        ? t(props.buttonText.key, props.buttonText.params)
+        : props.buttonText;
+    });
     const currentAttribute = computed(() =>
       props.to
         ? {
@@ -28,14 +37,14 @@ export default defineComponent({
             disabled: props.disabled,
           },
     );
-    return { currentComponent, currentAttribute };
+    return { currentComponent, currentAttribute, t, text };
   },
 });
 </script>
 
 <template>
   <component class="button" v-bind="currentAttribute" :is="currentComponent">
-    {{ buttonText }}
+    {{ text }}
     <span class="button__background"></span>
     <span class="button__arrow flex align-center justify-center">
       <svg

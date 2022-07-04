@@ -6,8 +6,8 @@ import { ROUTES } from "@/constants/routes.constants";
 import BaseButton from "@/components/form/BaseButton.vue";
 import data from "../../test-data.json";
 import { useRouter } from "vue-router";
-import { Perk } from "@/service/collections/collections.type";
-import { getPerk } from "@/service/collections/collection.service";
+import { Perk } from "@/service/perk/perk.type";
+import { getPerk } from "@/service/perk/perk.service";
 import router from "@/router";
 import { getLocalisingByKey } from "@/utils/localise";
 import { useI18n } from "vue-i18n";
@@ -118,7 +118,11 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <CountDown :end-date="perk.endingDate" class="mob" />
+      <CountDown
+        v-if="perk.endingDate && !inactiveTimer"
+        :end-date="perk.endingDate"
+        class="mob"
+      />
     </div>
   </div>
 </template>
