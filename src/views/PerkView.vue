@@ -118,7 +118,11 @@ export default defineComponent({
           </div>
         </div>
       </div>
-      <CountDown :end-date="perk.endingDate" class="mob" />
+      <CountDown
+        v-if="perk.endingDate && !inactiveTimer"
+        :end-date="perk.endingDate"
+        class="mob"
+      />
     </div>
   </div>
 </template>

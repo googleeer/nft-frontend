@@ -6,7 +6,9 @@ export default defineComponent({
   name: "BasePopup",
   setup() {
     const appStateStore = useAppStateStore();
-    const closeModal = () => appStateStore.setIsShowModal(false);
+    const closeModal = () => {
+      appStateStore.setIsShowModal(false);
+    };
     const appStore = useAppStateStore();
     const { showModal } = storeToRefs(appStore);
     return { closeModal, showModal };

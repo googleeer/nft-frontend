@@ -58,7 +58,7 @@
     "drop": "Drop",
     "open": "Open drop",
     "shipping": "Space shipping",
-    "mint": "Mint 3 NFT",
+    "mint": "Mint {count} NFT",
     "succeedMint": "Minting succeed.",
     "feelFree": "Please, feel free to use NFT."
 },
