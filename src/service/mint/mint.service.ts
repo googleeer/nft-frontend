@@ -10,7 +10,7 @@ export const getMint = async (id: number): Promise<Mint> => {
   }
 };
 
-export const putActivate = async (id: number) => {
+export const postMint = async (id: number) => {
   try {
     await instance.post(`/nft-drop/${id}/mint`);
   } catch (e) {

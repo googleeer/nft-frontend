@@ -1,20 +1,21 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useAppStateStore } from "@/store/appState.store";
 import { storeToRefs } from "pinia";
 import { ROUTES } from "@/constants/routes.constants";
 import BaseButton from "@/components/form/BaseButton.vue";
 import data from "../../test-data.json";
 import { useRouter } from "vue-router";
-import { Perk } from "@/service/perk/perk.type";
-import { getPerk } from "@/service/perk/perk.service";
+import { Perk, PerkWithDrops } from "@/service/perk/perk.type";
+import { getPerk, putActivate } from "@/service/perk/perk.service";
 import router from "@/router";
 import { getLocalisingByKey } from "@/utils/localise";
 import { useI18n } from "vue-i18n";
 import CountDown from "@/components/timer/CountDown.vue";
+import SlotsBig from "@/components/perks/SlotsBig.vue";
 export default defineComponent({
   name: "PerkView",
-  components: { BaseButton, CountDown },
+  components: { BaseButton, CountDown, SlotsBig },
   emits: ["auctionInactive"],
   setup() {
     const appStore = useAppStateStore();
@@ -24,7 +25,7 @@ export default defineComponent({
     const currentIndex = ref(0);
     const tab = ["all", "active", "inactive"];
     const currentPerkId = +useRouter().currentRoute.value.params.id;
-    const perk = ref<Perk | null>(null);
+    const perk = ref<PerkWithDrops | null>(null);
     appStore.setPreloaderValue(true);
     const auctionInactive = () => {
       inactiveTimer.value = true;
@@ -37,6 +38,21 @@ export default defineComponent({
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
     const perks = data[2].myperks;
+    const btnText = computed(() =>
+      perk.value?.active
+        ? "Active"
+        : perk.value?.slots === 5
+        ? "Activate"
+        : "Unavailable",
+    ); // transated
+    const loadedPerk = ref(false);
+    const activatePerk = async (id: number) => {
+      loadedPerk.value = true;
+      if (perk.value?.slots !== 5 || perk.value.active) return;
+      await putActivate(id);
+      perk.value = await getPerk(currentPerkId);
+      loadedPerk.value = false;
+    };
     // const staticData = {
     //   19: {
     //     img: "heart.png",
@@ -60,10 +76,12 @@ export default defineComponent({
       nftsData,
       countOfActiveNft,
       perk,
-
       someFun,
       inactiveTimer,
       auctionInactive,
+      btnText,
+      activatePerk,
+      loadedPerk,
     };
   },
 });
@@ -82,7 +100,7 @@ export default defineComponent({
         />
       </div>
       <div class="perk__content flex direction-column align-center">
-        <img class="perk__content__img" src="@/assets/images/heart-big.png" />
+        <SlotsBig :slots="perk.slots"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p class="perk__content__info__get">
             {{ someFun(perk, "description").value }}
@@ -91,9 +109,28 @@ export default defineComponent({
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
-              :disabled="true"
-              button-text="Inactivate"
-            ></BaseButton>
+              :disabled="perk.slots !== 5 || loadedPerk"
+              :button-text="btnText"
+              @click="activatePerk(perk.id)"
+              :class="{ disabled: perk.active }"
+            >
+              <svg
+                v-if="perk.active"
+                class="done"
+                width="18"
+                height="13"
+                viewBox="0 0 18 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M17 1L11.6093 7.46881C9.47319 10.0322 8.40512 11.3139 7 11.3139C5.59488 11.3139 4.52681 10.0322 2.39067 7.46881L1 5.8"
+                  stroke="black"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </BaseButton>
           </span>
         </div>
       </div>
@@ -107,7 +144,7 @@ export default defineComponent({
             class="perk__nfts__need--block flex"
             v-for="nft of perk.drops"
             :key="nft.id"
-            :class="{ active: nft.active }"
+            :class="{ active: nft.canBeUsed }"
           >
             <img
               class="perk__nfts__need--img"
@@ -126,6 +163,13 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.disabled {
+  pointer-events: none;
+}
+.done {
+  position: absolute;
+  right: 34px;
+}
 .wrapper {
   width: 100%;
   max-width: 1475px;
@@ -248,8 +292,12 @@ export default defineComponent({
       max-width: 374px;
       min-width: 374px;
       text-align: center;
-      &__img {
+      ::v-deep(svg) {
         max-width: 266px;
+        max-height: 266px;
+      }
+      ::v-deep(.img) {
+        max-width: 150px;
       }
       @media screen and (max-width: 374px) {
         max-width: 320px;

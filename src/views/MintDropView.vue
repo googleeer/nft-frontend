@@ -10,7 +10,7 @@ import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { storeToRefs } from "pinia";
-import { getMint, putActivate } from "@/service/mint/mint.service";
+import { getMint, postMint } from "@/service/mint/mint.service";
 import router from "@/router";
 import { Mint } from "@/service/mint/mint.type";
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
     const visibleBtn = ref(true);
     const { isMobile } = storeToRefs(appState);
     const activate = () => {
-      putActivate(currentDropId);
+      postMint(currentDropId);
       appState.setIsShowModal(true);
       visibleBtn.value = false;
     };
@@ -72,7 +72,7 @@ export default defineComponent({
       isMobile,
       mint,
       currentDropId,
-      putActivate,
+      postMint,
       activate,
       visibleBtn,
     };

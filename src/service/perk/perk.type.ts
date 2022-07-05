@@ -1,3 +1,5 @@
+import { Drop } from "@/service/drop/drop.type";
+
 export interface Perk {
   id: number;
   name: string;
@@ -7,3 +9,4 @@ export interface Perk {
   slots: number;
   active: boolean;
 }
+export type PerkWithDrops = Perk & { drops: Drop[] };
