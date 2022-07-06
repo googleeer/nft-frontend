@@ -3,4 +3,5 @@ export interface Drop {
   name: string;
   artist: string;
   drops: Array<Drop>;
+  canBeUsed?: boolean;
 }

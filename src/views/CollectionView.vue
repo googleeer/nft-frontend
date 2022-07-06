@@ -25,7 +25,6 @@ export default defineComponent({
       .then((data) => {
         collection.value = data;
         currentDropId.value = data.drops[0].id;
-        console.log(data);
       })
       .catch(() => {
         router.push(ROUTES.COLLECTIONS);

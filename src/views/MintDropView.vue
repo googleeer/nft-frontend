@@ -10,7 +10,7 @@ import { useRouter } from "vue-router";
 import { useAppStateStore } from "@/store/appState.store";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { storeToRefs } from "pinia";
-import { getMint, putActivate } from "@/service/mint/mint.service";
+import { getMint, postMint } from "@/service/mint/mint.service";
 import router from "@/router";
 import { Mint } from "@/service/mint/mint.type";
 export default defineComponent({
@@ -22,15 +22,12 @@ export default defineComponent({
       +useRouter().currentRoute.value.params.collectionId;
     const currentDropId = +useRouter().currentRoute.value.params.id;
     const appState = useAppStateStore();
-    console.log(currentDropId);
     const mint = ref<Mint>();
     appState.setPreloaderValue(true);
 
     getMint(currentDropId)
       .then((data) => {
         mint.value = data;
-
-        console.log(data);
       })
       .catch(() =>
         router.push({ name: ROUTES.DROP.name, params: { id: currentDropId } }),
@@ -40,7 +37,6 @@ export default defineComponent({
       });
 
     const collections = data[0].collections;
-    console.log(collections);
     const currentCollection = collections?.[currentCollectionId];
     const currentDrop = currentCollection?.drops[0];
 
@@ -56,7 +52,7 @@ export default defineComponent({
     const visibleBtn = ref(true);
     const { isMobile } = storeToRefs(appState);
     const activate = () => {
-      putActivate(currentDropId);
+      postMint(currentDropId);
       appState.setIsShowModal(true);
       visibleBtn.value = false;
     };
@@ -72,7 +68,7 @@ export default defineComponent({
       isMobile,
       mint,
       currentDropId,
-      putActivate,
+      postMint,
       activate,
       visibleBtn,
     };
