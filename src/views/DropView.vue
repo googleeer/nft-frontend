@@ -27,7 +27,6 @@ export default defineComponent({
     getDrop(currentDropId)
       .then((data) => {
         drop.value = data;
-        console.log(data);
       })
       .catch(() => {
         router.push({
