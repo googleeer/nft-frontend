@@ -75,7 +75,6 @@ export default defineComponent({
                   anim.loop = THREE.LoopOnce;
                   anim.paused = false;
                   anim.play();
-                  // console.log(open, mixer.time);
 
                   setTimeout(() => {
                     anim.paused = true;

@@ -22,15 +22,12 @@ export default defineComponent({
       +useRouter().currentRoute.value.params.collectionId;
     const currentDropId = +useRouter().currentRoute.value.params.id;
     const appState = useAppStateStore();
-    console.log(currentDropId);
     const mint = ref<Mint>();
     appState.setPreloaderValue(true);
 
     getMint(currentDropId)
       .then((data) => {
         mint.value = data;
-
-        console.log(data);
       })
       .catch(() =>
         router.push({ name: ROUTES.DROP.name, params: { id: currentDropId } }),
@@ -40,7 +37,6 @@ export default defineComponent({
       });
 
     const collections = data[0].collections;
-    console.log(collections);
     const currentCollection = collections?.[currentCollectionId];
     const currentDrop = currentCollection?.drops[0];
 

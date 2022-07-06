@@ -21,7 +21,6 @@ export default defineComponent({
   },
   setup(props) {
     const { t } = useI18n();
-    console.log(props.buttonText);
     const currentComponent = props.to ? "RouterLink" : "button";
     const text = computed(() => {
       return typeof props.buttonText === "object"

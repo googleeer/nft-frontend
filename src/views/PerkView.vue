@@ -33,7 +33,6 @@ export default defineComponent({
     getPerk(currentPerkId)
       .then((data) => {
         perk.value = data;
-        console.log(data);
       })
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
