@@ -11,7 +11,14 @@ export default defineComponent({
 <template>
   <div class="perks">
     <div class="perks__perk" v-for="perk of perks" :key="perk.id">
-      <Slots :slots="perk.slots"></Slots>
+      <Slots
+        :slots="
+          perk.slots.openingNewSlot && perk.slots.count < 5
+            ? perk.slots.count + 1
+            : perk.slots.count
+        "
+        :isNew="perk.slots.openingNewSlot"
+      ></Slots>
     </div>
   </div>
 </template>

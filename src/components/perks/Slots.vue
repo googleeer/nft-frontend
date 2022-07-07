@@ -1,17 +1,28 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "SlotsSvg",
   props: {
     slots: { type: Number, required: true },
+    isNew: Boolean,
   },
   setup(props) {
     const { t } = useI18n();
+    const isDropPage = useRouter().currentRoute.value.name === "drop";
     const activePath = (order: number) => (props.slots >= order ? 1 : 0.15);
+    const test = true;
+    console.log("log", props.isNew);
+    const isBlink = (order: number) => {
+      return test && isDropPage && props.slots === order;
+    };
+
     return {
       t,
       activePath,
+      isDropPage,
+      isBlink,
     };
   },
 });
@@ -35,25 +46,28 @@ export default defineComponent({
       <path
         d="M244.05 133.522C244.05 152.306 239.305 170.787 230.256 187.248C221.206 203.709 208.145 217.617 192.285 227.682"
         stroke="url(#paint0_radial_2097_11519)"
-        :stroke-opacity="activePath(3)"
-        stroke-width="6"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M166.991 239.585C149.125 245.39 130.083 246.588 111.631 243.068C93.1795 239.548 75.9157 231.424 61.4419 219.451"
-        stroke="url(#paint1_radial_2097_11519)"
         :stroke-opacity="activePath(4)"
         stroke-width="6"
         stroke-linecap="round"
         stroke-linejoin="round"
+        :class="{ blink: isBlink(4) }"
+      />
+      <path
+        d="M166.991 239.585C149.125 245.39 130.083 246.588 111.631 243.068C93.1795 239.548 75.9157 231.424 61.4419 219.451"
+        stroke="url(#paint1_radial_2097_11519)"
+        :stroke-opacity="activePath(3)"
+        stroke-width="6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        :class="{ blink: isBlink(3) }"
       />
       <path
         d="M42.3056 199.072C31.2643 183.875 24.2406 166.135 21.8862 147.499C19.5319 128.863 21.9232 109.933 28.8383 92.4678"
         stroke="url(#paint2_radial_2097_11519)"
-        :stroke-opacity="activePath(5)"
+        :stroke-opacity="activePath(2)"
         stroke-width="6"
         stroke-linecap="round"
+        :class="{ blink: isBlink(2) }"
         stroke-linejoin="round"
       />
       <path
@@ -63,14 +77,16 @@ export default defineComponent({
         stroke-linecap="round"
         stroke-linejoin="round"
         :stroke-opacity="activePath(1)"
+        :class="{ blink: isBlink(1) }"
       />
       <path
         d="M166.991 27.4583C184.856 33.263 200.965 43.4864 213.824 57.1798C226.683 70.8732 235.875 87.5929 240.546 105.787"
         stroke="url(#paint4_radial_2097_11519)"
-        :stroke-opacity="activePath(2)"
+        :stroke-opacity="activePath(5)"
         stroke-width="6"
         stroke-linecap="round"
         stroke-linejoin="round"
+        :class="{ blink: isBlink(5) }"
       />
       <defs>
         <pattern
@@ -151,6 +167,34 @@ export default defineComponent({
 <style lang="scss" scoped>
 .slots {
   position: relative;
+  .blink {
+    stroke: #e3a5b0;
+    animation-name: blinker;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(1, 0, 0, 1);
+    animation-duration: 2s;
+    -webkit-animation-name: blinker;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: cubic-bezier(1, 0, 0, 1);
+    -webkit-animation-duration: 2s;
+  }
+  @keyframes blinker {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @-webkit-keyframes blinker {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 }
 .img {
   position: absolute;
