@@ -10,6 +10,8 @@ declare module "vue-router" {
   interface RouteMeta {
     isAuth?: boolean;
     layout?: string;
+    bgRightHeader?: boolean;
+    bgAllHeader?: boolean;
   }
 }
 
@@ -29,6 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -38,6 +41,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -60,6 +64,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -69,6 +74,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -96,6 +102,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -105,6 +112,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -116,6 +124,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
     children: [
       {
