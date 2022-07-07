@@ -4,6 +4,7 @@ import { JWT_TOKEN_KEY } from "@/constants/constants";
 import { getCurrentUser } from "@/service/user/user.service";
 import { useAppStateStore } from "@/store/appState.store";
 import { ROUTES } from "@/constants/routes.constants";
+import { getMintedDropsCount } from "@/service/drop/drop.service";
 
 declare module "vue-router" {
   interface RouteMeta {
@@ -176,7 +177,7 @@ router.beforeResolve((to, from, next) => {
   if (!from.name && to.meta.isAuth) {
     const token = localStorage.getItem(JWT_TOKEN_KEY);
     if (token) {
-      getCurrentUser()
+      Promise.all([getCurrentUser(), getMintedDropsCount()])
         .then(async () => {
           next();
         })
