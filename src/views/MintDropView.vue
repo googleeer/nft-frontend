@@ -98,6 +98,7 @@ export default defineComponent({
           <p class="collection-content&#45;&#45;perks">Perks</p>
           <DropPerks :perks="mint.userPerks"></DropPerks>
           <BaseButton
+            v-if="mint.mintCount && visibleBtn"
             :disabled="loadedMint"
             :button-text="{
               key: 'drop.mint',
