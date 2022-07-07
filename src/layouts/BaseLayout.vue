@@ -69,7 +69,7 @@ export default defineComponent({
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
       <span class="layout__empty"></span>
-      <router-link to="/">
+      <router-link :to="{ name: ROUTES.COLLECTIONS.name }">
         <img
           src="../assets/images/weedar.svg"
           :alt="t('logo')"
