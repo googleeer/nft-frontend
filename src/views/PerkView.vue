@@ -40,28 +40,18 @@ export default defineComponent({
     const btnText = computed(() =>
       perk.value?.active
         ? "Active"
-        : perk.value?.slots === 5
+        : perk.value?.slots.count === 5
         ? "Activate"
         : "Unavailable",
     ); // transated
     const loadedPerk = ref(false);
     const activatePerk = async (id: number) => {
       loadedPerk.value = true;
-      if (perk.value?.slots !== 5 || perk.value.active) return;
+      if (perk.value?.slots.count !== 5 || perk.value.active) return;
       await putActivate(id);
       perk.value = await getPerk(currentPerkId);
       loadedPerk.value = false;
     };
-    // const staticData = {
-    //   19: {
-    //     img: "heart.png",
-    //     youGet: "by back price $5 (not $3)",
-    //   },
-    //   20: {
-    //     img: "brilliant.png",
-    //     youGet: "company owner",
-    //   },
-    // };
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
     const countOfActiveNft = nftsData?.nfts.filter(
       (item) => item.active,
@@ -99,7 +89,7 @@ export default defineComponent({
         />
       </div>
       <div class="perk__content flex direction-column align-center">
-        <SlotsBig :slots="perk.slots"></SlotsBig>
+        <SlotsBig :slots="perk.slots.count"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p class="perk__content__info__get">
             {{ someFun(perk, "description").value }}
@@ -108,7 +98,7 @@ export default defineComponent({
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
-              :disabled="perk.slots !== 5 || loadedPerk"
+              :disabled="perk.slots.count !== 5 || loadedPerk"
               :button-text="btnText"
               @click="activatePerk(perk.id)"
               :class="{ disabled: perk.active }"

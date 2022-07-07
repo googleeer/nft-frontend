@@ -13,6 +13,10 @@ export const ROUTES = {
   },
   MY_NFTS: {
     path: "/my-nft",
+    name: "myNfts",
+  },
+  MY_NFT: {
+    path: "/my-nft/:id",
     name: "myNft",
   },
   COLLECTIONS: {

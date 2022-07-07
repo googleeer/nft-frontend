@@ -6,7 +6,11 @@ export interface Perk {
   description: string;
   description_es: string;
   endingDate: string | null;
-  slots: number;
+  slots: Slots;
   active: boolean;
+}
+interface Slots {
+  count: number;
+  openingNewSlot: boolean;
 }
 export type PerkWithDrops = Perk & { drops: Drop[] };

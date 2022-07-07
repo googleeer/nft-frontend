@@ -24,6 +24,15 @@ const routes: Array<RouteRecordRaw> = [
   {
     ...ROUTES.MY_NFTS,
     component: () =>
+      import(/* webpackChunkName: "myNft" */ "../views/MyNftsView.vue"),
+    meta: {
+      isAuth: true,
+      layout: "base",
+    },
+  },
+  {
+    ...ROUTES.MY_NFT,
+    component: () =>
       import(/* webpackChunkName: "myNft" */ "../views/MyNftView.vue"),
     meta: {
       isAuth: true,

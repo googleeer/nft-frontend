@@ -9,3 +9,12 @@ export const getDrop = async (id: number): Promise<Drop> => {
     return Promise.reject(e);
   }
 };
+
+export const getMintedDrops = async (): Promise<Drop[]> => {
+  try {
+    const res = await instance.get("/nft-drop/minted");
+    return res.data;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};
