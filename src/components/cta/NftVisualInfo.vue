@@ -2,7 +2,8 @@
 import { defineComponent } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import { useI18n } from "vue-i18n";
-
+import { getLocalisingByKey } from "@/utils/localise";
+import { Drop } from "@/service/drop/drop.type";
 export default defineComponent({
   name: "NftVisualInfo",
   components: {},
@@ -10,28 +11,41 @@ export default defineComponent({
     nfts: Array,
   },
   setup() {
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
     const countOfMaxWordDesc = 21;
     const isMoreThanMaxWordDesc = (desc: string) => {
       return desc.length > countOfMaxWordDesc ? "..." : "";
     };
-    return { ROUTES, t, isMoreThanMaxWordDesc, countOfMaxWordDesc };
+    const someFun = getLocalisingByKey<Drop>(locale);
+
+    return { ROUTES, t, isMoreThanMaxWordDesc, countOfMaxWordDesc, someFun };
   },
 });
 </script>
 
 <template>
   <div class="nft" v-for="nft of nfts" :key="nft.id">
-    <img class="nft__img" :src="require(`@/assets/images/mynft/${nft.img}`)" />
-    <div class="nft__content">
-      <h2 class="nft__content__title">{{ nft.title }}</h2>
-      <p class="nft__content__desc">
-        {{
-          nft.desc.slice(0, countOfMaxWordDesc) +
-          isMoreThanMaxWordDesc(nft.desc)
-        }}
-      </p>
-    </div>
+    <RouterLink
+      class="nft__link flex direction-column"
+      :to="{
+        name: ROUTES.MY_NFT.name,
+        params: { id: nft.drop.id },
+      }"
+    >
+      <img class="nft__img" src="@/assets/images/mynft/1.png" />
+
+      <div class="nft__content">
+        <h2 class="nft__content__title">{{ nft.drop.name }}</h2>
+        <p class="nft__content__desc">
+          {{
+            someFun(nft.drop, "shortDescription").value.slice(
+              0,
+              countOfMaxWordDesc,
+            ) + isMoreThanMaxWordDesc(nft.drop.shortDescription)
+          }}
+        </p>
+      </div>
+    </RouterLink>
   </div>
 </template>
 
@@ -39,8 +53,6 @@ export default defineComponent({
 .nft {
   width: 100%;
   max-width: 322px;
-  display: flex;
-  flex-direction: column;
   margin: 0 17px;
   padding-bottom: 56px;
   @media screen and (max-width: 771px) {
@@ -48,7 +60,10 @@ export default defineComponent({
     margin: 0 7.5px;
     padding-bottom: 29px;
   }
-
+  &__link {
+    text-decoration: none;
+    color: var(--color-white);
+  }
   &__img {
     width: 322px;
     border-radius: 42px;

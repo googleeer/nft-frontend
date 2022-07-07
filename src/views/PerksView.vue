@@ -79,7 +79,7 @@ export default defineComponent({
         :key="i"
       >
         <div class="perk__img">
-          <Slots :slots="perk.slots"></Slots>
+          <Slots :slots="perk.slots.count"></Slots>
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>

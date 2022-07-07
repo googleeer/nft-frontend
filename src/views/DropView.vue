@@ -14,7 +14,7 @@ import router from "@/router";
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, DropPerks, BackFixed },
-  setup: function () {
+  setup() {
     const currentCollectionId =
       +useRouter().currentRoute.value.params.collectionId;
     const appState = useAppStateStore();
@@ -27,13 +27,15 @@ export default defineComponent({
     getDrop(currentDropId)
       .then((data) => {
         drop.value = data;
+        console.log(data);
       })
       .catch(() => {
         router.push({
           name: ROUTES.COLLECTION.name,
           params: { id: currentCollectionId },
         });
-      });
+      })
+      .finally(() => appState.setPreloaderValue(false));
     const properties = computed(() =>
       (["brand", "artist"] as (keyof Drop)[]).map((key) => ({
         title: t(`collection.${key}`),
