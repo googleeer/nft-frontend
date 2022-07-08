@@ -16,7 +16,7 @@ export default defineComponent({
 <template>
   <transition>
     <div class="scene__loader flex flexCenter" v-if="visible">
-      {{ count }} of 4 resources
+      {{ count }} of 9 resources
     </div>
   </transition>
 </template>
@@ -27,7 +27,7 @@ export default defineComponent({
     z-index: 1;
     position: absolute;
     inset: 0;
-    background: rgba(28, 35, 77, 0.32);
+    background: rgba(28, 35, 77, 0.92);
   }
 }
 </style>
