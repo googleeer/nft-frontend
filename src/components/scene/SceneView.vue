@@ -11,6 +11,7 @@ export default defineComponent({
       type: Object as PropType<SceneImagesProp>,
       required: true,
     },
+    test: Boolean,
   },
   setup(props) {
     const count = computed(
@@ -34,10 +35,44 @@ export default defineComponent({
 
 <template>
   <div class="scene--wrap">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
+      <defs>
+        <filter id="goovey">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.01"
+            numOctaves="1"
+            result="warpper"
+          ></feTurbulence>
+          <feColorMatrix in="warpper" type="hueRotate">
+            <animate
+              attributeType="XML"
+              attributeName="values"
+              values="0;110;150;210;360"
+              dur="6s"
+              repeatCount="indefinite"
+            ></animate>
+          </feColorMatrix>
+          <feDisplacementMap
+            xChannelSelector="R"
+            yChannelSelector="G"
+            scale="8"
+            in="SourceGraphic"
+          ></feDisplacementMap>
+        </filter>
+      </defs>
+    </svg>
     <SceneViewLoader
       :countOf="count"
       :count="loadedImagesCount"
       :visible="!isLoadedAllImages"
+    />
+    <img
+      v-if="test"
+      class="scene__img test"
+      :src="require(`@/assets/images/scene/quarry_01_1k.png`)"
+      @load="() => ++loadedImagesCount"
+      alt=""
     />
     <img
       class="scene__img"
@@ -89,6 +124,15 @@ export default defineComponent({
     pointer-events: none;
     will-change: transform;
     transition: transform 10ms linear;
+
+    &.test {
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: 1190px;
+      z-index: -4;
+      filter: url("#goovey");
+    }
 
     &.background {
       z-index: var(--z-index-scene-background);
