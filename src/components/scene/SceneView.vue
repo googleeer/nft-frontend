@@ -1,7 +1,8 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
+
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
@@ -13,7 +14,12 @@ export default defineComponent({
   },
   setup() {
     const loadedImagesCount = ref(0);
-    const isLoadedAllImages = computed(() => loadedImagesCount.value === 9);
+    const isLoadedAllImages = ref(false);
+    watch(loadedImagesCount, (value) => {
+      if (value === 10) {
+        setTimeout(() => (isLoadedAllImages.value = true), 420);
+      }
+    });
     return {
       isLoadedAllImages,
       loadedImagesCount,
@@ -85,21 +91,46 @@ export default defineComponent({
     }
 
     &.leftColumn {
-      z-index: var(--z-index-scene-column);
-      height: 100%;
       left: var(--inset-scene);
-      top: var(--inset-scene);
-      bottom: var(--inset-scene);
       transform-origin: left;
+
+      @media screen and (max-width: 1200px) and (min-height: 700px) {
+        left: -10%;
+      }
+
+      @media screen and (max-width: 900px) and (min-height: 600px) {
+        left: -15%;
+      }
     }
 
     &.rightColumn {
+      right: var(--inset-scene);
+
+      transform-origin: right;
+
+      @media screen and (max-width: 1200px) and (min-height: 700px) {
+        right: -10%;
+      }
+
+      @media screen and (max-width: 900px) and (min-height: 600px) {
+        right: -15%;
+      }
+    }
+
+    &.leftColumn,
+    &.rightColumn {
       z-index: var(--z-index-scene-column);
       height: 100%;
-      right: var(--inset-scene);
       top: var(--inset-scene);
       bottom: var(--inset-scene);
-      transform-origin: right;
+
+      @media (orientation: portrait) and (max-width: 1100px) {
+        display: none;
+      }
+
+      @media screen and (max-width: 768px) and (min-height: 550px) {
+        display: none;
+      }
     }
 
     &.cube {
@@ -109,6 +140,7 @@ export default defineComponent({
       left: 50%;
       transform: translateX(-50%);
       height: 100%;
+      max-height: 90vh;
     }
 
     &.bottomLantern {
@@ -116,6 +148,7 @@ export default defineComponent({
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
+      max-height: 28vh;
     }
 
     &.upperLantern {
@@ -123,6 +156,28 @@ export default defineComponent({
       top: 0;
       left: 50%;
       transform: translateX(-50%);
+      max-height: 37vh;
+
+      @media screen and (max-width: 768px) {
+        top: -41px;
+      }
+    }
+
+    &.artistLogo {
+      top: 210px;
+      width: 217px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: var(--z-index-scene-artistLogo);
+      animation-name: wakeUpSm;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease;
+      animation-direction: alternate;
+      animation-duration: 3s;
+
+      @media screen and (max-width: 768px) {
+        display: none;
+      }
     }
 
     &.bottomBlackout {
@@ -131,6 +186,7 @@ export default defineComponent({
       right: 0;
       z-index: 1;
       width: 100%;
+      min-height: 220px;
     }
 
     &.upperBlackout {
@@ -139,6 +195,7 @@ export default defineComponent({
       right: 0;
       z-index: 1;
       width: 100%;
+      min-height: 220px;
     }
 
     &.light {
@@ -157,6 +214,15 @@ export default defineComponent({
     perspective: 2000px;
     perspective-origin: center;
     transform-style: preserve-3d;
+  }
+}
+@keyframes wakeUpSm {
+  0% {
+    transform: translateX(-51%) rotate(0.3deg);
+  }
+
+  100% {
+    transform: translateX(-49%) rotate(-0.3deg);
   }
 }
 </style>
