@@ -147,6 +147,12 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "sdf" */ "../views/TestView.vue"),
   },
   {
+    path: "/test2",
+    name: "test2",
+    component: () =>
+      import(/* webpackChunkName: "sdf" */ "../views/TestView2.vue"),
+  },
+  {
     ...ROUTES.LOGIN,
     component: () =>
       import(/* webpackChunkName: "login" */ "../views/LoginView.vue"),

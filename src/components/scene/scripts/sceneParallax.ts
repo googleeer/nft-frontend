@@ -36,7 +36,6 @@ export const useParallax = (sceneRef: Ref<HTMLElement>) => {
   });
 
   let wait = false;
-
   const onMouseMove = ({ pageY, pageX }: MouseEvent) => {
     if (!wait) {
       const section = detectSection(sceneRef)(pageX, pageY);
