@@ -66,6 +66,7 @@ export default defineComponent({
 
       &.active {
         transform: translateX(-14px);
+        opacity: 0.45;
       }
     }
   }

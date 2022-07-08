@@ -12,10 +12,8 @@ export default defineComponent({
     const { t } = useI18n();
     const isDropPage = useRouter().currentRoute.value.name === "drop";
     const activePath = (order: number) => (props.slots >= order ? 1 : 0.15);
-    const test = true;
-    console.log("log", props.isNew);
     const isBlink = (order: number) => {
-      return test && isDropPage && props.slots === order;
+      return props.isNew && isDropPage && props.slots === order;
     };
 
     return {

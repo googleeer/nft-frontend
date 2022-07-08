@@ -50,11 +50,14 @@ export default defineComponent({
       }
     };
     const visibleBtn = ref(true);
+    const loadedMint = ref(false);
     const { isMobile } = storeToRefs(appState);
     const activate = () => {
+      loadedMint.value = true;
       postMint(currentDropId);
       appState.setIsShowModal(true);
       visibleBtn.value = false;
+      loadedMint.value = false;
     };
     return {
       t,
@@ -71,6 +74,7 @@ export default defineComponent({
       postMint,
       activate,
       visibleBtn,
+      loadedMint,
     };
   },
 });
@@ -95,6 +99,7 @@ export default defineComponent({
           <DropPerks :perks="mint.userPerks"></DropPerks>
           <BaseButton
             v-if="mint.mintCount && visibleBtn"
+            :disabled="loadedMint"
             :button-text="{
               key: 'drop.mint',
               params: { count: `${mint.mintCount}` },
