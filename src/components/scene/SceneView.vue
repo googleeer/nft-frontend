@@ -2,7 +2,6 @@
 import { computed, defineComponent, PropType, Ref, ref } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
-import { useParallax } from "@/components/scene/scripts/sceneParallax";
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
@@ -13,16 +12,9 @@ export default defineComponent({
     },
   },
   setup() {
-    const sceneRef = ref<HTMLElement>();
     const loadedImagesCount = ref(0);
     const isLoadedAllImages = computed(() => loadedImagesCount.value === 9);
-    const { onMouseMove, parallaxStyles } = useParallax(
-      sceneRef as Ref<HTMLElement>,
-    );
     return {
-      sceneRef,
-      onMouseMove,
-      parallaxStyles,
       isLoadedAllImages,
       loadedImagesCount,
     };
@@ -31,7 +23,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="scene--wrap" ref="sceneRef" @mousemove.passive="onMouseMove">
+  <div class="scene--wrap">
     <SceneViewLoader :count="loadedImagesCount" :visible="!isLoadedAllImages" />
     <img
       class="scene__img"
@@ -42,7 +34,6 @@ export default defineComponent({
       alt=""
       v-show="url"
       @load="() => ++loadedImagesCount"
-      :style="parallaxStyles[key]"
     />
     <img
       class="scene__img bottomLantern"
@@ -88,14 +79,14 @@ export default defineComponent({
     &.background {
       z-index: var(--z-index-scene-background);
       inset: var(--inset-scene);
-      width: 110%;
-      height: 110%;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
     &.leftColumn {
       z-index: var(--z-index-scene-column);
-      height: 110%;
+      height: 100%;
       left: var(--inset-scene);
       top: var(--inset-scene);
       bottom: var(--inset-scene);
@@ -104,7 +95,7 @@ export default defineComponent({
 
     &.rightColumn {
       z-index: var(--z-index-scene-column);
-      height: 110%;
+      height: 100%;
       right: var(--inset-scene);
       top: var(--inset-scene);
       bottom: var(--inset-scene);
@@ -159,12 +150,11 @@ export default defineComponent({
   }
 
   &--wrap {
-    opacity: 0;
     position: absolute;
     overflow: hidden;
     z-index: 1;
     inset: 0;
-    perspective: 1800px;
+    perspective: 2000px;
     perspective-origin: center;
     transform-style: preserve-3d;
   }
