@@ -18,8 +18,9 @@ export default defineComponent({
     const { t } = useI18n();
     const appStore = useAppStateStore();
     const userStore = useUserStore();
-    const { user } = storeToRefs(userStore);
+    const { user, userNftCount } = storeToRefs(userStore);
     const { isMobile } = storeToRefs(appStore);
+
     const links = [
       {
         to: ROUTES.MY_NFTS.path,
@@ -47,6 +48,7 @@ export default defineComponent({
       links,
       nftCount,
       user,
+      userNftCount,
     };
   },
 });
@@ -65,7 +67,8 @@ export default defineComponent({
           <span
             v-if="link.name === 'myNft' && !!nftCount"
             class="nftCount flex flexCenter"
-            >{{ nftCount }}
+          >
+            {{ userNftCount }}
           </span>
         </router-link>
       </li>
@@ -180,7 +183,7 @@ export default defineComponent({
   transform: translateY(-50%);
   width: 41px;
   height: 41px;
-  background-image: url("~@/assets/images/nftCount.svg");
+  background-image: url("~@/assets/images/nftCount.png");
   background-size: cover;
   font-size: 18px;
   line-height: 18px;

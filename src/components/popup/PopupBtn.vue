@@ -34,7 +34,7 @@ export default defineComponent({
   }
 }
 .default {
-  background-image: url("~@/assets/images/simpleBtnBg.svg");
+  background-image: url("~@/assets/images/simpleBtnBg.png");
   background-repeat: no-repeat;
   background-size: contain;
 }

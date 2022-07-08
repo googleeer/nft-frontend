@@ -1,6 +1,7 @@
 import instance from "@/service/api/api.instance";
 import { useUserStore } from "@/store/user.store";
 import { JWT_TOKEN_KEY } from "@/constants/constants";
+import { getMintedDropsCount } from "@/service/drop/drop.service";
 
 export const getCodeByPhone = async (phone: string) => {
   try {
@@ -21,6 +22,7 @@ export const verifyCodeByPhone = async (phone: string, code: string) => {
     const userStore = useUserStore();
     userStore.setUser(user.data);
     localStorage.setItem(JWT_TOKEN_KEY, user.data.accessToken);
+    await getMintedDropsCount();
   } catch (e) {
     return Promise.reject(e);
   }

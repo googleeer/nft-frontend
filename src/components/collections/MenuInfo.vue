@@ -24,9 +24,9 @@ export default defineComponent({
     const appState = useAppStateStore();
     const { isMobile } = storeToRefs(appState);
     const readMoreActive = ref(false);
-    const someFun = getLocalisingByKey<object>(locale);
+    const localisingDesc = getLocalisingByKey<object>(locale);
 
-    return { ROUTES, t, isMobile, readMoreActive, someFun };
+    return { ROUTES, t, isMobile, readMoreActive, localisingDesc };
   },
 });
 </script>
@@ -43,7 +43,7 @@ export default defineComponent({
             {{ item.name }}
           </h1>
           <p class="collection__info__content__desc--short">
-            {{ someFun(item, "shortDescription").value }}
+            {{ localisingDesc(item, "shortDescription").value }}
           </p>
         </div>
       </div>
@@ -51,14 +51,14 @@ export default defineComponent({
     <div class="collection__author flex direction-column align-center">
       <div class="collection__author--desc">
         <span class="collection__author--desc__short" v-if="!readMoreActive"
-          >{{ someFun(item, "description").value.slice(0, 162) }}
+          >{{ localisingDesc(item, "description").value.slice(0, 162) }}
         </span>
         <span
           class="collection__author--desc__all"
           :class="{ active: readMoreActive }"
           v-if="readMoreActive"
         >
-          {{ someFun(item, "description").value }}
+          {{ localisingDesc(item, "description").value }}
         </span>
         <span
           class="collection__author--desc__more"
