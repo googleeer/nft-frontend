@@ -25,7 +25,7 @@ export default defineComponent({
       })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();
-    const someFun = getLocalisingByKey<Collection>(locale);
+    const localisingDesc = getLocalisingByKey<Collection>(locale);
     const isComingSoon = computed(
       () =>
         collections.value.find((item) => item.id === currentCollectionId.value)
@@ -37,7 +37,7 @@ export default defineComponent({
       ROUTES,
       collections,
       currentCollectionId,
-      someFun,
+      localisingDesc,
       isComingSoon,
       formatImages,
     };
@@ -63,7 +63,7 @@ export default defineComponent({
         <div class="collection-content flex direction-column">
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">
-            {{ someFun(item, "shortDescription").value }}
+            {{ localisingDesc(item, "shortDescription").value }}
           </p>
           <BaseButton
             :button-text="t('collection.open')"

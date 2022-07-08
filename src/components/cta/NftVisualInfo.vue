@@ -19,9 +19,15 @@ export default defineComponent({
     const isMoreThanMaxWordDesc = (desc: string) => {
       return desc.length > countOfMaxWordDesc ? "..." : "";
     };
-    const someFun = getLocalisingByKey<Drop>(locale);
+    const localisingDesc = getLocalisingByKey<Drop>(locale);
 
-    return { ROUTES, t, isMoreThanMaxWordDesc, countOfMaxWordDesc, someFun };
+    return {
+      ROUTES,
+      t,
+      isMoreThanMaxWordDesc,
+      countOfMaxWordDesc,
+      localisingDesc,
+    };
   },
 });
 </script>
@@ -36,7 +42,7 @@ export default defineComponent({
       </p>
       <p v-else-if="shortDescItem">
         {{
-          someFun(shortDescItem, "shortDescription").value.slice(
+          localisingDesc(shortDescItem, "shortDescription").value.slice(
             0,
             countOfMaxWordDesc,
           ) + isMoreThanMaxWordDesc(shortDescItem.shortDescription)

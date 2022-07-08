@@ -36,7 +36,7 @@ export default defineComponent({
         return perks.value.filter((item) => !item.active);
       }
     };
-    const someFun = getLocalisingByKey<Perk>(locale);
+    const localisingDesc = getLocalisingByKey<Perk>(locale);
 
     return {
       tab,
@@ -45,7 +45,7 @@ export default defineComponent({
       filteredData,
       isMobile,
       ROUTES,
-      someFun,
+      localisingDesc,
     };
   },
 });
@@ -84,7 +84,7 @@ export default defineComponent({
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
           <p class="perk__content__desc">
-            {{ someFun(perk, "description").value }}
+            {{ localisingDesc(perk, "description").value }}
           </p>
           <p class="perk__content__action">company owner</p>
         </div>
