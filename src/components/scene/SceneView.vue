@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, Ref, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 export default defineComponent({

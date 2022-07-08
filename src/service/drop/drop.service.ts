@@ -29,3 +29,12 @@ export const getMintedDropsCount = async (): Promise<void> => {
     return Promise.reject(e);
   }
 };
+
+export const getDrops = async (): Promise<Drop[]> => {
+  try {
+    const res = await instance.get("/nft-drop");
+    return res.data;
+  } catch (e) {
+    return Promise.reject(e);
+  }
+};

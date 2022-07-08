@@ -6,7 +6,6 @@ import { ROUTES } from "@/constants/routes.constants";
 import { useAppStateStore } from "@/store/appState.store";
 import { getCollections } from "@/service/collections/collection.service";
 import { Collection } from "@/service/collections/collections.type";
-import router from "@/router";
 import { getLocalisingByKey } from "@/utils/localise";
 import SceneView from "@/components/scene/SceneView.vue";
 import { formatImages } from "@/components/scene/sceneComponent.service";
@@ -24,12 +23,9 @@ export default defineComponent({
         collections.value = data;
         currentCollectionId.value = data[0].id;
       })
-      .catch(() => {
-        router.push(ROUTES.HOME);
-      })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();
-    const someFun = getLocalisingByKey<Collection>(locale);
+    const localisingDesc = getLocalisingByKey<Collection>(locale);
     const isComingSoon = computed(
       () =>
         collections.value.find((item) => item.id === currentCollectionId.value)
@@ -41,7 +37,7 @@ export default defineComponent({
       ROUTES,
       collections,
       currentCollectionId,
-      someFun,
+      localisingDesc,
       isComingSoon,
       formatImages,
     };
@@ -67,7 +63,7 @@ export default defineComponent({
         <div class="collection-content flex direction-column">
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">
-            {{ someFun(item, "shortDescription").value }}
+            {{ localisingDesc(item, "shortDescription").value }}
           </p>
           <BaseButton
             :button-text="t('collection.open')"
