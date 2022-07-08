@@ -24,7 +24,7 @@ export default defineComponent({
       .then((data) => {
         perks.value = data;
       })
-      .catch(() => router.push(ROUTES.HOME))
+      .catch(() => router.push(ROUTES.COLLECTIONS.name))
       .finally(() => appStore.setPreloaderValue(false));
 
     const filteredData = () => {

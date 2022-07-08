@@ -6,7 +6,6 @@ import { ROUTES } from "@/constants/routes.constants";
 import { useAppStateStore } from "@/store/appState.store";
 import { getCollections } from "@/service/collections/collection.service";
 import { Collection } from "@/service/collections/collections.type";
-import router from "@/router";
 import { getLocalisingByKey } from "@/utils/localise";
 import SceneView from "@/components/scene/SceneView.vue";
 import { formatImages } from "@/components/scene/sceneComponent.service";
@@ -23,9 +22,6 @@ export default defineComponent({
       .then((data) => {
         collections.value = data;
         currentCollectionId.value = data[0].id;
-      })
-      .catch(() => {
-        router.push(ROUTES.HOME);
       })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();

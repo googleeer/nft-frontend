@@ -55,6 +55,7 @@
     "swipe": "Swipe to next collection"
   },
   "drop": {
+    "drops": "Drops",
     "drop": "Drop",
     "open": "Open drop",
     "shipping": "Space shipping",

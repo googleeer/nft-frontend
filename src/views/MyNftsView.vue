@@ -23,11 +23,11 @@ export default defineComponent({
         console.log(data);
       })
       .catch(() => {
-        router.push(ROUTES.HOME);
+        router.push(ROUTES.COLLECTIONS.name);
       })
       .finally(() => appState.setPreloaderValue(false));
 
-    return { count, nfts, t };
+    return { count, nfts, t, ROUTES };
   },
 });
 </script>
@@ -39,12 +39,32 @@ export default defineComponent({
       {{ nfts.length }} {{ t("mynfts.nftInCollection") }}
     </p>
     <div class="nfts">
-      <NftVisualInfo :nfts="nfts"></NftVisualInfo>
+      <div class="nft" v-for="nft of nfts" :key="nft.id">
+        <NftVisualInfo
+          :title="nft.drop.name"
+          :shortDescItem="nft.drop"
+          :to="{
+            name: ROUTES.MY_NFT.name,
+            params: { id: nft.drop.id },
+          }"
+        ></NftVisualInfo>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.nft {
+  width: 100%;
+  max-width: 322px;
+  margin: 0 17px;
+  padding-bottom: 56px;
+  @media screen and (max-width: 771px) {
+    max-width: 160px;
+    margin: 0 7.5px;
+    padding-bottom: 29px;
+  }
+}
 .wrapper {
   width: 100%;
   padding-left: 43px;

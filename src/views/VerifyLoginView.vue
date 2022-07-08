@@ -6,6 +6,7 @@ import { useRouter } from "vue-router";
 import { getCodeByPhone, verifyCodeByPhone } from "@/service/auth/auth.service";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import { useI18n } from "vue-i18n";
+import { ROUTES } from "@/constants/routes.constants";
 
 export default defineComponent({
   name: "VerifyLoginView",
@@ -75,7 +76,7 @@ export default defineComponent({
         isLoaded.value = true;
         try {
           await verifyCodeByPhone(verifiedPhone.value, codeValue.value);
-          await router.push("/");
+          await router.push({ name: ROUTES.COLLECTIONS.name });
         } catch (e) {
           error.value = (e as any).response.data;
         } finally {
