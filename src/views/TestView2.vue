@@ -5,7 +5,17 @@ export default defineComponent({
   name: "TestView2",
   setup() {
     const error = ref("dfghjkl");
-    const handleMotion = (e: any) => (error.value = JSON.stringify(e));
+    const handleMotion = (e: any) => {
+      console.log(e);
+      error.value = JSON.stringify({
+        alpha: e.alpha,
+        beta: e.beta,
+        gamma: e.beta,
+        acceleration: e.acceleration,
+        accelerationIncludingGravity: e.accelerationIncludingGravity,
+        rotationRate: e.rotationRate,
+      });
+    };
     try {
       window.addEventListener("devicemotion", handleMotion);
       window.addEventListener("deviceorientation", handleMotion);

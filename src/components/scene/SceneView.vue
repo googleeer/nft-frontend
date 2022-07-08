@@ -159,6 +159,7 @@ export default defineComponent({
   }
 
   &--wrap {
+    opacity: 0;
     position: absolute;
     overflow: hidden;
     z-index: 1;
