@@ -17,7 +17,7 @@ export default defineComponent({
 <template>
   <div class="wrapper flex justify-center align-center flex-grow-1">
     <div class="flex direction-column container align-center">
-      <img class="logo" src="../assets/images/logo.svg" :alt="t('logo')" />
+      <img class="logo" src="../assets/images/logo.png" :alt="t('logo')" />
       <div class="container__form flex direction-column flex-grow-1">
         <h1 class="container__form--title">{{ title }}</h1>
         <p v-if="text" class="container__form--text">{{ text }}</p>
