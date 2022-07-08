@@ -152,15 +152,15 @@ export default defineComponent({
     //  inset: 0;
     //}
     @media screen and (max-width: 768px) {
-      &::before {
-        content: "";
-        position: fixed;
-        width: 100%;
-        height: 90px;
-        background-color: black;
-        z-index: var(--z-index-header-logo);
-        inset: 0;
-      }
+      //&::before {
+      //  content: "";
+      //  position: fixed;
+      //  width: 100%;
+      //  height: 90px;
+      //  background-color: black;
+      //  z-index: var(--z-index-header-logo);
+      //  inset: 0;
+      //}
     }
     &__right {
       position: fixed;

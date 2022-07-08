@@ -6,6 +6,7 @@ export default defineComponent({
   props: {
     visible: Boolean,
     count: Number,
+    countOf: Number,
   },
   setup() {
     return {};
@@ -14,9 +15,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <transition>
+  <transition name="fadeOut" mode="out-in">
     <div class="scene__loader flex flexCenter" v-if="visible">
-      {{ count }} of 9 resources
+      {{ count }} of 10 resources
     </div>
   </transition>
 </template>
@@ -24,10 +25,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 .scene {
   &__loader {
-    z-index: 1;
+    z-index: 5;
     position: absolute;
     inset: 0;
-    background: rgba(28, 35, 77, 0.92);
+    background: rgba(28, 35, 77, 1);
   }
 }
 </style>
