@@ -3,15 +3,16 @@ import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
-import data from "../../test-data.json";
 import { useAppStateStore } from "@/store/appState.store";
 import { getCollections } from "@/service/collections/collection.service";
 import { Collection } from "@/service/collections/collections.type";
 import router from "@/router";
 import { getLocalisingByKey } from "@/utils/localise";
+import SceneView from "@/components/scene/SceneView.vue";
+import { formatImages } from "@/components/scene/sceneComponent.service";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BaseButton },
+  components: { SceneView, BaseButton },
   setup() {
     const appState = useAppStateStore();
     appState.setPreloaderValue(true);
@@ -28,7 +29,6 @@ export default defineComponent({
       })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();
-    const collectionsStatic = data[0].collections;
     const someFun = getLocalisingByKey<Collection>(locale);
     const isComingSoon = computed(
       () =>
@@ -41,9 +41,9 @@ export default defineComponent({
       ROUTES,
       collections,
       currentCollectionId,
-      collectionsStatic,
       someFun,
       isComingSoon,
+      formatImages,
     };
   },
 });
@@ -53,7 +53,7 @@ export default defineComponent({
   <div class="wrapper flex direction-column flex-grow-1">
     <div class="blur" v-if="isComingSoon"></div>
     <div
-      v-for="(item, key) of collections"
+      v-for="item of collections"
       :key="item.id"
       class="flex"
       :class="{ 'flex-grow-1': currentCollectionId === item.id }"
@@ -63,15 +63,8 @@ export default defineComponent({
         v-if="item.id === currentCollectionId"
         :data-content="t('collections.swipe')"
       >
-        <img
-          :src="require(`@/assets/images/${collectionsStatic[key].gif}`)"
-          class="bg"
-        />
+        <SceneView :images="formatImages(item)"></SceneView>
         <div class="collection-content flex direction-column">
-          <img
-            class="collection-content-img"
-            :src="require(`@/assets/images/${collectionsStatic[key].logo}`)"
-          />
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">
             {{ someFun(item, "shortDescription").value }}
@@ -151,7 +144,7 @@ export default defineComponent({
     position: relative;
     &::after {
       position: absolute;
-      content: attr(data-content);
+      //content: attr(data-content);
       left: 50%;
       margin-left: -85px;
       bottom: 60px;
@@ -174,17 +167,13 @@ export default defineComponent({
       );
       opacity: 0.55;
     }
-    .bg {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      object-fit: cover;
-    }
     .collection-content {
       width: 100%;
       padding-left: 59px;
       padding-bottom: 62px;
       z-index: 2;
+      user-select: none;
+      pointer-events: none;
       @media screen and (max-width: 768px) {
         padding: 0 20px 44px;
       }

@@ -6,7 +6,7 @@
   --color-eerie: #212121;
   --color-error: #f282ab;
 
-//  z-index
+  // z-index
   --z-idx-main-menu-blur: 4;
   --z-idx-main-menu: 5;
   --z-idx-header-items: 6;
@@ -15,6 +15,13 @@
   --z-index-click-back: 2;
   --z-index-collections: 1;
 
-
-
+  // scene
+  --z-index-scene-background: -5;
+  --z-index-scene-column: -4;
+  --z-index-scene-artistLogo: -5;
+  --z-index-scene-brandLogo: -5;
+  --z-index-scene-cube: -1;
+  --z-index-scene-light: -2;
+  --inset-scene: -5%;
+  --z-index-scene-lantern: -1;
 }
