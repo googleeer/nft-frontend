@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref, watch } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 
@@ -14,7 +14,12 @@ export default defineComponent({
   },
   setup() {
     const loadedImagesCount = ref(0);
-    const isLoadedAllImages = computed(() => loadedImagesCount.value === 10);
+    const isLoadedAllImages = ref(false);
+    watch(loadedImagesCount, (value) => {
+      if (value === 10) {
+        setTimeout(() => (isLoadedAllImages.value = true), 420);
+      }
+    });
     return {
       isLoadedAllImages,
       loadedImagesCount,
