@@ -8,7 +8,10 @@ export default defineComponent({
   name: "NftVisualInfo",
   components: {},
   props: {
-    nfts: Array,
+    title: String,
+    desc: String,
+    shortDescItem: Object,
+    to: Object,
   },
   setup() {
     const { t, locale } = useI18n();
@@ -16,54 +19,54 @@ export default defineComponent({
     const isMoreThanMaxWordDesc = (desc: string) => {
       return desc.length > countOfMaxWordDesc ? "..." : "";
     };
-    const someFun = getLocalisingByKey<Drop>(locale);
+    const localisingDesc = getLocalisingByKey<Drop>(locale);
 
-    return { ROUTES, t, isMoreThanMaxWordDesc, countOfMaxWordDesc, someFun };
+    return {
+      ROUTES,
+      t,
+      isMoreThanMaxWordDesc,
+      countOfMaxWordDesc,
+      localisingDesc,
+    };
   },
 });
 </script>
 
 <template>
-  <div class="nft" v-for="nft of nfts" :key="nft.id">
-    <RouterLink
-      class="nft__link flex direction-column"
-      :to="{
-        name: ROUTES.MY_NFT.name,
-        params: { id: nft.drop.id },
-      }"
-    >
-      <img class="nft__img" src="@/assets/images/mynft/1.png" />
-
-      <div class="nft__content">
-        <h2 class="nft__content__title">{{ nft.drop.name }}</h2>
-        <p class="nft__content__desc">
-          {{
-            someFun(nft.drop, "shortDescription").value.slice(
-              0,
-              countOfMaxWordDesc,
-            ) + isMoreThanMaxWordDesc(nft.drop.shortDescription)
-          }}
-        </p>
-      </div>
-    </RouterLink>
-  </div>
+  <RouterLink class="nft__link flex direction-column" :to="to">
+    <img class="nft__link__img" src="@/assets/images/mynft/1.png" />
+    <div class="nft__link__content">
+      <h2 class="nft__link__content__title" v-if="title">{{ title }}</h2>
+      <p class="nft__link__content__desc" v-if="desc">
+        {{ desc }}
+      </p>
+      <p v-else-if="shortDescItem">
+        {{
+          localisingDesc(shortDescItem, "shortDescription").value.slice(
+            0,
+            countOfMaxWordDesc,
+          ) + isMoreThanMaxWordDesc(shortDescItem.shortDescription)
+        }}
+      </p>
+    </div>
+  </RouterLink>
 </template>
 
 <style lang="scss" scoped>
-.nft {
-  width: 100%;
-  max-width: 322px;
-  margin: 0 17px;
-  padding-bottom: 56px;
-  @media screen and (max-width: 771px) {
-    max-width: 160px;
-    margin: 0 7.5px;
-    padding-bottom: 29px;
-  }
-  &__link {
-    text-decoration: none;
-    color: var(--color-white);
-  }
+//.nft {
+//  width: 100%;
+//  max-width: 322px;
+//  margin: 0 17px;
+//  padding-bottom: 56px;
+//  @media screen and (max-width: 771px) {
+//    max-width: 160px;
+//    margin: 0 7.5px;
+//    padding-bottom: 29px;
+//  }
+.nft__link {
+  text-decoration: none;
+  color: var(--color-white);
+
   &__img {
     width: 322px;
     border-radius: 42px;

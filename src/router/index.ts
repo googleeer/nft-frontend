@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import { JWT_TOKEN_KEY } from "@/constants/constants";
 import { getCurrentUser } from "@/service/user/user.service";
 import { useAppStateStore } from "@/store/appState.store";
@@ -16,14 +15,6 @@ declare module "vue-router" {
 }
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    ...ROUTES.HOME,
-    component: HomeView,
-    meta: {
-      isAuth: true,
-      layout: "base",
-    },
-  },
   {
     ...ROUTES.MY_NFTS,
     component: () =>
@@ -93,6 +84,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {

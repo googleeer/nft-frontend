@@ -56,7 +56,7 @@ export default defineComponent({
     const countOfActiveNft = nftsData?.nfts.filter(
       (item) => item.active,
     ).length;
-    const someFun = getLocalisingByKey<Perk>(locale);
+    const localisingDesc = getLocalisingByKey<Perk>(locale);
     return {
       tab,
       currentIndex,
@@ -65,7 +65,7 @@ export default defineComponent({
       nftsData,
       countOfActiveNft,
       perk,
-      someFun,
+      localisingDesc,
       inactiveTimer,
       auctionInactive,
       btnText,
@@ -92,7 +92,7 @@ export default defineComponent({
         <SlotsBig :slots="perk.slots.count"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p class="perk__content__info__get">
-            {{ someFun(perk, "description").value }}
+            {{ localisingDesc(perk, "description").value }}
           </p>
           <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">
@@ -124,10 +124,6 @@ export default defineComponent({
         </div>
       </div>
       <div class="perk__nfts flex direction-column">
-        <!--        <h2 class="perk__nfts__title">-->
-        <!--          Need {{ nftsData.nfts.length - countOfActiveNft }} out of-->
-        <!--          {{ nftsData.nfts.length }} NFTs-->
-        <!--        </h2>-->
         <div class="perk__nfts__need flex">
           <div
             class="perk__nfts__need--block flex"
