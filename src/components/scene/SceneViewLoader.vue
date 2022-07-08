@@ -6,6 +6,7 @@ export default defineComponent({
   props: {
     visible: Boolean,
     count: Number,
+    countOf: Number,
   },
   setup() {
     return {};
