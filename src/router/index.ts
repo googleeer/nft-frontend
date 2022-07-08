@@ -168,7 +168,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/:pathMatch(.*)*",
-    redirect: "/",
+    redirect: ROUTES.COLLECTIONS.path,
   },
 ];
 
