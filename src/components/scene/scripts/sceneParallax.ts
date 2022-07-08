@@ -39,9 +39,9 @@ export const useParallax = (sceneRef: Ref<HTMLElement>) => {
   const onMouseMove = ({ pageY, pageX }: MouseEvent) => {
     if (!wait) {
       const section = detectSection(sceneRef)(pageX, pageY);
-      const z = getByPercent(section.axisPart, -3);
-      const x = getByPercent(section.verticalPart, 2);
-      const y = getByPercent(section.horizontalPart, 2);
+      const z = getByPercent(section.axisPart, -1);
+      const x = getByPercent(section.verticalPart, 1);
+      const y = getByPercent(section.horizontalPart, 1);
 
       parallaxStyles.background = {
         transform: `translateZ(${z}px) rotateX(${x}deg) rotateY(${y}deg)`,

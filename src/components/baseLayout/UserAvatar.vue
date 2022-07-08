@@ -11,7 +11,7 @@ export default defineComponent({
 
 <template>
   <img
-    src="../../assets/images/avatar.svg"
+    src="../../assets/images/avatar.png"
     alt="avatar"
     class="avatar pointer"
   />

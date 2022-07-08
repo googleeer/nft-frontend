@@ -96,7 +96,7 @@ export default defineComponent({
     position: absolute;
     inset: 0;
     z-index: -1;
-    background-image: url("~@/assets/images/buttonBg.svg");
+    background-image: url("~@/assets/images/buttonBg.png");
     background-repeat: no-repeat;
     background-size: cover;
   }

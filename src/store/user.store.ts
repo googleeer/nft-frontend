@@ -19,10 +19,14 @@ export const useUserStore = defineStore("userStore", () => {
   const userOrders = ref([]);
   const setUserOrders = (value: []) => (userOrders.value = value);
 
+  const userNftCount = ref(0);
+  const setUserNftCount = (value: number) => (userNftCount.value = value);
   return {
     user,
     userOrders,
+    userNftCount,
     setUser,
     setUserOrders,
+    setUserNftCount,
   };
 });

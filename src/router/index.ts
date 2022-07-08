@@ -4,11 +4,14 @@ import { JWT_TOKEN_KEY } from "@/constants/constants";
 import { getCurrentUser } from "@/service/user/user.service";
 import { useAppStateStore } from "@/store/appState.store";
 import { ROUTES } from "@/constants/routes.constants";
+import { getMintedDropsCount } from "@/service/drop/drop.service";
 
 declare module "vue-router" {
   interface RouteMeta {
     isAuth?: boolean;
     layout?: string;
+    bgRightHeader?: boolean;
+    bgAllHeader?: boolean;
   }
 }
 
@@ -28,6 +31,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -37,6 +41,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -59,6 +64,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -68,6 +74,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgRightHeader: true,
     },
   },
   {
@@ -95,6 +102,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -104,6 +112,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
   },
   {
@@ -115,6 +124,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
+      bgAllHeader: true,
     },
     children: [
       {
@@ -182,7 +192,7 @@ router.beforeResolve((to, from, next) => {
   if (!from.name && to.meta.isAuth) {
     const token = localStorage.getItem(JWT_TOKEN_KEY);
     if (token) {
-      getCurrentUser()
+      Promise.all([getCurrentUser(), getMintedDropsCount()])
         .then(async () => {
           next();
         })

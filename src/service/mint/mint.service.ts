@@ -1,5 +1,6 @@
 import { Mint } from "@/service/mint/mint.type";
 import instance from "@/service/api/api.instance";
+import { getMintedDropsCount } from "@/service/drop/drop.service";
 
 export const getMint = async (id: number): Promise<Mint> => {
   try {
@@ -13,6 +14,7 @@ export const getMint = async (id: number): Promise<Mint> => {
 export const postMint = async (id: number) => {
   try {
     await instance.post(`/nft-drop/${id}/mint`);
+    await getMintedDropsCount();
   } catch (e) {
     return Promise.reject(e);
   }

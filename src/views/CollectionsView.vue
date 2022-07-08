@@ -173,7 +173,6 @@ export default defineComponent({
       padding-bottom: 62px;
       z-index: 2;
       user-select: none;
-      pointer-events: none;
       @media screen and (max-width: 768px) {
         padding: 0 20px 44px;
       }

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import BaseBurger from "@/components/baseLayout/BaseBurger.vue";
 import { useI18n } from "vue-i18n";
 import MainMenu from "@/components/baseLayout/MainMenu.vue";
@@ -9,7 +9,7 @@ import { storeToRefs } from "pinia";
 import UserAvatar from "@/components/baseLayout/UserAvatar.vue";
 import MenuUserProfile from "@/components/baseLayout/MenuUserProfile.vue";
 import { useUserStore } from "@/store/user.store";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/routes.constants";
 export default defineComponent({
   name: "BaseLayout",
@@ -29,6 +29,13 @@ export default defineComponent({
     const { user } = storeToRefs(userStore);
     const isOpenMenu = ref(false);
     const isOpenUserMenu = ref(false);
+    const bgRightHeader = computed(
+      () => useRouter().currentRoute.value.meta.bgRightHeader,
+    );
+    const bgAllHeader = computed(
+      () => useRouter().currentRoute.value.meta.bgAllHeader,
+    );
+    console.log("bgRightHeader", bgRightHeader);
     watch(
       () => route.name,
       () => {
@@ -44,6 +51,8 @@ export default defineComponent({
       user,
       isOpenUserMenu,
       ROUTES,
+      bgRightHeader,
+      bgAllHeader,
     };
   },
 });
@@ -53,12 +62,16 @@ export default defineComponent({
   <div class="layout--wrap flex direction-column flex-grow-1">
     <header
       class="layout__header flex align-center justify-between justify-center-sm"
+      :class="[
+        { isRightBg: bgRightHeader && !isMobile },
+        { isAllBg: bgAllHeader && !isMobile },
+      ]"
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
       <span class="layout__empty"></span>
-      <router-link to="/">
+      <router-link :to="{ name: ROUTES.COLLECTIONS.name }">
         <img
-          src="../assets/images/weedar.svg"
+          src="../assets/images/weedar.png"
           :alt="t('logo')"
           class="layout__logo"
         />
@@ -87,8 +100,32 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.isRightBg::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  max-width: 523px;
+  right: 0;
+  height: 110px;
+  background-color: var(--color-black);
+  z-index: var(--z-index-header-logo);
+  right: 0;
+  top: 0;
+}
+.isAllBg::before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  right: 0;
+  height: 110px;
+  background-color: var(--color-black);
+  z-index: var(--z-index-header-logo);
+  inset: 0;
+}
 .layout {
   &__logo {
+    width: 100%;
+    max-width: 198px;
     position: fixed;
     top: 42px;
     left: 50%;
@@ -105,6 +142,15 @@ export default defineComponent({
 
   &__header {
     position: relative;
+    //&::before {
+    //  content: "";
+    //  position: fixed;
+    //  width: 100%;
+    //  height: 120px;
+    //  background-color: rgba(25, 23, 23, 0.5);
+    //  z-index: var(--z-index-header-logo);
+    //  inset: 0;
+    //}
     @media screen and (max-width: 768px) {
       &::before {
         content: "";
