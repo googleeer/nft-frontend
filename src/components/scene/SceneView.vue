@@ -12,17 +12,21 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
+    const count = computed(
+      () => Object.values(props.images).filter((_) => _).length,
+    );
     const loadedImagesCount = ref(0);
     const isLoadedAllImages = ref(false);
     watch(loadedImagesCount, (value) => {
-      if (value === 10) {
+      if (value === count.value) {
         setTimeout(() => (isLoadedAllImages.value = true), 420);
       }
     });
     return {
       isLoadedAllImages,
       loadedImagesCount,
+      count,
     };
   },
 });
@@ -30,7 +34,11 @@ export default defineComponent({
 
 <template>
   <div class="scene--wrap">
-    <SceneViewLoader :count="loadedImagesCount" :visible="!isLoadedAllImages" />
+    <SceneViewLoader
+      :countOf="count"
+      :count="loadedImagesCount"
+      :visible="!isLoadedAllImages"
+    />
     <img
       class="scene__img"
       v-for="(url, key) in images"
