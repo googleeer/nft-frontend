@@ -33,7 +33,7 @@ export default defineComponent({
     <div class="popup__content flex direction-column flexCenter">
       <img
         class="popup__content__img"
-        :src="require(`@/assets/images/smile_mint.svg`)"
+        :src="require(`@/assets/images/smile_mint.png`)"
       />
       <h2 class="popup__content__info">
         {{ t("drop.succeedMint") }}

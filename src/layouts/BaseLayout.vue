@@ -71,7 +71,7 @@ export default defineComponent({
       <span class="layout__empty"></span>
       <router-link :to="{ name: ROUTES.COLLECTIONS.name }">
         <img
-          src="../assets/images/weedar.svg"
+          src="../assets/images/weedar.png"
           :alt="t('logo')"
           class="layout__logo"
         />
@@ -124,6 +124,8 @@ export default defineComponent({
 }
 .layout {
   &__logo {
+    width: 100%;
+    max-width: 198px;
     position: fixed;
     top: 42px;
     left: 50%;
