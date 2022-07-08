@@ -49,7 +49,7 @@ export default defineComponent({
               attributeType="XML"
               attributeName="values"
               values="0;110;150;210;360"
-              dur="6s"
+              dur="4s"
               repeatCount="indefinite"
             ></animate>
           </feColorMatrix>
