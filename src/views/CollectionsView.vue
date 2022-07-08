@@ -59,7 +59,10 @@ export default defineComponent({
         v-if="item.id === currentCollectionId"
         :data-content="t('collections.swipe')"
       >
-        <SceneView :images="formatImages(item)"></SceneView>
+        <SceneView
+          :test="currentCollectionId === 11"
+          :images="formatImages(item)"
+        ></SceneView>
         <div class="collection-content flex direction-column">
           <h1 class="collection-content-name">{{ item.name }}</h1>
           <p class="collection-content-desc">
