@@ -45,7 +45,7 @@ export default defineComponent({
       })),
     );
 
-    const localisingDesc = getLocalisingByKey<object>(locale);
+    const localisingDesc = getLocalisingByKey(locale);
 
     return {
       ROUTES,
@@ -78,14 +78,14 @@ export default defineComponent({
       <h1 v-if="!isMobile" class="nft__menu__name">{{ drop.name }}</h1>
       <div class="nft__menu__author--desc">
         <span class="nft__menu__author--desc__short" v-if="!readMoreActive">
-          {{ localisingDesc(drop, "description").value.slice(0, 162) }}
+          {{ localisingDesc(drop, "description").slice(0, 162) }}
         </span>
         <span
           class="nft__menu__author--desc__all"
           :class="{ active: readMoreActive }"
           v-if="readMoreActive"
         >
-          {{ localisingDesc(drop, "description").value }}
+          {{ localisingDesc(drop, "description") }}
         </span>
         <span
           class="nft__menu__author--desc__more"

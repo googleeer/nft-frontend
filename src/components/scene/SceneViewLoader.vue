@@ -17,7 +17,7 @@ export default defineComponent({
 <template>
   <transition name="fadeOut" mode="out-in">
     <div class="scene__loader flex flexCenter" v-if="visible">
-      {{ count }} of 10 resources
+      {{ count }} of {{ countOf }} resources
     </div>
   </transition>
 </template>

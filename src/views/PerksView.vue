@@ -84,7 +84,7 @@ export default defineComponent({
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
           <p class="perk__content__desc">
-            {{ localisingDesc(perk, "description").value }}
+            {{ localisingDesc(perk, "description") }}
           </p>
           <p class="perk__content__action">company owner</p>
         </div>
