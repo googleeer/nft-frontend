@@ -92,7 +92,7 @@ export default defineComponent({
         <SlotsBig :slots="perk.slots.count"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p class="perk__content__info__get">
-            {{ localisingDesc(perk, "description").value }}
+            {{ localisingDesc(perk, "description") }}
           </p>
           <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">

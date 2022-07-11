@@ -44,7 +44,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="scene--wrap">
+  <div class="scene--wrap flex align-end">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
         <filter id="goovey">
@@ -94,6 +94,7 @@ export default defineComponent({
       v-show="url"
       @load="() => ++loadedImagesCount"
     />
+    <slot></slot>
   </div>
 </template>
 

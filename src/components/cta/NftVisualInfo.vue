@@ -42,7 +42,7 @@ export default defineComponent({
       </p>
       <p v-else-if="shortDescItem">
         {{
-          localisingDesc(shortDescItem, "shortDescription").value.slice(
+          localisingDesc(shortDescItem, "shortDescription").slice(
             0,
             countOfMaxWordDesc,
           ) + isMoreThanMaxWordDesc(shortDescItem.shortDescription)
