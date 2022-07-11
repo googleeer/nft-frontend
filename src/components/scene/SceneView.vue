@@ -59,14 +59,14 @@ export default defineComponent({
               attributeType="XML"
               attributeName="values"
               values="0;110;150;210;360"
-              dur="4s"
+              dur="6s"
               repeatCount="indefinite"
             ></animate>
           </feColorMatrix>
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
-            scale="8"
+            scale="12"
             in="SourceGraphic"
           ></feDisplacementMap>
         </filter>
