@@ -14,8 +14,17 @@ export default defineComponent({
     test: Boolean,
   },
   setup(props) {
+    const defaultImages = {
+      bottomLantern: require(`@/assets/images/scene/bottomLantern.png`),
+      upperLantern: require(`@/assets/images/scene/upperLantern.png`),
+      upperBlackout: require(`@/assets/images/scene/upperBlackout.png`),
+      bottomBlackout: require(`@/assets/images/scene/bottomBlackout.png`),
+      light: require(`@/assets/images/scene/light.svg`),
+    };
     const count = computed(
-      () => Object.values(props.images).filter((_) => _).length,
+      () =>
+        Object.values({ ...props.images, ...defaultImages }).filter((_) => _)
+          .length,
     );
     const loadedImagesCount = ref(0);
     const isLoadedAllImages = ref(false);
@@ -28,6 +37,7 @@ export default defineComponent({
       isLoadedAllImages,
       loadedImagesCount,
       count,
+      defaultImages,
     };
   },
 });
@@ -76,43 +86,13 @@ export default defineComponent({
     />
     <img
       class="scene__img"
-      v-for="(url, key) in images"
+      v-for="(url, key) in { ...images, ...defaultImages }"
       :key="url"
       :src="url"
       :class="[key]"
       alt=""
       v-show="url"
       @load="() => ++loadedImagesCount"
-    />
-    <img
-      class="scene__img bottomLantern"
-      :src="require(`@/assets/images/scene/bottomLantern.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
-      class="scene__img upperLantern"
-      :src="require(`@/assets/images/scene/upperLantern.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
-      class="scene__img upperBlackout"
-      :src="require(`@/assets/images/scene/upperBlackout.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
-      class="scene__img bottomBlackout"
-      :src="require(`@/assets/images/scene/bottomBlackout.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
-      class="scene__img light"
-      :src="require(`@/assets/images/scene/light.svg`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
     />
   </div>
 </template>
@@ -193,6 +173,10 @@ export default defineComponent({
       transform: translateX(-50%);
       height: 100%;
       max-height: 90vh;
+
+      @media screen and (max-width: 768px) {
+        top: 7%;
+      }
     }
 
     &.bottomLantern {
@@ -226,6 +210,24 @@ export default defineComponent({
       animation-timing-function: ease;
       animation-direction: alternate;
       animation-duration: 3s;
+
+      @media screen and (max-width: 768px) {
+        display: none;
+      }
+    }
+
+    &.brandLogo {
+      width: 310px;
+      bottom: 102px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: var(--z-index-scene-artistLogo);
+      animation-name: wakeUpSm;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease;
+      animation-direction: alternate;
+      animation-duration: 3s;
+      transition-delay: 0.5s;
 
       @media screen and (max-width: 768px) {
         display: none;
