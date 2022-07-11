@@ -1,6 +1,7 @@
 import axios from "axios";
 import router from "@/router";
-import { JWT_TOKEN_KEY } from "@/constants/constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "@/constants/constants";
+import { postRefreshToken } from "@/service/auth/auth.service";
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_WEEDAR_API_URL,
@@ -10,7 +11,7 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-  const token = localStorage.getItem(JWT_TOKEN_KEY);
+  const token = localStorage.getItem(ACCESS_TOKEN);
   token &&
     (config.headers = {
       ...config.headers,
@@ -23,8 +24,28 @@ instance.interceptors.response.use(
   (res) => res,
   async (error) => {
     if (error.response.status === 401) {
-      localStorage.removeItem(JWT_TOKEN_KEY);
-      router.currentRoute.value.meta.isAuth && (await router.push("/login"));
+      const originalRequest = error.config;
+      const oldRefreshToken = localStorage.getItem(REFRESH_TOKEN) || "";
+      try {
+        const { accessToken, refreshToken } = await postRefreshToken(
+          oldRefreshToken,
+        );
+
+        localStorage.setItem(ACCESS_TOKEN, accessToken);
+        localStorage.setItem(REFRESH_TOKEN, refreshToken);
+
+        return instance({
+          ...originalRequest,
+          headers: {
+            ...originalRequest.headers,
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+      } catch (e) {
+        localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem(REFRESH_TOKEN);
+        await router.push("/login");
+      }
     }
 
     return Promise.reject(error);
