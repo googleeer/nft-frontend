@@ -12,3 +12,10 @@ export interface SceneImages {
   leftColumn: CdnFile;
   rightColumn: CdnFile;
 }
+
+export interface ElementDescription {
+  description: string;
+  description_es: string;
+  shortDescription: string;
+  shortDescription_es: string;
+}

@@ -1,17 +1,17 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import BaseButton from "@/components/form/BaseButton.vue";
 import { ROUTES } from "@/constants/routes.constants";
 import { useAppStateStore } from "@/store/appState.store";
 import { getCollections } from "@/service/collections/collection.service";
 import { Collection } from "@/service/collections/collections.type";
-import { getLocalisingByKey } from "@/utils/localise";
+import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
 import SceneView from "@/components/scene/SceneView.vue";
 import { formatImages } from "@/components/scene/sceneComponent.service";
+import SceneTextContent from "@/components/scene/SceneTextContent.vue";
 export default defineComponent({
   name: "CollectionsView",
-  components: { SceneView, BaseButton },
+  components: { SceneTextContent, SceneView },
   setup() {
     const appState = useAppStateStore();
     appState.setPreloaderValue(true);
@@ -25,7 +25,8 @@ export default defineComponent({
       })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();
-    const localisingDesc = getLocalisingByKey<Collection>(locale);
+    const localisingDesc =
+      getLocalisingByKey<Pick<Collection, LocalisingKey>>(locale);
     const isComingSoon = computed(
       () =>
         collections.value.find((item) => item.id === currentCollectionId.value)
@@ -62,34 +63,18 @@ export default defineComponent({
         <SceneView
           :test="currentCollectionId === 11"
           :images="formatImages(item)"
-        ></SceneView>
-        <div class="collection-content flex direction-column">
-          <h1 class="collection-content-name">{{ item.name }}</h1>
-          <p class="collection-content-desc">
-            {{ localisingDesc(item, "shortDescription").value }}
-          </p>
-          <BaseButton
-            :button-text="t('collection.open')"
-            class="collection-content-btn"
-            v-if="!isComingSoon"
-            :to="{
+        >
+          <SceneTextContent
+            button-text="collection.open"
+            :route="{
               name: ROUTES.COLLECTION.name,
               params: { id: currentCollectionId },
             }"
-          ></BaseButton>
-          <div
-            v-if="isComingSoon"
-            class="collection-content-soon flex align-center"
-          >
-            <img
-              src="../assets/images/time.svg"
-              class="collection-content-soon--img"
-            />
-            <h2 class="collection-content-soon--text">
-              {{ t("collection.soon") }}
-            </h2>
-          </div>
-        </div>
+            :is-coming-soon="isComingSoon"
+            :name="item.name"
+            :short-description="localisingDesc(item, 'shortDescription')"
+          />
+        </SceneView>
         <div class="pagination__wrapper flex direction-column align-center">
           <button
             v-for="btn of collections"
@@ -165,73 +150,6 @@ export default defineComponent({
         rgba(0, 0, 0, 0.51) 100%
       );
       opacity: 0.55;
-    }
-    .collection-content {
-      width: 100%;
-      padding-left: 59px;
-      padding-bottom: 62px;
-      z-index: 2;
-      user-select: none;
-      @media screen and (max-width: 768px) {
-        padding: 0 20px 44px;
-      }
-      @media screen and (max-width: 370px) {
-        padding: 0px 5px 20px;
-      }
-      &-name {
-        padding-top: 28px;
-        padding-bottom: 9px;
-        font-weight: 800;
-        font-size: 82px;
-        line-height: 110%;
-        @media screen and (max-width: 768px) {
-          padding-top: 19px;
-          font-size: 42px;
-        }
-      }
-      &-desc {
-        padding-bottom: 46px;
-        font-size: 22px;
-        @media screen and (max-width: 768px) {
-          font-size: 16px;
-          padding-bottom: 36px;
-        }
-      }
-      &-btn {
-        max-width: 335px;
-        @media screen and (max-width: 350px) {
-          min-width: 310px;
-          max-width: 310px;
-          ::v-deep(.button__background) {
-            background-size: 100% 100%;
-          }
-        }
-      }
-      &-img {
-        max-width: 104px;
-        height: 104px;
-        @media screen and (max-width: 768px) {
-          max-width: 92px;
-          height: 92px;
-        }
-      }
-      &-soon {
-        &--img {
-          width: 58px;
-          margin-right: 27px;
-          @media screen and (max-width: 768px) {
-            width: 38px;
-          }
-        }
-        &--text {
-          font-size: 46px;
-          line-height: 110%;
-          font-weight: 300;
-          @media screen and (max-width: 768px) {
-            font-size: 24px;
-          }
-        }
-      }
     }
   }
 }
