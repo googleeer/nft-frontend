@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import { JWT_TOKEN_KEY } from "@/constants/constants";
+import { ACCESS_TOKEN } from "@/constants/constants";
 import { getCurrentUser } from "@/service/user/user.service";
 import { useAppStateStore } from "@/store/appState.store";
 import { ROUTES } from "@/constants/routes.constants";
@@ -182,10 +182,11 @@ const router = createRouter({
 router.beforeResolve((to, from, next) => {
   const appStateStore = useAppStateStore();
   if (!from.name && to.meta.isAuth) {
-    const token = localStorage.getItem(JWT_TOKEN_KEY);
+    const token = localStorage.getItem(ACCESS_TOKEN);
     if (token) {
-      Promise.all([getCurrentUser(), getMintedDropsCount()])
+      getCurrentUser()
         .then(async () => {
+          await getMintedDropsCount();
           next();
         })
         .finally(() => {
