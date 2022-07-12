@@ -18,6 +18,10 @@ body {
   color: var(--color-white);
 }
 
+body.overflowHidden {
+  overflow: hidden;
+}
+
 html, body {
   background-color: var(--color-black);
 }

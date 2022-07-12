@@ -81,6 +81,11 @@ export default defineComponent({
   transition: all 0.3s ease;
   font-family: CoreSansC, sans-serif;
   text-decoration: none;
+
+  * {
+    pointer-events: none;
+  }
+
   &[disabled] {
     pointer-events: none;
     .button__background {

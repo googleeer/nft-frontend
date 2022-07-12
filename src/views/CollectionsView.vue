@@ -15,13 +15,12 @@ export default defineComponent({
   setup() {
     const appState = useAppStateStore();
     appState.setPreloaderValue(true);
-    const currentCollectionId = ref<number>(0);
+    const currentCollectionIdx = ref<number>(0);
 
     const collections = ref<Collection[]>([]);
     getCollections()
       .then((data) => {
         collections.value = data;
-        currentCollectionId.value = data[0].id;
       })
       .finally(() => appState.setPreloaderValue(false));
     const { t, locale } = useI18n();
@@ -29,18 +28,32 @@ export default defineComponent({
       getLocalisingByKey<Pick<Collection, LocalisingKey>>(locale);
     const isComingSoon = computed(
       () =>
-        collections.value.find((item) => item.id === currentCollectionId.value)
-          ?.isComingSoon === "true",
+        collections.value[currentCollectionIdx.value]?.isComingSoon === "true",
     );
+
+    const test = (e: string) => {
+      if (e === "prev") {
+        currentCollectionIdx.value =
+          currentCollectionIdx.value === 0
+            ? collections.value.length - 1
+            : currentCollectionIdx.value - 1;
+      } else if (e === "next") {
+        currentCollectionIdx.value =
+          currentCollectionIdx.value === collections.value.length - 1
+            ? 0
+            : currentCollectionIdx.value + 1;
+      }
+    };
 
     return {
       t,
       ROUTES,
       collections,
-      currentCollectionId,
+      currentCollectionIdx,
       localisingDesc,
       isComingSoon,
       formatImages,
+      test,
     };
   },
 });
@@ -50,25 +63,27 @@ export default defineComponent({
   <div class="wrapper flex direction-column flex-grow-1">
     <div class="blur" v-if="isComingSoon"></div>
     <div
-      v-for="item of collections"
+      v-for="(item, idx) of collections"
       :key="item.id"
       class="flex"
-      :class="{ 'flex-grow-1': currentCollectionId === item.id }"
+      :class="{ 'flex-grow-1': currentCollectionIdx === idx }"
     >
       <div
         class="content flex align-end"
-        v-if="item.id === currentCollectionId"
+        v-if="idx === currentCollectionIdx"
         :data-content="t('collections.swipe')"
       >
         <SceneView
-          :test="currentCollectionId === 11"
+          :test="item.id === 11"
           :images="formatImages(item)"
+          @prev="test('prev')"
+          @next="test('next')"
         >
           <SceneTextContent
             button-text="collection.open"
             :route="{
               name: ROUTES.COLLECTION.name,
-              params: { id: currentCollectionId },
+              params: { id: item.id },
             }"
             :is-coming-soon="isComingSoon"
             :name="item.name"
@@ -77,11 +92,11 @@ export default defineComponent({
         </SceneView>
         <div class="pagination__wrapper flex direction-column align-center">
           <button
-            v-for="btn of collections"
+            v-for="(btn, btnIdx) of collections"
             :key="btn"
             class="pagination__wrapper__btn"
-            :class="{ active: btn.id === currentCollectionId }"
-            @click="currentCollectionId = btn.id"
+            :class="{ active: btnIdx === currentCollectionIdx }"
+            @click="currentCollectionIdx = btnIdx"
           ></button>
         </div>
       </div>
@@ -93,7 +108,7 @@ export default defineComponent({
 .blur {
   position: fixed;
   inset: 0;
-  left: 0px;
+  left: 0;
   z-index: 2;
   background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(27.1828px);
