@@ -1,11 +1,15 @@
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, watch } from "vue";
+import { defineComponent, PropType } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
+import { useSceneSwipe } from "@/components/scene/scripts/sceneSwipe";
+import { useImageLoading } from "@/components/scene/scripts/imageLoading";
+import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHiddenBody";
 
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
+  emits: ["prev", "next"],
   props: {
     images: {
       type: Object as PropType<SceneImagesProp>,
@@ -13,7 +17,8 @@ export default defineComponent({
     },
     test: Boolean,
   },
-  setup(props) {
+  setup(props, { emit }) {
+    useOverflowHiddenBody();
     const defaultImages = {
       bottomLantern: require(`@/assets/images/scene/bottomLantern.png`),
       upperLantern: require(`@/assets/images/scene/upperLantern.png`),
@@ -21,30 +26,41 @@ export default defineComponent({
       bottomBlackout: require(`@/assets/images/scene/bottomBlackout.png`),
       light: require(`@/assets/images/scene/light.svg`),
     };
-    const count = computed(
-      () =>
-        Object.values({ ...props.images, ...defaultImages }).filter((_) => _)
-          .length,
-    );
-    const loadedImagesCount = ref(0);
-    const isLoadedAllImages = ref(false);
-    watch(loadedImagesCount, (value) => {
-      if (value === count.value) {
-        setTimeout(() => (isLoadedAllImages.value = true), 420);
-      }
+    const { count, isLoadedAllImages, loadedImagesCount } = useImageLoading({
+      ...props.images,
+      ...defaultImages,
     });
+    const { onSwipeEnd, onSwipeStart, onSwipeMove, cubeStyles } = useSceneSwipe(
+      "Y",
+      emit,
+    );
     return {
       isLoadedAllImages,
       loadedImagesCount,
       count,
       defaultImages,
+      onSwipeEnd,
+      onSwipeStart,
+      onSwipeMove,
+      cubeStyles,
     };
   },
 });
 </script>
 
 <template>
-  <div class="scene--wrap flex align-end">
+  <div
+    class="scene--wrap flex align-end"
+    :class="{
+      loading: !isLoadedAllImages,
+    }"
+    @touchstart="onSwipeStart"
+    @touchmove="onSwipeMove"
+    @touchend="onSwipeEnd"
+    @mousedown="onSwipeStart"
+    @mousemove="onSwipeMove"
+    @mouseup="onSwipeEnd"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
         <filter id="goovey">
@@ -90,6 +106,7 @@ export default defineComponent({
       :key="url"
       :src="url"
       :class="[key]"
+      :style="key === 'cube' ? cubeStyles : null"
       alt=""
       v-show="url"
       @load="() => ++loadedImagesCount"
@@ -104,7 +121,6 @@ export default defineComponent({
     position: absolute;
     pointer-events: none;
     will-change: transform;
-    transition: transform 10ms linear;
 
     &.test {
       left: 50%;
@@ -269,6 +285,11 @@ export default defineComponent({
     perspective: 2000px;
     perspective-origin: center;
     transform-style: preserve-3d;
+    user-select: none;
+
+    &.loading {
+      pointer-events: none;
+    }
   }
 }
 @keyframes wakeUpSm {

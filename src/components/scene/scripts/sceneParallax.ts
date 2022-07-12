@@ -1,4 +1,4 @@
-import { reactive, Ref, ref } from "vue";
+import { reactive, Ref } from "vue";
 
 const getPercent = (a: number, b: number) => (a * 100) / b;
 const getByPercent = (percent: number, number: number) =>
