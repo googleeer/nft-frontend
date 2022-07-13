@@ -118,7 +118,7 @@ export default defineComponent({
 .wrapper {
   position: relative;
   .back:not(.isMob) {
-    @media screen and (max-height: 700px) {
+    @media screen and (max-height: 800px) {
       left: auto;
       right: 95px;
       transform: none;
