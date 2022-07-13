@@ -20,7 +20,6 @@ export default defineComponent({
     getDrops()
       .then((data) => {
         drops.value = data;
-        console.log(data);
       })
       .catch(() => {
         router.push({ name: ROUTES.COLLECTIONS.name });
