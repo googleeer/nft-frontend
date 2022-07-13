@@ -30,10 +30,14 @@ export default defineComponent({
       ...props.images,
       ...defaultImages,
     });
-    const { onSwipeEnd, onSwipeStart, onSwipeMove, cubeStyles } = useSceneSwipe(
-      "Y",
-      emit,
-    );
+    const {
+      onSwipeEnd,
+      onSwipeStart,
+      onSwipeMove,
+      onWheel,
+      cubeStyles,
+      wheelDirection,
+    } = useSceneSwipe("Y", emit);
     return {
       isLoadedAllImages,
       loadedImagesCount,
@@ -42,7 +46,9 @@ export default defineComponent({
       onSwipeEnd,
       onSwipeStart,
       onSwipeMove,
+      onWheel,
       cubeStyles,
+      wheelDirection,
     };
   },
 });
@@ -60,6 +66,7 @@ export default defineComponent({
     @mousedown="onSwipeStart"
     @mousemove="onSwipeMove"
     @mouseup="onSwipeEnd"
+    @wheel="onWheel"
   >
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
@@ -105,7 +112,7 @@ export default defineComponent({
       v-for="(url, key) in { ...images, ...defaultImages }"
       :key="url"
       :src="url"
-      :class="[key]"
+      :class="[key, wheelDirection]"
       :style="key === 'cube' ? cubeStyles : null"
       alt=""
       v-show="url"
@@ -193,6 +200,18 @@ export default defineComponent({
 
       @media screen and (max-width: 768px) {
         top: 7%;
+      }
+
+      &.next {
+        transition: transform 0.4s ease-in;
+        transform-origin: top !important;
+        transform: translateX(-50%) translateY(-17px) scale(0.8) !important;
+      }
+
+      &.prev {
+        transition: transform 0.4s ease-in;
+        transform-origin: bottom !important;
+        transform: translateX(-50%) translateY(17px) scale(0.8) !important;
       }
     }
 

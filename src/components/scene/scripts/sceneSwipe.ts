@@ -36,7 +36,7 @@ export const useSceneSwipe = (
   });
 
   const onSwipeStart = (event: SwipeEvent) => {
-    if (targetIsLink(event.target)) return;
+    if (targetIsLink(event.target) || wheelStarted.value) return;
     startPosition.value = getCoordinate(event, direction);
   };
   const onSwipeEnd = () => {
@@ -66,10 +66,28 @@ export const useSceneSwipe = (
     }
   };
 
+  const wheelStarted = ref(false);
+  const wheelDirection = ref("");
+
+  const onWheel = (event: WheelEvent) => {
+    if (wheelStarted.value || startPosition.value) return;
+    wheelStarted.value = true;
+    const direction = event.deltaY < 0 ? "prev" : "next";
+    console.log(direction);
+    wheelDirection.value = direction;
+    setTimeout(() => {
+      wheelStarted.value = false;
+      wheelDirection.value = "";
+      onSwitch(direction);
+    }, 420);
+  };
+
   return {
     onSwipeEnd,
     onSwipeStart,
     onSwipeMove,
+    onWheel,
     cubeStyles,
+    wheelDirection,
   };
 };
