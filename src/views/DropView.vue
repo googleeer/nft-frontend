@@ -164,9 +164,6 @@ export default defineComponent({
     max-height: none;
     .back {
       position: absolute;
-      //@media screen and (max-width: 768px) {
-      //  transform: translateX(-36%);
-      //}
     }
   }
   &__img--wrap {
