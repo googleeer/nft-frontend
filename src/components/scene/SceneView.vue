@@ -9,13 +9,18 @@ import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHidden
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
-  emits: ["prev", "next"],
+  emits: ["toActive"],
   props: {
     images: {
       type: Object as PropType<SceneImagesProp>,
       required: true,
     },
-    test: Boolean,
+    buttons: {
+      type: Array as PropType<number[]>,
+      required: true,
+    },
+    activeId: Number,
+    blur: Boolean,
   },
   setup(props, { emit }) {
     useOverflowHiddenBody();
@@ -30,6 +35,22 @@ export default defineComponent({
       ...props.images,
       ...defaultImages,
     });
+
+    const emitToActive = (id: number) => emit("toActive", id);
+    const onSwipe = (direction: "prev" | "next") => {
+      const { buttons, activeId } = props;
+      const currentIdx = buttons.findIndex((id) => id === activeId);
+      const nextIdx: number =
+        direction === "prev"
+          ? currentIdx === 0
+            ? buttons.length - 1
+            : currentIdx - 1
+          : currentIdx === buttons.length - 1
+          ? 0
+          : currentIdx + 1;
+      emitToActive(buttons[nextIdx]);
+    };
+
     const {
       onSwipeEnd,
       onSwipeStart,
@@ -37,7 +58,7 @@ export default defineComponent({
       onWheel,
       cubeStyles,
       wheelDirection,
-    } = useSceneSwipe("Y", emit);
+    } = useSceneSwipe("Y", onSwipe);
     return {
       isLoadedAllImages,
       loadedImagesCount,
@@ -49,6 +70,7 @@ export default defineComponent({
       onWheel,
       cubeStyles,
       wheelDirection,
+      emitToActive,
     };
   },
 });
@@ -68,6 +90,7 @@ export default defineComponent({
     @mouseup="onSwipeEnd"
     @wheel="onWheel"
   >
+    <div class="blur" v-if="blur"></div>
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
         <filter id="goovey">
@@ -101,13 +124,6 @@ export default defineComponent({
       :visible="!isLoadedAllImages"
     />
     <img
-      v-if="test"
-      class="scene__img test"
-      :src="require(`@/assets/images/scene/quarry_01_1k.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
       class="scene__img"
       v-for="(url, key) in { ...images, ...defaultImages }"
       :key="url"
@@ -119,6 +135,15 @@ export default defineComponent({
       @load="() => ++loadedImagesCount"
     />
     <slot></slot>
+    <div class="pagination__wrapper flex direction-column align-center">
+      <button
+        v-for="btn of buttons"
+        :key="btn"
+        class="pagination__wrapper__btn"
+        :class="{ active: btn === activeId }"
+        @click="emitToActive(btn)"
+      ></button>
+    </div>
   </div>
 </template>
 
@@ -311,6 +336,38 @@ export default defineComponent({
     }
   }
 }
+
+.blur {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(27.1828px);
+}
+
+.pagination__wrapper {
+  width: 100%;
+  max-width: 13px;
+  position: absolute;
+  z-index: 2;
+  right: 53px;
+  top: 50%;
+  transform: translateY(-50%);
+  button {
+    outline: none;
+    border: none;
+    margin: 10px;
+    padding: 4.5px;
+  }
+  .active {
+    padding: 6.5px;
+  }
+  &__btn {
+    background: white;
+    border-radius: 100%;
+  }
+}
+
 @keyframes wakeUpSm {
   0% {
     transform: translateX(-51%) rotate(0.3deg);

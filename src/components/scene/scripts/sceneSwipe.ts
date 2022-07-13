@@ -70,10 +70,10 @@ export const useSceneSwipe = (
   const wheelDirection = ref("");
 
   const onWheel = (event: WheelEvent) => {
-    if (wheelStarted.value || startPosition.value) return;
+    const delta = event[isY ? "deltaY" : "deltaX"];
+    if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
     wheelStarted.value = true;
-    const direction = event.deltaY < 0 ? "prev" : "next";
-    console.log(direction);
+    const direction = delta < 0 ? "prev" : "next";
     wheelDirection.value = direction;
     setTimeout(() => {
       wheelStarted.value = false;

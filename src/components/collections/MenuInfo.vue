@@ -103,6 +103,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .collection {
+  display: none;
   width: 100%;
   max-width: 523px;
   min-width: 523px;

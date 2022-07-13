@@ -1,99 +1,85 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
-import CollectionDrop from "@/components/collections/Drop.vue";
-import MenuInfo from "@/components/collections/MenuInfo.vue";
-import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
-import { useAppStateStore } from "@/store/appState.store";
-import { CollectionWithDrops } from "@/service/collections/collections.type";
-import { getCollection } from "@/service/collections/collection.service";
-import router from "@/router";
-
+import { getCollections } from "@/service/collections/collection.service";
+import { useCollectionsStore } from "@/store/collections.store";
+import { storeToRefs } from "pinia";
+import SceneView from "@/components/scene/SceneView.vue";
+import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
+import { Collection } from "@/service/collections/collections.type";
+import { formatImages } from "@/components/scene/sceneComponent.service";
+import SceneTextContent from "@/components/scene/SceneTextContent.vue";
 export default defineComponent({
   name: "CollectionView",
-  components: { MenuInfo, CollectionDrop, BackFixed },
+  components: { SceneTextContent, SceneView, BackFixed },
   setup() {
-    const currentCollectionId = +useRouter().currentRoute.value.params.id;
-    const appState = useAppStateStore();
-    const collection = ref<CollectionWithDrops | null>(null);
-    const currentDropId = ref(0);
-    appState.setPreloaderValue(true);
-    getCollection(currentCollectionId)
-      .then((data) => {
-        collection.value = data;
-        currentDropId.value = data.drops[0].id;
-      })
-      .catch(() => {
+    const router = useRouter();
+    const route = useRoute();
+    const currentCollectionId = +route.params.id;
+    const { t, locale } = useI18n();
+    const localisingDesc =
+      getLocalisingByKey<Pick<Collection, LocalisingKey>>(locale);
+
+    const collectionStore = useCollectionsStore();
+    const { collectionsButtons, collections } = storeToRefs(collectionStore);
+    if (!collections.value.length) {
+      getCollections().catch(() => {
         router.push(ROUTES.COLLECTIONS);
-      })
-      .finally(() => appState.setPreloaderValue(false));
-    const { t } = useI18n();
-    const collections = data[0].collections;
-    const currentCollection = collections?.[currentCollectionId];
-    const properties = computed(() =>
-      (["brand", "artist"] as (keyof CollectionWithDrops)[]).map((key) => ({
-        title: t(`collection.${key}`),
-        value: collection.value?.[key],
-      })),
+      });
+    }
+    const collection = computed(() =>
+      collections.value.find(({ id }) => id === currentCollectionId),
     );
-    const drops = currentCollection?.drops;
+    const toActive = (id: number) =>
+      router.push({
+        name: ROUTES.COLLECTION.name,
+        params: {
+          id,
+        },
+      });
     return {
+      currentCollectionId,
       ROUTES,
-      properties,
-      drops,
       t,
+      collectionsButtons,
       collection,
-      currentDropId,
+      localisingDesc,
+      formatImages,
+      toActive,
     };
   },
 });
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1">
+  <div class="collection flex flex-grow-1" v-if="collection">
     <BackFixed
       :to="{
         name: ROUTES.COLLECTIONS.name,
       }"
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
     ></BackFixed>
-    <div class="collection__img--wrap">
-      <img src="@/assets/images/big-drop.png" class="collection__img" />
-    </div>
-
-    <MenuInfo
-      v-if="collection"
-      :properties="properties"
-      :drops="drops"
-      :item="collection"
-      :btn-text="'drop.open'"
-      :title-last-section="t('drop.drop')"
-      :route="{
-        name: ROUTES.DROP.name,
-        params: { collectionId: collection.id, id: currentDropId },
-      }"
+    <SceneView
+      :images="formatImages(collection)"
+      :buttons="collectionsButtons"
+      :activeId="currentCollectionId"
+      @toActive="toActive"
+      :blur="collection.isComingSoon"
     >
-      <div class="drops">
-        <div v-for="drop of collection.drops" :key="drop.id">
-          <CollectionDrop
-            v-if="drop.id === currentDropId"
-            :drop="drop"
-          ></CollectionDrop>
-        </div>
-        <div class="pagination__wrapper flex align-center">
-          <button
-            v-for="(btn, index) of collection.drops"
-            :key="index"
-            class="pagination__wrapper__btn"
-            :class="{ active: btn.id === currentDropId }"
-            @click="currentDropId = btn.id"
-          ></button>
-        </div>
-      </div>
-    </MenuInfo>
+      <SceneTextContent
+        button-text="collection.open"
+        :route="{
+          name: ROUTES.COLLECTION.name,
+          params: { id: collection.id },
+        }"
+        :is-coming-soon="collection.isComingSoon"
+        :name="collection.name"
+        :short-description="localisingDesc(collection, 'shortDescription')"
+      />
+    </SceneView>
   </div>
 </template>
 
@@ -148,8 +134,7 @@ export default defineComponent({
 }
 
 .collection {
-  max-height: 100vh;
-  overflow-y: auto;
+  position: relative;
   @media screen and (max-width: 768px) {
     max-width: none;
     max-height: none;
