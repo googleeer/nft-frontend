@@ -107,6 +107,7 @@ export default defineComponent({
   right: 0;
   top: 0;
   bottom: 0;
+  overflow-y: auto;
   background-color: var(--color-black);
   z-index: var(--z-index-header-logo);
   //&:before {
