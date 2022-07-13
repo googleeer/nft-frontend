@@ -37,7 +37,6 @@ export default defineComponent({
     const bgAllHeader = computed(
       () => useRouter().currentRoute.value.meta.bgAllHeader,
     );
-    console.log("bgRightHeader", bgRightHeader);
     watch(
       () => route.name,
       () => {
