@@ -11,6 +11,7 @@ import MenuUserProfile from "@/components/baseLayout/MenuUserProfile.vue";
 import { useUserStore } from "@/store/user.store";
 import { useRoute, useRouter } from "vue-router";
 import { ROUTES } from "@/constants/routes.constants";
+import BasePreloader from "@/components/baseLayout/BasePreloader.vue";
 export default defineComponent({
   name: "BaseLayout",
   components: {
@@ -19,6 +20,7 @@ export default defineComponent({
     LocaleSwitcher,
     MainMenu,
     BaseBurger,
+    BasePreloader,
   },
   setup() {
     const { t } = useI18n();
@@ -60,6 +62,7 @@ export default defineComponent({
 
 <template>
   <div class="layout--wrap flex direction-column flex-grow-1">
+    <BasePreloader></BasePreloader>
     <header
       class="layout__header flex align-center justify-between justify-center-sm"
       :class="[
