@@ -27,6 +27,7 @@ export default defineComponent({
     const currentComponent = props.to ? "RouterLink" : "button";
     const isOpen = ref(false);
     const showInfo = () => {
+      if (props.to) return;
       isOpen.value = true;
       context.emit("showInfo", isOpen.value);
     };

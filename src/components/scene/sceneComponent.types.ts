@@ -5,4 +5,6 @@ export interface SceneImagesProp {
   cube?: string;
   leftColumn?: string;
   rightColumn?: string;
+  leftCube?: string;
+  rightCube?: string;
 }
