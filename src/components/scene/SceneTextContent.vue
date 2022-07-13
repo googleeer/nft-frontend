@@ -13,7 +13,10 @@ export default defineComponent({
       type: Boolean,
       required: false,
     },
-    route: Object as PropType<{ name: string; params: { id: number } }>,
+    route: Object as PropType<{
+      name: string;
+      params: { id: number; collectionId?: number };
+    }>,
     buttonText: String,
   },
   setup() {

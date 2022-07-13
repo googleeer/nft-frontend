@@ -16,9 +16,10 @@ import { useDropsStore } from "@/store/drop.store";
 import SceneView from "@/components/scene/SceneView.vue";
 import { formatImages } from "@/components/scene/sceneComponent.service";
 import { SceneImages } from "@/service/commonTypes/commonTypes";
+import SceneTextContent from "@/components/scene/SceneTextContent.vue";
 export default defineComponent({
   name: "DropView",
-  components: { SceneView, MenuInfo, DropPerks, BackFixed },
+  components: { SceneTextContent, SceneView, MenuInfo, DropPerks, BackFixed },
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -96,6 +97,7 @@ export default defineComponent({
       sceneImages,
       formatImages,
       toActive,
+      localisingDesc,
     };
   },
 });
@@ -109,7 +111,17 @@ export default defineComponent({
       :activeId="currentDropId"
       @toActive="toActive"
       sceneDirection="X"
-    ></SceneView>
+    >
+      <SceneTextContent
+        button-text="collection.open"
+        :route="{
+          name: ROUTES.MINT.name,
+          params: { id: drop.id, collectionId: currentCollectionId },
+        }"
+        :name="drop.name"
+        :short-description="localisingDesc(drop, 'shortDescription')"
+      />
+    </SceneView>
     <BackFixed
       :to="{
         name: ROUTES.COLLECTION.name,
