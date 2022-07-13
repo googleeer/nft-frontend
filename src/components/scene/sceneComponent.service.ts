@@ -9,7 +9,7 @@ export const formatImages = ({
   artistLogo,
   brandLogo,
   cube,
-}: Collection | Drop): SceneImagesProp => ({
+}: Partial<Collection | Drop>): SceneImagesProp => ({
   background: background?.url,
   rightColumn: rightColumn?.url,
   leftColumn: leftColumn?.url,

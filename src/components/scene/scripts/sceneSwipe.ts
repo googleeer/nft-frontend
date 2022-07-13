@@ -3,7 +3,7 @@ import { useAppStateStore } from "@/store/appState.store";
 
 const defaultCubeTransformStyles = "translateX(-50%)";
 
-type Direction = "X" | "Y";
+export type SceneDirection = "X" | "Y";
 type SwipeEvent = MouseEvent | TouchEvent;
 type SwitchFunction = (direction: "prev" | "next") => void;
 
@@ -11,7 +11,7 @@ const targetIsLink = (target: EventTarget | null) => {
   return (target as HTMLElement).tagName === "A";
 };
 
-const getCoordinate = (event: SwipeEvent, direction: Direction) => {
+const getCoordinate = (event: SwipeEvent, direction: SceneDirection) => {
   const isY = direction === "Y";
   if ("changedTouches" in event) {
     const touch = event?.changedTouches?.[0];
@@ -22,7 +22,7 @@ const getCoordinate = (event: SwipeEvent, direction: Direction) => {
 };
 
 export const useSceneSwipe = (
-  direction: Direction,
+  direction: SceneDirection,
   onSwitch: SwitchFunction,
 ) => {
   const appStateStore = useAppStateStore();
@@ -50,19 +50,26 @@ export const useSceneSwipe = (
     const currentCoordinate = getCoordinate(event, direction);
     const toPrev = currentCoordinate < startPosition.value;
     difference.value = currentCoordinate - startPosition.value;
+    const part = Math.abs(difference.value) / threshold.value / 5;
 
     if (isY) {
-      const part = Math.abs(difference.value) / threshold.value / 5;
-
       cubeStyles.transform = `translateX(-50%) translateY(${
         difference.value / 10
       }px) scale(${1 - part})`;
       cubeStyles.transformOrigin = toPrev ? "top" : "bottom";
-    }
-
-    if (Math.abs(difference.value) >= threshold.value) {
-      onSwitch(toPrev ? "prev" : "next");
-      onSwipeEnd();
+      if (Math.abs(difference.value) >= threshold.value) {
+        onSwitch(toPrev ? "prev" : "next");
+        onSwipeEnd();
+      }
+    } else {
+      cubeStyles.transform = `translateX(calc(-50% + ${
+        difference.value / 10
+      }px)) scale(${1 - part})`;
+      cubeStyles.transformOrigin = toPrev ? "left" : "right";
+      if (Math.abs(difference.value) >= threshold.value) {
+        onSwitch(!toPrev ? "prev" : "next");
+        onSwipeEnd();
+      }
     }
   };
 
@@ -70,15 +77,15 @@ export const useSceneSwipe = (
   const wheelDirection = ref("");
 
   const onWheel = (event: WheelEvent) => {
-    const delta = event[isY ? "deltaY" : "deltaX"];
+    const delta = event["deltaY"];
     if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
     wheelStarted.value = true;
-    const direction = delta < 0 ? "prev" : "next";
-    wheelDirection.value = direction;
+    const deltaDirection = delta < 0 ? "prev" : "next";
+    wheelDirection.value = deltaDirection + direction;
     setTimeout(() => {
       wheelStarted.value = false;
       wheelDirection.value = "";
-      onSwitch(direction);
+      onSwitch(deltaDirection);
     }, 420);
   };
 

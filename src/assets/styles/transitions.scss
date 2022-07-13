@@ -5,6 +5,10 @@
   opacity: 0;
 }
 
+.fadeOut-enter-active {
+  transition: opacity 0.3s ease;
+}
+
 .fadeOut-leave-active {
   transition: opacity 1s cubic-bezier(1, 0, 1, 1);
 }

@@ -2,7 +2,10 @@
 import { defineComponent, PropType } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
-import { useSceneSwipe } from "@/components/scene/scripts/sceneSwipe";
+import {
+  SceneDirection,
+  useSceneSwipe,
+} from "@/components/scene/scripts/sceneSwipe";
 import { useImageLoading } from "@/components/scene/scripts/imageLoading";
 import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHiddenBody";
 
@@ -21,6 +24,11 @@ export default defineComponent({
     },
     activeId: Number,
     blur: Boolean,
+    sceneDirection: {
+      type: String as PropType<SceneDirection>,
+      require: true,
+      default: "Y",
+    },
   },
   setup(props, { emit }) {
     useOverflowHiddenBody();
@@ -58,7 +66,7 @@ export default defineComponent({
       onWheel,
       cubeStyles,
       wheelDirection,
-    } = useSceneSwipe("Y", onSwipe);
+    } = useSceneSwipe(props.sceneDirection, onSwipe);
     return {
       isLoadedAllImages,
       loadedImagesCount,
@@ -227,16 +235,28 @@ export default defineComponent({
         top: 7%;
       }
 
-      &.next {
+      &.nextY {
         transition: transform 0.4s ease-in;
         transform-origin: top !important;
         transform: translateX(-50%) translateY(-17px) scale(0.8) !important;
       }
 
-      &.prev {
+      &.prevY {
         transition: transform 0.4s ease-in;
         transform-origin: bottom !important;
         transform: translateX(-50%) translateY(17px) scale(0.8) !important;
+      }
+
+      &.prevX {
+        transition: transform 0.4s ease-in;
+        transform-origin: right !important;
+        transform: translateX(calc(-50% - 17px)) scale(0.8) !important;
+      }
+
+      &.nextX {
+        transition: transform 0.4s ease-in;
+        transform-origin: left !important;
+        transform: translateX(calc(-50% + 17px)) scale(0.8) !important;
       }
     }
 

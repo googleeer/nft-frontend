@@ -4,52 +4,98 @@ import { ROUTES } from "@/constants/routes.constants";
 import DropPerks from "@/components/collections/Perks.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
 import { useAppStateStore } from "@/store/appState.store";
 import { Drop } from "@/service/drop/drop.type";
-import { getDrop } from "@/service/drop/drop.service";
+import { getDropsByCollectionId } from "@/service/drop/drop.service";
 import { storeToRefs } from "pinia";
-import router from "@/router";
+import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
+import { CollectionWithDrops } from "@/service/collections/collections.type";
+import { useDropsStore } from "@/store/drop.store";
+import SceneView from "@/components/scene/SceneView.vue";
+import { formatImages } from "@/components/scene/sceneComponent.service";
+import { SceneImages } from "@/service/commonTypes/commonTypes";
 export default defineComponent({
-  name: "CollectionView",
-  components: { MenuInfo, DropPerks, BackFixed },
+  name: "DropView",
+  components: { SceneView, MenuInfo, DropPerks, BackFixed },
   setup() {
-    const currentCollectionId =
-      +useRouter().currentRoute.value.params.collectionId;
+    const router = useRouter();
+    const route = useRoute();
+    const currentDropId = +route.params.id;
+    const currentCollectionId = +route.params.collectionId;
+    const { t, locale } = useI18n();
+    const localisingDesc =
+      getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
     const appState = useAppStateStore();
-    const currentDropId = +useRouter().currentRoute.value.params.id;
-    const currentDrop = ref<object>();
-    const { t } = useI18n();
     const { isMobile } = storeToRefs(appState);
-    const drop = ref<Drop | null>(null);
-    appState.setPreloaderValue(true);
-    getDrop(currentDropId)
-      .then((data) => {
-        drop.value = data;
-        console.log(data);
-      })
-      .catch(() => {
-        router.push({
-          name: ROUTES.COLLECTION.name,
-          params: { id: currentCollectionId },
-        });
-      })
-      .finally(() => appState.setPreloaderValue(false));
+
+    const dropsStore = useDropsStore();
+    const { drops, dropsButtons } = storeToRefs(dropsStore);
+    if (!drops.value.length) {
+      appState.setPreloaderValue(true);
+      getDropsByCollectionId(currentCollectionId)
+        .catch(() => {
+          router.push({
+            name: ROUTES.COLLECTION.name,
+            params: { id: currentCollectionId },
+          });
+        })
+        .finally(() => appState.setPreloaderValue(false));
+    }
+
+    const drop = computed(() =>
+      drops.value.find(({ id }) => id === currentDropId),
+    );
+
     const properties = computed(() =>
       (["brand", "artist"] as (keyof Drop)[]).map((key) => ({
         title: t(`collection.${key}`),
         value: drop.value?.[key],
       })),
     );
+
+    const infoIsOpen = ref(false);
+    const showInfo = (isOpen: boolean) => {
+      infoIsOpen.value = isOpen;
+    };
+    const closeInfo = () => {
+      infoIsOpen.value = false;
+    };
+
+    const sceneImages = computed<SceneImages>(() => ({
+      background: drop.value?.background,
+      cube: drop.value?.cube,
+      artistLogo: drop.value?.collection.artistLogo,
+      brandLogo: drop.value?.collection.brandLogo,
+      leftColumn: drop.value?.collection.leftColumn,
+      rightColumn: drop.value?.collection.rightColumn,
+    }));
+
+    const toActive = (id: number) =>
+      router.push({
+        name: ROUTES.DROP.name,
+        params: {
+          id,
+          collectionId: currentCollectionId,
+        },
+      });
+
     return {
+      closeInfo,
+      showInfo,
+      infoIsOpen,
       ROUTES,
       t,
-      currentDrop,
       currentCollectionId,
+      currentDropId,
       isMobile,
       drop,
       properties,
+      dropsButtons,
+      sceneImages,
+      formatImages,
+      toActive,
     };
   },
 });
@@ -57,6 +103,13 @@ export default defineComponent({
 
 <template>
   <div class="collection flex flex-grow-1" v-if="drop">
+    <SceneView
+      :images="formatImages(sceneImages)"
+      :buttons="dropsButtons"
+      :activeId="currentDropId"
+      @toActive="toActive"
+      sceneDirection="X"
+    ></SceneView>
     <BackFixed
       :to="{
         name: ROUTES.COLLECTION.name,
@@ -64,21 +117,24 @@ export default defineComponent({
       }"
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
     ></BackFixed>
-    <div class="collection__img--wrap">
-      <img src="@/assets/images/big-drop.png" class="collection__img" />
-    </div>
-    <MenuInfo
-      :properties="properties"
-      :item="drop"
-      :btn-text="'redeem'"
-      :title-last-section="t('perk.perks')"
-      :route="{
-        name: ROUTES.MINT.name,
-        params: { collectionId: currentCollectionId, id: drop.id },
-      }"
-    >
-      <DropPerks :perks="drop.perks"></DropPerks>
-    </MenuInfo>
+    <BackFixed
+      :infoIsOpen="infoIsOpen"
+      @showInfo="showInfo"
+      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+      arrow="right"
+    ></BackFixed>
+    <transition name="fade" mode="in-out">
+      <MenuInfo
+        v-click-outside:[300]="closeInfo"
+        v-if="infoIsOpen"
+        :properties="properties"
+        :item="drop"
+        :btn-text="'redeem'"
+        :title-last-section="t('perk.perks')"
+      >
+        <DropPerks :perks="drop.perks"></DropPerks>
+      </MenuInfo>
+    </transition>
   </div>
 </template>
 

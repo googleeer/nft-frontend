@@ -14,6 +14,7 @@ import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
 import { CollectionWithDrops } from "@/service/collections/collections.type";
 import { formatImages } from "@/components/scene/sceneComponent.service";
 import SceneTextContent from "@/components/scene/SceneTextContent.vue";
+import { useAppStateStore } from "@/store/appState.store";
 export default defineComponent({
   name: "CollectionView",
   components: {
@@ -35,9 +36,13 @@ export default defineComponent({
     const collectionStore = useCollectionsStore();
     const { collectionsButtons, collections } = storeToRefs(collectionStore);
     if (!collections.value.length) {
-      getCollections().catch(() => {
-        router.push(ROUTES.COLLECTIONS);
-      });
+      const appState = useAppStateStore();
+      appState.setPreloaderValue(true);
+      getCollections()
+        .catch(() => {
+          router.push(ROUTES.COLLECTIONS);
+        })
+        .finally(() => appState.setPreloaderValue(false));
     }
     const collection = computed(() =>
       collections.value.find(({ id }) => id === currentCollectionId),
@@ -95,6 +100,7 @@ export default defineComponent({
       :activeId="currentCollectionId"
       @toActive="toActive"
       :blur="collection.isComingSoon"
+      sceneDirection="Y"
     >
       <SceneTextContent
         button-text="collection.open"
@@ -118,7 +124,6 @@ export default defineComponent({
         v-click-outside:[300]="closeInfo"
         v-if="infoIsOpen"
         :properties="properties"
-        :drops="collection.drops"
         :item="collection"
         :btn-text="'drop.open'"
         :title-last-section="t('drop.drop')"
