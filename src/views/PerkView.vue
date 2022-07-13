@@ -157,7 +157,6 @@ export default defineComponent({
 }
 .wrapper {
   width: 100%;
-  max-width: 1475px;
   margin: 0 auto;
   padding: 120px 60px 0;
   box-sizing: border-box;
@@ -180,12 +179,13 @@ export default defineComponent({
   &__left {
     height: 100%;
     max-height: 100px;
+    width: 30%;
+    display: inline-block;
   }
   &__timer {
     width: 100%;
     position: relative;
     max-width: 328px;
-    margin: 75px auto 0px;
     background: radial-gradient(
       113.12% 113.12% at 50.52% 50.52%,
       #292929 0%,
@@ -231,14 +231,12 @@ export default defineComponent({
     flex-direction: column;
   }
   &__name {
-    width: 100%;
-    max-width: 400px;
+    width: min-content;
     display: inline;
     position: relative;
     font-weight: 600;
     font-size: 74px;
     line-height: 130%;
-    white-space: nowrap;
     @media screen and (max-width: 1346px) {
       padding-bottom: 40px;
       font-weight: 800;
@@ -248,7 +246,7 @@ export default defineComponent({
     }
     &::after {
       position: absolute;
-      top: 114px;
+      bottom: -18px;
       content: "";
       width: 100%;
       height: 6px;
@@ -269,7 +267,7 @@ export default defineComponent({
   }
   &__content {
     position: relative;
-    width: 100%;
+    width: 40%;
     max-width: 530px;
     min-width: 530px;
     box-sizing: content-box;
@@ -351,8 +349,7 @@ export default defineComponent({
     }
   }
   &__nfts {
-    width: 100%;
-    max-width: 348px;
+    width: 30%;
     @media screen and (max-width: 1346px) {
       max-width: 480px;
       padding-top: 86px;

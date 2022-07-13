@@ -90,13 +90,6 @@ export default defineComponent({
 
 <template>
   <div class="collection flex flex-grow-1" v-if="collection">
-    <BackFixed
-      v-show="sceneIsLoaded"
-      :to="{
-        name: ROUTES.COLLECTIONS.name,
-      }"
-      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
-    ></BackFixed>
     <SceneView
       :images="formatImages(collection)"
       :buttons="collectionsButtons"
