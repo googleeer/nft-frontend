@@ -25,6 +25,7 @@ export default defineComponent({
     const route = useRoute();
     const currentDropId = +route.params.id;
     const currentCollectionId = +route.params.collectionId;
+    const sceneIsLoaded = ref(false);
     const { t, locale } = useI18n();
     const localisingDesc =
       getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
@@ -98,6 +99,7 @@ export default defineComponent({
       formatImages,
       toActive,
       localisingDesc,
+      sceneIsLoaded,
     };
   },
 });
@@ -111,9 +113,10 @@ export default defineComponent({
       :activeId="currentDropId"
       @toActive="toActive"
       sceneDirection="X"
+      @loaded="sceneIsLoaded = true"
     >
       <SceneTextContent
-        button-text="collection.open"
+        button-text="drop.open"
         :route="{
           name: ROUTES.MINT.name,
           params: { id: drop.id, collectionId: currentCollectionId },
@@ -123,6 +126,7 @@ export default defineComponent({
       />
     </SceneView>
     <BackFixed
+      v-show="sceneIsLoaded"
       :to="{
         name: ROUTES.COLLECTION.name,
         params: { id: currentCollectionId },
@@ -130,6 +134,7 @@ export default defineComponent({
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
     ></BackFixed>
     <BackFixed
+      v-show="sceneIsLoaded"
       :infoIsOpen="infoIsOpen"
       @showInfo="showInfo"
       :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
@@ -158,11 +163,10 @@ export default defineComponent({
     max-width: none;
     max-height: none;
     .back {
-      top: 94px;
       position: absolute;
-      @media screen and (max-width: 768px) {
-        transform: translateX(-36%);
-      }
+      //@media screen and (max-width: 768px) {
+      //  transform: translateX(-36%);
+      //}
     }
   }
   &__img--wrap {

@@ -27,6 +27,7 @@ export default defineComponent({
     const currentComponent = props.to ? "RouterLink" : "button";
     const isOpen = ref(false);
     const showInfo = () => {
+      if (props.to) return;
       isOpen.value = true;
       context.emit("showInfo", isOpen.value);
     };
@@ -99,6 +100,7 @@ button {
   text-decoration: none;
   @media screen and (max-width: 768px) {
     left: 50%;
+    top: 94px;
     transform: translateX(-50%);
   }
   &__right {
@@ -106,6 +108,12 @@ button {
     bottom: 80px;
     left: auto;
     right: 90px;
+    @media screen and (max-width: 768px) {
+      bottom: 280px;
+      left: 20px;
+      right: auto;
+      transform: translateX(0);
+    }
   }
   &__text {
     position: relative;
@@ -113,12 +121,15 @@ button {
     color: var(--color-white);
     font-family: "SFPro", sans-serif;
     font-weight: 400;
-    .left {
-      left: -32px;
-    }
     .right {
       transform: rotate(180deg);
       left: 100px;
+    }
+    .left {
+      left: -32px;
+      @media screen and (max-width: 768px) {
+        transform: translateX(-36%);
+      }
     }
   }
   &__arrow {
@@ -143,6 +154,7 @@ button {
   top: 50px;
   bottom: auto;
   right: 20px;
+  left: auto;
   ::v-deep(.back__arrow) {
     background-image: none;
   }

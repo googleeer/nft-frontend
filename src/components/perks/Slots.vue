@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
 export default defineComponent({
   name: "SlotsSvg",
   props: {
@@ -10,16 +9,12 @@ export default defineComponent({
   },
   setup(props) {
     const { t } = useI18n();
-    const isDropPage = useRouter().currentRoute.value.name === "drop";
     const activePath = (order: number) => (props.slots >= order ? 1 : 0.15);
-    const isBlink = (order: number) => {
-      return props.isNew && isDropPage && props.slots === order;
-    };
+    const isBlink = (order: number) => props.isNew && props.slots === order;
 
     return {
       t,
       activePath,
-      isDropPage,
       isBlink,
     };
   },

@@ -12,7 +12,7 @@ import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHidden
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
-  emits: ["toActive"],
+  emits: ["toActive", "loaded"],
   props: {
     images: {
       type: Object as PropType<SceneImagesProp>,
@@ -39,10 +39,13 @@ export default defineComponent({
       bottomBlackout: require(`@/assets/images/scene/bottomBlackout.png`),
       light: require(`@/assets/images/scene/light.svg`),
     };
-    const { count, isLoadedAllImages, loadedImagesCount } = useImageLoading({
-      ...props.images,
-      ...defaultImages,
-    });
+    const { count, isLoadedAllImages, loadedImagesCount } = useImageLoading(
+      {
+        ...props.images,
+        ...defaultImages,
+      },
+      emit,
+    );
 
     const emitToActive = (id: number) => emit("toActive", id);
     const onSwipe = (direction: "prev" | "next") => {
@@ -137,7 +140,7 @@ export default defineComponent({
       :key="url"
       :src="url"
       :class="[key, wheelDirection]"
-      :style="key === 'cube' ? cubeStyles : null"
+      :style="key.toLocaleLowerCase().includes('cube') ? cubeStyles : null"
       alt=""
       v-show="url"
       @load="() => ++loadedImagesCount"

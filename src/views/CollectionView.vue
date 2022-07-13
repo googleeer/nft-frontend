@@ -32,6 +32,7 @@ export default defineComponent({
     const { t, locale } = useI18n();
     const localisingDesc =
       getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
+    const sceneIsLoaded = ref(false);
 
     const collectionStore = useCollectionsStore();
     const { collectionsButtons, collections } = storeToRefs(collectionStore);
@@ -81,6 +82,7 @@ export default defineComponent({
       infoIsOpen,
       closeInfo,
       properties,
+      sceneIsLoaded,
     };
   },
 });
@@ -88,12 +90,6 @@ export default defineComponent({
 
 <template>
   <div class="collection flex flex-grow-1" v-if="collection">
-    <BackFixed
-      :to="{
-        name: ROUTES.COLLECTIONS.name,
-      }"
-      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
-    ></BackFixed>
     <SceneView
       :images="formatImages(collection)"
       :buttons="collectionsButtons"
@@ -101,12 +97,13 @@ export default defineComponent({
       @toActive="toActive"
       :blur="collection.isComingSoon"
       sceneDirection="Y"
+      @loaded="sceneIsLoaded = true"
     >
       <SceneTextContent
         button-text="collection.open"
         :route="{
-          name: ROUTES.COLLECTION.name,
-          params: { id: collection.id },
+          name: ROUTES.DROP.name,
+          params: { collectionId: collection.id, id: collection.drops[0]?.id },
         }"
         :is-coming-soon="collection.isComingSoon"
         :name="collection.name"
@@ -114,6 +111,7 @@ export default defineComponent({
       />
     </SceneView>
     <BackFixed
+      v-show="sceneIsLoaded"
       :infoIsOpen="infoIsOpen"
       @showInfo="showInfo"
       :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
