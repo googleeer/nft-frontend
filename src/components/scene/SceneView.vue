@@ -2,20 +2,33 @@
 import { defineComponent, PropType } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
-import { useSceneSwipe } from "@/components/scene/scripts/sceneSwipe";
+import {
+  SceneDirection,
+  useSceneSwipe,
+} from "@/components/scene/scripts/sceneSwipe";
 import { useImageLoading } from "@/components/scene/scripts/imageLoading";
 import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHiddenBody";
 
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
-  emits: ["prev", "next"],
+  emits: ["toActive"],
   props: {
     images: {
       type: Object as PropType<SceneImagesProp>,
       required: true,
     },
-    test: Boolean,
+    buttons: {
+      type: Array as PropType<number[]>,
+      required: true,
+    },
+    activeId: Number,
+    blur: Boolean,
+    sceneDirection: {
+      type: String as PropType<SceneDirection>,
+      require: true,
+      default: "Y",
+    },
   },
   setup(props, { emit }) {
     useOverflowHiddenBody();
@@ -30,10 +43,30 @@ export default defineComponent({
       ...props.images,
       ...defaultImages,
     });
-    const { onSwipeEnd, onSwipeStart, onSwipeMove, cubeStyles } = useSceneSwipe(
-      "Y",
-      emit,
-    );
+
+    const emitToActive = (id: number) => emit("toActive", id);
+    const onSwipe = (direction: "prev" | "next") => {
+      const { buttons, activeId } = props;
+      const currentIdx = buttons.findIndex((id) => id === activeId);
+      const nextIdx: number =
+        direction === "prev"
+          ? currentIdx === 0
+            ? buttons.length - 1
+            : currentIdx - 1
+          : currentIdx === buttons.length - 1
+          ? 0
+          : currentIdx + 1;
+      emitToActive(buttons[nextIdx]);
+    };
+
+    const {
+      onSwipeEnd,
+      onSwipeStart,
+      onSwipeMove,
+      onWheel,
+      cubeStyles,
+      wheelDirection,
+    } = useSceneSwipe(props.sceneDirection, onSwipe);
     return {
       isLoadedAllImages,
       loadedImagesCount,
@@ -42,7 +75,10 @@ export default defineComponent({
       onSwipeEnd,
       onSwipeStart,
       onSwipeMove,
+      onWheel,
       cubeStyles,
+      wheelDirection,
+      emitToActive,
     };
   },
 });
@@ -60,7 +96,9 @@ export default defineComponent({
     @mousedown="onSwipeStart"
     @mousemove="onSwipeMove"
     @mouseup="onSwipeEnd"
+    @wheel="onWheel"
   >
+    <div class="blur" v-if="blur"></div>
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
         <filter id="goovey">
@@ -94,24 +132,26 @@ export default defineComponent({
       :visible="!isLoadedAllImages"
     />
     <img
-      v-if="test"
-      class="scene__img test"
-      :src="require(`@/assets/images/scene/quarry_01_1k.png`)"
-      @load="() => ++loadedImagesCount"
-      alt=""
-    />
-    <img
       class="scene__img"
       v-for="(url, key) in { ...images, ...defaultImages }"
       :key="url"
       :src="url"
-      :class="[key]"
+      :class="[key, wheelDirection]"
       :style="key === 'cube' ? cubeStyles : null"
       alt=""
       v-show="url"
       @load="() => ++loadedImagesCount"
     />
     <slot></slot>
+    <div class="pagination__wrapper flex direction-column align-center">
+      <button
+        v-for="btn of buttons"
+        :key="btn"
+        class="pagination__wrapper__btn"
+        :class="{ active: btn === activeId }"
+        @click="emitToActive(btn)"
+      ></button>
+    </div>
   </div>
 </template>
 
@@ -193,6 +233,30 @@ export default defineComponent({
 
       @media screen and (max-width: 768px) {
         top: 7%;
+      }
+
+      &.nextY {
+        transition: transform 0.4s ease-in;
+        transform-origin: top !important;
+        transform: translateX(-50%) translateY(-17px) scale(0.8) !important;
+      }
+
+      &.prevY {
+        transition: transform 0.4s ease-in;
+        transform-origin: bottom !important;
+        transform: translateX(-50%) translateY(17px) scale(0.8) !important;
+      }
+
+      &.prevX {
+        transition: transform 0.4s ease-in;
+        transform-origin: right !important;
+        transform: translateX(calc(-50% - 17px)) scale(0.8) !important;
+      }
+
+      &.nextX {
+        transition: transform 0.4s ease-in;
+        transform-origin: left !important;
+        transform: translateX(calc(-50% + 17px)) scale(0.8) !important;
       }
     }
 
@@ -292,6 +356,38 @@ export default defineComponent({
     }
   }
 }
+
+.blur {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(27.1828px);
+}
+
+.pagination__wrapper {
+  width: 100%;
+  max-width: 13px;
+  position: absolute;
+  z-index: 2;
+  right: 53px;
+  top: 50%;
+  transform: translateY(-50%);
+  button {
+    outline: none;
+    border: none;
+    margin: 10px;
+    padding: 4.5px;
+  }
+  .active {
+    padding: 6.5px;
+  }
+  &__btn {
+    background: white;
+    border-radius: 100%;
+  }
+}
+
 @keyframes wakeUpSm {
   0% {
     transform: translateX(-51%) rotate(0.3deg);

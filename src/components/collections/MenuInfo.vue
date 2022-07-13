@@ -1,9 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
-import BaseButton from "@/components/form/BaseButton.vue";
 import CollectionProperties from "@/components/collections/Properties.vue";
-
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAppStateStore } from "@/store/appState.store";
@@ -18,7 +16,7 @@ export default defineComponent({
     titleLastSection: String,
     route: Object,
   },
-  components: { BaseButton, CollectionProperties },
+  components: { CollectionProperties },
   setup() {
     const { t, locale } = useI18n();
     const appState = useAppStateStore();
@@ -32,45 +30,45 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1 direction-column" v-if="item">
-    <div class="collection__info flex align-center">
-      <div class="collection__info--img" v-if="isMobile">
+  <div class="info flex flex-grow-1 direction-column" v-if="item">
+    <div class="info__info flex align-center">
+      <div class="info__info--img" v-if="isMobile">
         <img src="../../assets/images/junkYard-mini.svg" />
       </div>
       <div>
-        <div class="collection__info__content">
-          <h1 class="collection__info__content__name">
+        <div class="info__info__content">
+          <h1 class="info__info__content__name">
             {{ item.name }}
           </h1>
-          <p class="collection__info__content__desc--short">
+          <p class="info__info__content__desc--short">
             {{ localisingDesc(item, "shortDescription") }}
           </p>
         </div>
       </div>
     </div>
-    <div class="collection__author flex direction-column align-center">
-      <div class="collection__author--desc">
-        <span class="collection__author--desc__short" v-if="!readMoreActive"
+    <div class="info__author flex direction-column align-center">
+      <div class="info__author--desc">
+        <span class="info__author--desc__short" v-if="!readMoreActive"
           >{{ localisingDesc(item, "description").slice(0, 162) }}
         </span>
         <span
-          class="collection__author--desc__all"
+          class="info__author--desc__all"
           :class="{ active: readMoreActive }"
           v-if="readMoreActive"
         >
           {{ localisingDesc(item, "description") }}
         </span>
         <span
-          class="collection__author--desc__more"
+          class="info__author--desc__more"
           @click="readMoreActive = true"
-          v-if="!readMoreActive"
+          v-show="!readMoreActive"
         >
           Read More
         </span>
         <span
-          class="collection__author--desc__more"
+          class="info__author--desc__more"
           @click="readMoreActive = false"
-          v-else
+          v-show="readMoreActive"
         >
           Collapse</span
         >
@@ -85,31 +83,43 @@ export default defineComponent({
         </CollectionProperties>
       </div>
     </div>
-    <div class="collection__component flex direction-column flex-grow-1">
-      <div class="collection__component__content flex direction-column">
-        <p class="collection__component__content--title">
+    <div class="info__component flex direction-column flex-grow-1">
+      <div class="info__component__content flex direction-column">
+        <p class="info__component__content--title">
           {{ titleLastSection }}
         </p>
         <slot></slot>
       </div>
-      <BaseButton
-        :button-text="t(btnText)"
-        class="collection__component--btn"
-        :to="route"
-      ></BaseButton>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.collection {
+.info {
   width: 100%;
   max-width: 523px;
   min-width: 523px;
   padding-top: 118px;
-  @media screen and (max-width: 768px) {
-    padding-top: 136px;
-  }
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--color-black);
+  z-index: var(--z-index-header-logo);
+  //&:before {
+  //  content: "";
+  //  position: fixed;
+  //  width: 100%;
+  //  max-width: 523px;
+  //  right: 0;
+  //  height: 110px;
+  //  background-color: var(--color-black);
+  //  z-index: var(--z-index-header-logo);
+  //  right: 0;
+  //  top: 0;
+  //}
+
   @media screen and (max-width: 523px) {
     min-width: auto;
   }
@@ -167,6 +177,16 @@ export default defineComponent({
     border-top-right-radius: 34px;
     border-top-left-radius: 34px;
     width: 100%;
+    &:after {
+      content: "";
+      position: absolute;
+      background-color: black;
+      inset: 0;
+      z-index: -1;
+      bottom: -150px;
+      background-size: cover;
+      border-radius: 34px;
+    }
     @media screen and (max-width: 768px) {
       padding: 0px 20px;
     }

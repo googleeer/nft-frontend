@@ -1,15 +1,24 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "SceneViewLoader",
   props: {
     visible: Boolean,
-    count: Number,
-    countOf: Number,
+    count: {
+      type: Number,
+      default: 0,
+    },
+    countOf: {
+      type: Number,
+      default: 0,
+    },
   },
-  setup() {
-    return {};
+  setup(props) {
+    const percent = computed(() =>
+      Math.round((props.count / props.countOf) * 100),
+    );
+    return { percent };
   },
 });
 </script>
@@ -17,7 +26,8 @@ export default defineComponent({
 <template>
   <transition name="fadeOut" mode="out-in">
     <div class="scene__loader flex flexCenter" v-if="visible">
-      {{ count }} of {{ countOf }} resources
+      <img class="scene__loader--gif" src="@/assets/images/progress.gif" />
+      <span class="scene__loader--percent">{{ percent + "%" }}</span>
     </div>
   </transition>
 </template>
@@ -28,7 +38,21 @@ export default defineComponent({
     z-index: 5;
     position: absolute;
     inset: 0;
-    background: rgba(28, 35, 77, 1);
+    background: var(--color-black);
+    &--gif {
+      width: 300px;
+      @media screen and (max-width: 768px) {
+        width: 200px;
+      }
+    }
+    &--percent {
+      position: absolute;
+      font-size: 32px;
+      text-align: center;
+      @media screen and (max-width: 768px) {
+        width: 200px;
+      }
+    }
   }
 }
 </style>

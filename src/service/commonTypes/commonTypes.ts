@@ -5,12 +5,12 @@ export interface CdnFile {
 }
 
 export interface SceneImages {
-  background: CdnFile;
-  artistLogo: CdnFile;
-  brandLogo: CdnFile;
-  cube: CdnFile;
-  leftColumn: CdnFile;
-  rightColumn: CdnFile;
+  background?: CdnFile;
+  artistLogo?: CdnFile;
+  brandLogo?: CdnFile;
+  cube?: CdnFile;
+  leftColumn?: CdnFile;
+  rightColumn?: CdnFile;
 }
 
 export interface ElementDescription {

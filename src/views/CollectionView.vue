@@ -3,97 +3,141 @@ import { computed, defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import CollectionDrop from "@/components/collections/Drop.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
-import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
-import { useAppStateStore } from "@/store/appState.store";
+import { getCollections } from "@/service/collections/collection.service";
+import { useCollectionsStore } from "@/store/collections.store";
+import { storeToRefs } from "pinia";
+import SceneView from "@/components/scene/SceneView.vue";
+import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
 import { CollectionWithDrops } from "@/service/collections/collections.type";
-import { getCollection } from "@/service/collections/collection.service";
-import router from "@/router";
-
+import { formatImages } from "@/components/scene/sceneComponent.service";
+import SceneTextContent from "@/components/scene/SceneTextContent.vue";
+import { useAppStateStore } from "@/store/appState.store";
 export default defineComponent({
   name: "CollectionView",
-  components: { MenuInfo, CollectionDrop, BackFixed },
+  components: {
+    SceneTextContent,
+    SceneView,
+    BackFixed,
+    MenuInfo,
+    CollectionDrop,
+  },
+  emits: ["showInfo"],
   setup() {
-    const currentCollectionId = +useRouter().currentRoute.value.params.id;
-    const appState = useAppStateStore();
-    const collection = ref<CollectionWithDrops | null>(null);
-    const currentDropId = ref(0);
-    appState.setPreloaderValue(true);
-    getCollection(currentCollectionId)
-      .then((data) => {
-        collection.value = data;
-        currentDropId.value = data.drops[0].id;
-      })
-      .catch(() => {
-        router.push(ROUTES.COLLECTIONS);
-      })
-      .finally(() => appState.setPreloaderValue(false));
-    const { t } = useI18n();
-    const collections = data[0].collections;
-    const currentCollection = collections?.[currentCollectionId];
+    const router = useRouter();
+    const route = useRoute();
+    const currentCollectionId = +route.params.id;
+    const { t, locale } = useI18n();
+    const localisingDesc =
+      getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
+
+    const collectionStore = useCollectionsStore();
+    const { collectionsButtons, collections } = storeToRefs(collectionStore);
+    if (!collections.value.length) {
+      const appState = useAppStateStore();
+      appState.setPreloaderValue(true);
+      getCollections()
+        .catch(() => {
+          router.push(ROUTES.COLLECTIONS);
+        })
+        .finally(() => appState.setPreloaderValue(false));
+    }
+    const collection = computed(() =>
+      collections.value.find(({ id }) => id === currentCollectionId),
+    );
+    const toActive = (id: number) =>
+      router.push({
+        name: ROUTES.COLLECTION.name,
+        params: {
+          id,
+        },
+      });
+
+    const infoIsOpen = ref(false);
+    const showInfo = (isOpen: boolean) => {
+      infoIsOpen.value = isOpen;
+    };
+    const closeInfo = () => {
+      infoIsOpen.value = false;
+    };
     const properties = computed(() =>
       (["brand", "artist"] as (keyof CollectionWithDrops)[]).map((key) => ({
         title: t(`collection.${key}`),
         value: collection.value?.[key],
       })),
     );
-    const drops = currentCollection?.drops;
     return {
+      currentCollectionId,
       ROUTES,
-      properties,
-      drops,
       t,
+      collectionsButtons,
       collection,
-      currentDropId,
+      localisingDesc,
+      formatImages,
+      toActive,
+      showInfo,
+      infoIsOpen,
+      closeInfo,
+      properties,
     };
   },
 });
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1">
+  <div class="collection flex flex-grow-1" v-if="collection">
     <BackFixed
       :to="{
         name: ROUTES.COLLECTIONS.name,
       }"
       :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
     ></BackFixed>
-    <div class="collection__img--wrap">
-      <img src="@/assets/images/big-drop.png" class="collection__img" />
-    </div>
-
-    <MenuInfo
-      v-if="collection"
-      :properties="properties"
-      :drops="drops"
-      :item="collection"
-      :btn-text="'drop.open'"
-      :title-last-section="t('drop.drop')"
-      :route="{
-        name: ROUTES.DROP.name,
-        params: { collectionId: collection.id, id: currentDropId },
-      }"
+    <SceneView
+      :images="formatImages(collection)"
+      :buttons="collectionsButtons"
+      :activeId="currentCollectionId"
+      @toActive="toActive"
+      :blur="collection.isComingSoon"
+      sceneDirection="Y"
     >
-      <div class="drops">
-        <div v-for="drop of collection.drops" :key="drop.id">
-          <CollectionDrop
-            v-if="drop.id === currentDropId"
-            :drop="drop"
-          ></CollectionDrop>
+      <SceneTextContent
+        button-text="collection.open"
+        :route="{
+          name: ROUTES.COLLECTION.name,
+          params: { id: collection.id },
+        }"
+        :is-coming-soon="collection.isComingSoon"
+        :name="collection.name"
+        :short-description="localisingDesc(collection, 'shortDescription')"
+      />
+    </SceneView>
+    <BackFixed
+      :infoIsOpen="infoIsOpen"
+      @showInfo="showInfo"
+      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+      arrow="right"
+    ></BackFixed>
+    <transition name="fade" mode="in-out">
+      <MenuInfo
+        v-click-outside:[300]="closeInfo"
+        v-if="infoIsOpen"
+        :properties="properties"
+        :item="collection"
+        :btn-text="'drop.open'"
+        :title-last-section="t('drop.drop')"
+      >
+        <div class="drops">
+          <template v-for="drop of collection.drops" :key="drop.id">
+            <CollectionDrop
+              :collectionId="collection.id"
+              :drop="drop"
+            ></CollectionDrop>
+          </template>
         </div>
-        <div class="pagination__wrapper flex align-center">
-          <button
-            v-for="(btn, index) of collection.drops"
-            :key="index"
-            class="pagination__wrapper__btn"
-            :class="{ active: btn.id === currentDropId }"
-            @click="currentDropId = btn.id"
-          ></button>
-        </div>
-      </div>
-    </MenuInfo>
+      </MenuInfo>
+    </transition>
   </div>
 </template>
 
@@ -102,68 +146,51 @@ export default defineComponent({
   display: flex;
   width: 100%;
   position: relative;
-  overflow-x: hidden;
-  .pagination__wrapper {
-    width: 100%;
-    max-width: 13px;
-    position: absolute;
-    z-index: 2;
-    bottom: 25px;
-    right: 50%;
-    transform: translateX(-50%);
-    //right: 53px;
-    //top: 50%;
-    //transform: translateY(-50%);
-    button {
-      outline: none;
-      border: none;
-      margin: 10px;
-      padding: 4.5px;
-    }
-    .active {
-      padding: 6.5px;
-    }
-    &__btn {
-      background: white;
-      border-radius: 100%;
-    }
+  overflow-x: auto;
+  padding-top: 23px;
+  padding-bottom: 46px;
+  max-width: calc(100% - 72px);
+  margin: 0 auto;
+
+  @media screen and (max-width: 768px) {
+    padding-top: 11px;
+    padding-bottom: 27px;
+    max-width: calc(100% - 52px);
   }
-  //&::-webkit-scrollbar {
-  //  height: 12px;
-  //}
-  //
-  //&::-webkit-scrollbar-track {
-  //  background: #f1f1f1;
-  //  border-radius: 10px;
-  //}
-  //
-  //&::-webkit-scrollbar-thumb {
-  //  background: #444444;
-  //  border-radius: 10px;
-  //}
-  .drop {
-    width: 100%;
-    min-width: 100%;
+
+  &::-webkit-scrollbar {
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 10px;
   }
 }
 
 .collection {
   max-height: 100vh;
   overflow-y: auto;
-  @media screen and (max-width: 768px) {
-    max-width: none;
-    max-height: none;
-    .back {
-      top: 93px;
-      position: absolute;
-    }
-  }
+  position: relative;
+  //@media screen and (max-width: 768px) {
+  //  max-width: none;
+  //  max-height: none;
+  //  .back {
+  //    top: 93px;
+  //    position: absolute;
+  //  }
+  //}
   &__img--wrap {
     width: 100%;
     position: relative;
-    @media screen and (max-width: 768px) {
-      display: none;
-    }
+    //@media screen and (max-width: 768px) {
+    //  display: none;
+    //}
     &::before {
       content: "";
       position: absolute;

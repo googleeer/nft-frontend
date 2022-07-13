@@ -1,10 +1,16 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import Slots from "@/components/perks/Slots.vue";
+import { Perk } from "@/service/perk/perk.type";
 export default defineComponent({
   name: "DropPerks",
   components: { Slots },
-  props: { perks: Object },
+  props: {
+    perks: {
+      type: Object as PropType<Perk[]>,
+      required: true,
+    },
+  },
 });
 </script>
 

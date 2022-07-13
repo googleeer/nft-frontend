@@ -55,7 +55,6 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
-      bgRightHeader: true,
     },
   },
   {
@@ -65,7 +64,6 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       isAuth: true,
       layout: "base",
-      bgRightHeader: true,
     },
   },
   {
