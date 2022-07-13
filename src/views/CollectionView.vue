@@ -15,6 +15,7 @@ import router from "@/router";
 export default defineComponent({
   name: "CollectionView",
   components: { MenuInfo, CollectionDrop, BackFixed },
+  emits: ["showInfo"],
   setup() {
     const currentCollectionId = +useRouter().currentRoute.value.params.id;
     const appState = useAppStateStore();
@@ -40,6 +41,13 @@ export default defineComponent({
       })),
     );
     const drops = currentCollection?.drops;
+    const infoIsOpen = ref(false);
+    const showInfo = (isOpen: boolean) => {
+      infoIsOpen.value = isOpen;
+    };
+    const closeInfo = () => {
+      infoIsOpen.value = false;
+    };
     return {
       ROUTES,
       properties,
@@ -47,6 +55,9 @@ export default defineComponent({
       t,
       collection,
       currentDropId,
+      showInfo,
+      infoIsOpen,
+      closeInfo,
     };
   },
 });
@@ -63,37 +74,33 @@ export default defineComponent({
     <div class="collection__img--wrap">
       <img src="@/assets/images/big-drop.png" class="collection__img" />
     </div>
-
-    <MenuInfo
-      v-if="collection"
-      :properties="properties"
-      :drops="drops"
-      :item="collection"
-      :btn-text="'drop.open'"
-      :title-last-section="t('drop.drop')"
-      :route="{
-        name: ROUTES.DROP.name,
-        params: { collectionId: collection.id, id: currentDropId },
-      }"
-    >
-      <div class="drops">
-        <div v-for="drop of collection.drops" :key="drop.id">
-          <CollectionDrop
-            v-if="drop.id === currentDropId"
-            :drop="drop"
-          ></CollectionDrop>
+    <BackFixed
+      :infoIsOpen="infoIsOpen"
+      @showInfo="showInfo"
+      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+      arrow="right"
+    ></BackFixed>
+    <transition name="fade" mode="in-out">
+      <MenuInfo
+        v-click-outside:[300]="closeInfo"
+        v-if="infoIsOpen"
+        :properties="properties"
+        :drops="drops"
+        :item="collection"
+        :btn-text="'drop.open'"
+        :title-last-section="t('drop.drop')"
+        :route="{
+          name: ROUTES.DROP.name,
+          params: { collectionId: collection.id, id: currentDropId },
+        }"
+      >
+        <div class="drops">
+          <div v-for="drop of collection.drops" :key="drop.id">
+            <CollectionDrop :drop="drop"></CollectionDrop>
+          </div>
         </div>
-        <div class="pagination__wrapper flex align-center">
-          <button
-            v-for="(btn, index) of collection.drops"
-            :key="index"
-            class="pagination__wrapper__btn"
-            :class="{ active: btn.id === currentDropId }"
-            @click="currentDropId = btn.id"
-          ></button>
-        </div>
-      </div>
-    </MenuInfo>
+      </MenuInfo>
+    </transition>
   </div>
 </template>
 
@@ -102,45 +109,24 @@ export default defineComponent({
   display: flex;
   width: 100%;
   position: relative;
-  overflow-x: hidden;
-  .pagination__wrapper {
-    width: 100%;
-    max-width: 13px;
-    position: absolute;
-    z-index: 2;
-    bottom: 25px;
-    right: 50%;
-    transform: translateX(-50%);
-    //right: 53px;
-    //top: 50%;
-    //transform: translateY(-50%);
-    button {
-      outline: none;
-      border: none;
-      margin: 10px;
-      padding: 4.5px;
-    }
-    .active {
-      padding: 6.5px;
-    }
-    &__btn {
-      background: white;
-      border-radius: 100%;
-    }
+  overflow-x: auto;
+  &::-webkit-scrollbar {
+    height: 12px;
   }
-  //&::-webkit-scrollbar {
-  //  height: 12px;
-  //}
-  //
-  //&::-webkit-scrollbar-track {
-  //  background: #f1f1f1;
-  //  border-radius: 10px;
-  //}
-  //
-  //&::-webkit-scrollbar-thumb {
-  //  background: #444444;
-  //  border-radius: 10px;
-  //}
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 10px;
+  }
+  .drop {
+    width: 100%;
+    min-width: 100%;
+  }
   .drop {
     width: 100%;
     min-width: 100%;
@@ -150,20 +136,21 @@ export default defineComponent({
 .collection {
   max-height: 100vh;
   overflow-y: auto;
-  @media screen and (max-width: 768px) {
-    max-width: none;
-    max-height: none;
-    .back {
-      top: 93px;
-      position: absolute;
-    }
-  }
+  position: relative;
+  //@media screen and (max-width: 768px) {
+  //  max-width: none;
+  //  max-height: none;
+  //  .back {
+  //    top: 93px;
+  //    position: absolute;
+  //  }
+  //}
   &__img--wrap {
     width: 100%;
     position: relative;
-    @media screen and (max-width: 768px) {
-      display: none;
-    }
+    //@media screen and (max-width: 768px) {
+    //  display: none;
+    //}
     &::before {
       content: "";
       position: absolute;

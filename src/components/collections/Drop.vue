@@ -8,15 +8,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <transition name="fade" mode="out-in">
-    <div class="drop">
-      <img class="drop__img" src="@/assets/images/drop.png" />
-      <div class="drop__content">
-        <p class="drop__content--name">{{ drop.name }}</p>
-        <p class="drop__content--desc">{{ drop.shortDescription }}</p>
-      </div>
-    </div>
-  </transition>
+  <div class="drop flex direction-column">
+    <img class="drop__img" src="@/assets/images/drop.png" />
+    <p class="drop__content--name">{{ drop.name }}</p>
+    <p class="drop__content--desc">{{ drop.shortDescription }}</p>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -32,13 +28,14 @@ export default defineComponent({
     padding-left: 26px;
   }
   &__img {
-    width: 92px;
-    height: 98px;
+    width: 148px;
+    height: 148px;
   }
   &__content {
     padding-left: 16px;
 
     &--name {
+      padding-top: 17px;
       max-width: 165px;
       font-weight: 800;
       font-size: 24px;
