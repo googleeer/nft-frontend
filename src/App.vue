@@ -31,6 +31,7 @@ export default defineComponent({
     return {
       preloader,
       layout,
+      route,
     };
   },
 });
@@ -46,7 +47,7 @@ export default defineComponent({
   <router-view v-slot="{ Component }">
     <transition name="fade" mode="out-in">
       <component v-if="layout" :is="layout">
-        <component :is="Component" />
+        <component :key="route.fullPath" :is="Component" />
       </component>
       <component v-else :is="Component" />
     </transition>

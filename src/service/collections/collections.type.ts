@@ -9,6 +9,6 @@ export type Collection = SceneImages &
     id: number;
     name: string;
     artist: string;
-    isComingSoon: string;
+    isComingSoon: boolean;
   };
 export type CollectionWithDrops = Collection & { drops: Drop[] };
