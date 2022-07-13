@@ -3,7 +3,6 @@ import { computed, defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import CollectionDrop from "@/components/collections/Drop.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
-import data from "../../test-data.json";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import BackFixed from "@/components/collections/BackFixed.vue";
@@ -12,12 +11,18 @@ import { useCollectionsStore } from "@/store/collections.store";
 import { storeToRefs } from "pinia";
 import SceneView from "@/components/scene/SceneView.vue";
 import { getLocalisingByKey, LocalisingKey } from "@/utils/localise";
-import { Collection } from "@/service/collections/collections.type";
+import { CollectionWithDrops } from "@/service/collections/collections.type";
 import { formatImages } from "@/components/scene/sceneComponent.service";
 import SceneTextContent from "@/components/scene/SceneTextContent.vue";
 export default defineComponent({
   name: "CollectionView",
-  components: { SceneTextContent, SceneView, BackFixed, MenuInfo, CollectionDrop },
+  components: {
+    SceneTextContent,
+    SceneView,
+    BackFixed,
+    MenuInfo,
+    CollectionDrop,
+  },
   emits: ["showInfo"],
   setup() {
     const router = useRouter();
@@ -25,7 +30,7 @@ export default defineComponent({
     const currentCollectionId = +route.params.id;
     const { t, locale } = useI18n();
     const localisingDesc =
-      getLocalisingByKey<Pick<Collection, LocalisingKey>>(locale);
+      getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
 
     const collectionStore = useCollectionsStore();
     const { collectionsButtons, collections } = storeToRefs(collectionStore);
@@ -44,7 +49,7 @@ export default defineComponent({
           id,
         },
       });
-    const drops = currentCollection?.drops;
+
     const infoIsOpen = ref(false);
     const showInfo = (isOpen: boolean) => {
       infoIsOpen.value = isOpen;
@@ -52,6 +57,12 @@ export default defineComponent({
     const closeInfo = () => {
       infoIsOpen.value = false;
     };
+    const properties = computed(() =>
+      (["brand", "artist"] as (keyof CollectionWithDrops)[]).map((key) => ({
+        title: t(`collection.${key}`),
+        value: collection.value?.[key],
+      })),
+    );
     return {
       currentCollectionId,
       ROUTES,
@@ -61,10 +72,10 @@ export default defineComponent({
       localisingDesc,
       formatImages,
       toActive,
-      currentDropId,
       showInfo,
       infoIsOpen,
       closeInfo,
+      properties,
     };
   },
 });
@@ -97,31 +108,31 @@ export default defineComponent({
       />
     </SceneView>
     <BackFixed
-        :infoIsOpen="infoIsOpen"
-        @showInfo="showInfo"
-        :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
-        arrow="right"
+      :infoIsOpen="infoIsOpen"
+      @showInfo="showInfo"
+      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+      arrow="right"
     ></BackFixed>
     <transition name="fade" mode="in-out">
       <MenuInfo
-          v-click-outside:[300]="closeInfo"
-          v-if="infoIsOpen"
-          :properties="properties"
-          :drops="drops"
-          :item="collection"
-          :btn-text="'drop.open'"
-          :title-last-section="t('drop.drop')"
-          :route="{
-          name: ROUTES.DROP.name,
-          params: { collectionId: collection.id, id: currentDropId },
-        }"
+        v-click-outside:[300]="closeInfo"
+        v-if="infoIsOpen"
+        :properties="properties"
+        :drops="collection.drops"
+        :item="collection"
+        :btn-text="'drop.open'"
+        :title-last-section="t('drop.drop')"
       >
         <div class="drops">
-          <div v-for="drop of collection.drops" :key="drop.id">
-            <CollectionDrop :drop="drop"></CollectionDrop>
-          </div>
+          <template v-for="drop of collection.drops" :key="drop.id">
+            <CollectionDrop
+              :collectionId="collection.id"
+              :drop="drop"
+            ></CollectionDrop>
+          </template>
         </div>
       </MenuInfo>
+    </transition>
   </div>
 </template>
 
@@ -131,6 +142,17 @@ export default defineComponent({
   width: 100%;
   position: relative;
   overflow-x: auto;
+  padding-top: 23px;
+  padding-bottom: 46px;
+  max-width: calc(100% - 72px);
+  margin: 0 auto;
+
+  @media screen and (max-width: 768px) {
+    padding-top: 11px;
+    padding-bottom: 27px;
+    max-width: calc(100% - 52px);
+  }
+
   &::-webkit-scrollbar {
     height: 12px;
   }
@@ -143,14 +165,6 @@ export default defineComponent({
   &::-webkit-scrollbar-thumb {
     background: #444444;
     border-radius: 10px;
-  }
-  .drop {
-    width: 100%;
-    min-width: 100%;
-  }
-  .drop {
-    width: 100%;
-    min-width: 100%;
   }
 }
 

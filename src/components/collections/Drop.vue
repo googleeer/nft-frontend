@@ -1,31 +1,39 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
+import { ROUTES } from "@/constants/routes.constants";
+import { Drop } from "@/service/drop/drop.type";
 
 export default defineComponent({
   name: "CollectionDrop",
-  props: { drop: Object },
+  props: { drop: Object as PropType<Drop>, collectionId: Number },
+  setup() {
+    return {
+      ROUTES,
+    };
+  },
 });
 </script>
 
 <template>
-  <div class="drop flex direction-column">
+  <router-link
+    :to="{
+      name: ROUTES.DROP.name,
+      params: { id: drop.id, collectionId },
+    }"
+    class="drop flex direction-column"
+  >
     <img class="drop__img" src="@/assets/images/drop.png" />
     <p class="drop__content--name">{{ drop.name }}</p>
-    <p class="drop__content--desc">{{ drop.shortDescription }}</p>
-  </div>
+  </router-link>
 </template>
 
 <style lang="scss" scoped>
 .drop {
   display: flex;
-  padding-top: 23px;
-  padding-bottom: 61px;
   align-self: flex-start;
-  padding-left: 36px;
-  @media screen and (max-width: 768px) {
-    padding-top: 11px;
-    padding-bottom: 27px;
-    padding-left: 26px;
+  text-decoration: none;
+  &:not(:last-child) {
+    margin-right: 20px;
   }
   &__img {
     width: 148px;
@@ -35,15 +43,11 @@ export default defineComponent({
     padding-left: 16px;
 
     &--name {
+      color: var(--color-white);
       padding-top: 17px;
       max-width: 165px;
-      font-weight: 800;
-      font-size: 24px;
-      line-height: 110%;
-    }
-
-    &--desc {
-      padding-top: 6px;
+      font-weight: 500;
+      font-size: 18px;
       line-height: 110%;
     }
   }
