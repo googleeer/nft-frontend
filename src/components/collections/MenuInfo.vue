@@ -23,7 +23,6 @@ export default defineComponent({
     const { isMobile } = storeToRefs(appState);
     const readMoreActive = ref(false);
     const localisingDesc = getLocalisingByKey(locale);
-
     return { ROUTES, t, isMobile, readMoreActive, localisingDesc };
   },
 });
@@ -61,7 +60,10 @@ export default defineComponent({
         <span
           class="info__author--desc__more"
           @click="readMoreActive = true"
-          v-show="!readMoreActive"
+          v-show="
+            !readMoreActive &&
+            !(localisingDesc(item, 'description').length < 162)
+          "
         >
           Read More
         </span>
