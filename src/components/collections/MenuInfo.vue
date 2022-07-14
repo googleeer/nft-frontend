@@ -31,9 +31,6 @@ export default defineComponent({
 <template>
   <div class="info flex flex-grow-1 direction-column" v-if="item">
     <div class="info__info flex align-center">
-      <div class="info__info--img" v-if="isMobile">
-        <img src="../../assets/images/junkYard-mini.svg" />
-      </div>
       <div>
         <div class="info__info__content">
           <h1 class="info__info__content__name">
