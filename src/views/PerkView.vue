@@ -418,17 +418,27 @@ export default defineComponent({
         justify-content: flex-start;
       }
       &::-webkit-scrollbar {
-        height: 12px;
+        width: 5px;
+        height: 6px;
       }
 
       &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
+        background: transparent;
+        box-shadow: inset 0 0 5px #dddddd;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid transparent;
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #444444;
-        border-radius: 10px;
+        background: #9e9e9e;
+        background: linear-gradient(
+          89.99deg,
+          #fcfff9 9.64%,
+          #e9eef7 44.04%,
+          #d5e7f0 61.4%,
+          #c1d8ef 95.53%
+        );
+        border-radius: 2px;
       }
       .active {
         position: relative;
