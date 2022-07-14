@@ -80,7 +80,6 @@ export default defineComponent({
     }));
 
     const toActive = (id: number) => {
-      closeInfo();
       router.push({
         name: ROUTES.DROP.name,
         params: {
