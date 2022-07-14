@@ -79,7 +79,7 @@ export default defineComponent({
         :key="i"
       >
         <div class="perk__img">
-          <Slots :slots="perk.slots.count"></Slots>
+          <Slots :perk="perk" :slots="perk.slots.count"></Slots>
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
@@ -152,6 +152,9 @@ export default defineComponent({
   color: var(--color-white);
   z-index: 0;
   margin: 50px 33px;
+  ::v-deep(.slots) > img {
+    width: 150px;
+  }
   @media screen and (max-width: 711px) {
     width: 100%;
     height: 157px;

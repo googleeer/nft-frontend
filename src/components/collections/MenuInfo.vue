@@ -23,7 +23,6 @@ export default defineComponent({
     const { isMobile } = storeToRefs(appState);
     const readMoreActive = ref(false);
     const localisingDesc = getLocalisingByKey(locale);
-
     return { ROUTES, t, isMobile, readMoreActive, localisingDesc };
   },
 });
@@ -32,9 +31,6 @@ export default defineComponent({
 <template>
   <div class="info flex flex-grow-1 direction-column" v-if="item">
     <div class="info__info flex align-center">
-      <div class="info__info--img" v-if="isMobile">
-        <img src="../../assets/images/junkYard-mini.svg" />
-      </div>
       <div>
         <div class="info__info__content">
           <h1 class="info__info__content__name">
@@ -61,7 +57,10 @@ export default defineComponent({
         <span
           class="info__author--desc__more"
           @click="readMoreActive = true"
-          v-show="!readMoreActive"
+          v-show="
+            !readMoreActive &&
+            !(localisingDesc(item, 'description').length < 162)
+          "
         >
           Read More
         </span>
@@ -105,6 +104,7 @@ export default defineComponent({
   right: 0;
   top: 0;
   bottom: 0;
+  overflow-y: auto;
   background-color: var(--color-black);
   z-index: var(--z-index-header-logo);
   //&:before {

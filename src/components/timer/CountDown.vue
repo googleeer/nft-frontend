@@ -91,7 +91,7 @@ export default defineComponent({
   width: 100%;
   position: relative;
   max-width: 328px;
-  margin: 75px auto 0px;
+  margin: 75px 0 0px;
   background: radial-gradient(
     113.12% 113.12% at 50.52% 50.52%,
     #292929 0%,
