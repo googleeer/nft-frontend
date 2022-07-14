@@ -106,9 +106,10 @@ export default defineComponent({
       <div class="perk__content flex direction-column align-center">
         <SlotsBig :perk="perk" :slots="perk.slots.count"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
-          <p class="perk__content__info__get">
-            {{ localisingDesc(perk, "description") }}
-          </p>
+          <p
+            class="perk__content__info__get"
+            v-html="localisingDesc(perk, 'description')"
+          ></p>
           <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">
             <BaseButton
@@ -336,30 +337,31 @@ export default defineComponent({
         font-weight: 400;
         font-size: 26px;
         line-height: 18px;
+        ::v-deep(u) {
+          font-weight: 400;
+          font-size: 38px;
+          line-height: 110%;
+          background: linear-gradient(
+            307.82deg,
+            #81ff81 -7.19%,
+            #fbfef9 32.88%,
+            #ff8bec 48.41%,
+            #ffffff 75.25%,
+            #3854ff 109.05%
+          );
+          padding-bottom: 53px;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          @media screen and (max-width: 1346px) {
+            padding-bottom: 35px;
+            font-size: 28px;
+          }
+        }
         @media screen and (max-width: 1346px) {
           font-size: 22px;
         }
       }
-      &__condition {
-        font-weight: 400;
-        font-size: 38px;
-        line-height: 110%;
-        background: linear-gradient(
-          307.82deg,
-          #81ff81 -7.19%,
-          #fbfef9 32.88%,
-          #ff8bec 48.41%,
-          #ffffff 75.25%,
-          #3854ff 109.05%
-        );
-        padding-bottom: 53px;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        @media screen and (max-width: 1346px) {
-          padding-bottom: 35px;
-          font-size: 28px;
-        }
-      }
+
       &__btn {
         position: absolute;
         bottom: -32px;
