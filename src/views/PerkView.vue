@@ -19,7 +19,7 @@ export default defineComponent({
   emits: ["auctionInactive"],
   setup() {
     const appStore = useAppStateStore();
-    const { locale } = useI18n();
+    const { locale, t } = useI18n();
     const { isMobile } = storeToRefs(appStore);
     const inactiveTimer = ref(false);
     const currentIndex = ref(0);
@@ -53,9 +53,21 @@ export default defineComponent({
       loadedPerk.value = false;
     };
     const nftsData = perks?.filter((item) => item.id === currentPerkId)[0];
-    const countOfActiveNft = nftsData?.nfts.filter(
-      (item) => item.active,
-    ).length;
+    const countOfActiveNft = computed(() => {
+      if (perk.value) {
+        const dropLength = perk.value?.drops?.length;
+        const canBeUsed = perk.value?.drops?.filter(
+          (item) => item.canBeUsed,
+        )?.length;
+        return dropLength - canBeUsed
+          ? t("perk.count", {
+              need: dropLength - canBeUsed,
+              length: dropLength,
+            })
+          : t("perk.success");
+      }
+      return "";
+    });
     const localisingDesc = getLocalisingByKey<Perk>(locale);
     return {
       tab,
@@ -79,7 +91,10 @@ export default defineComponent({
 <template>
   <div class="wrapper" v-if="perk">
     <div class="perk flex align-center justify-between">
-      <div class="flex direction-column perk__left">
+      <div
+        class="flex direction-column perk__left"
+        :class="{ timer__active: perk.endingDate && !inactiveTimer }"
+      >
         <h1 class="perk__name">{{ perk.name }}</h1>
         <CountDown
           v-if="perk.endingDate && !inactiveTimer"
@@ -124,7 +139,13 @@ export default defineComponent({
         </div>
       </div>
       <div class="perk__nfts flex direction-column">
+        <h2 class="perk__nfts__title desk-none">
+          {{ countOfActiveNft }}
+        </h2>
         <div class="perk__nfts__need flex">
+          <h2 class="perk__nfts__title mob-none">
+            {{ countOfActiveNft }}
+          </h2>
           <div
             class="perk__nfts__need--block flex"
             v-for="nft of perk.drops"
@@ -176,11 +197,20 @@ export default defineComponent({
   }
 }
 .perk {
+  .timer__active {
+    margin-top: auto;
+  }
   &__left {
-    height: 100%;
-    max-height: 100px;
-    width: 30%;
+    width: calc((100% - 530px) / 2);
+    min-width: min-content;
     display: inline-block;
+    margin-right: 20px;
+    @media screen and (max-width: 1346px) {
+      text-align: center;
+      margin-bottom: 40px;
+      margin-left: 20px;
+      width: 100%;
+    }
   }
   &__timer {
     width: 100%;
@@ -231,14 +261,12 @@ export default defineComponent({
     flex-direction: column;
   }
   &__name {
-    width: min-content;
-    display: inline;
     position: relative;
     font-weight: 600;
     font-size: 74px;
     line-height: 130%;
+    display: inline;
     @media screen and (max-width: 1346px) {
-      padding-bottom: 40px;
       font-weight: 800;
       font-size: 32px;
       line-height: 110%;
@@ -260,7 +288,7 @@ export default defineComponent({
       );
       left: 0;
       @media screen and (max-width: 1346px) {
-        top: 35px;
+        bottom: -10px;
         height: 4px;
       }
     }
@@ -301,6 +329,7 @@ export default defineComponent({
       }
       &__get {
         padding-top: 40px;
+        margin: 0 10px;
         padding-bottom: 13.5px;
         font-weight: 400;
         font-size: 26px;
@@ -349,13 +378,28 @@ export default defineComponent({
     }
   }
   &__nfts {
-    width: 30%;
+    width: calc((100% - 530px) / 2);
+    margin-left: 20px;
     @media screen and (max-width: 1346px) {
       max-width: 480px;
       padding-top: 86px;
+      width: 100%;
+    }
+    @media screen and (max-width: 768px) {
+      max-width: 300px;
+    }
+    @media screen and (max-width: 1346px) {
+      .mob-none {
+        display: none;
+      }
+    }
+    @media screen and (min-width: 1347px) {
+      .desk-none {
+        display: none;
+      }
     }
     &__title {
-      padding-left: 12px;
+      padding-left: 8px;
       padding-bottom: 30px;
       font-size: 20px;
       line-height: 130%;
@@ -363,6 +407,7 @@ export default defineComponent({
     &__need {
       display: flex;
       flex-wrap: wrap;
+      margin-left: auto;
       max-width: 375px;
 
       @media screen and (max-width: 1346px) {
@@ -373,17 +418,27 @@ export default defineComponent({
         justify-content: flex-start;
       }
       &::-webkit-scrollbar {
-        height: 12px;
+        width: 5px;
+        height: 6px;
       }
 
       &::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 10px;
+        background: transparent;
+        box-shadow: inset 0 0 5px #dddddd;
+        border-top: 2px solid transparent;
+        border-bottom: 2px solid transparent;
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #444444;
-        border-radius: 10px;
+        background: #9e9e9e;
+        background: linear-gradient(
+          89.99deg,
+          #fcfff9 9.64%,
+          #e9eef7 44.04%,
+          #d5e7f0 61.4%,
+          #c1d8ef 95.53%
+        );
+        border-radius: 2px;
       }
       .active {
         position: relative;

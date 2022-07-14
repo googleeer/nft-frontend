@@ -22,7 +22,10 @@ export default defineComponent({
     }"
     class="drop flex direction-column"
   >
-    <img class="drop__img" src="@/assets/images/drop.png" />
+    <img
+      class="drop__img"
+      :src="drop.dropPreview?.url || require('@/assets/images/drop.png')"
+    />
     <p class="drop__content--name">{{ drop.name }}</p>
   </router-link>
 </template>

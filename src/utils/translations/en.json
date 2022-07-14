@@ -65,7 +65,9 @@
     "feelFree": "Please, feel free to use NFT."
 },
   "perk": {
-    "perks": "Perks"
+    "perks": "Perks",
+    "count":"Need {need} out of {length} NFTs",
+    "success": "NFTs collected successfully"
   },
   "collection": {
     "open": "Open Collection",

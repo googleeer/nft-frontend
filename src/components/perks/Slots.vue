@@ -6,6 +6,7 @@ export default defineComponent({
   props: {
     slots: { type: Number, required: true },
     isNew: Boolean,
+    perk: Object,
   },
   setup(props) {
     const { t } = useI18n();
@@ -153,7 +154,12 @@ export default defineComponent({
         />
       </defs>
     </svg>
-    <img class="img" src="../../assets/images/BrilliantTest.png" />
+    <img
+      class="img"
+      :src="
+        perk?.image?.url || require('../../assets/images/BrilliantTest.png')
+      "
+    />
   </div>
 </template>
 
