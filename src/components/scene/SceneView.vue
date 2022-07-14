@@ -235,7 +235,7 @@ export default defineComponent({
       inset: -10px;
       z-index: -6;
       object-fit: cover;
-      //filter: url("#goovey");
+      filter: url("#goovey");
     }
 
     &.background {
