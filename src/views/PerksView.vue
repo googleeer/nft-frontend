@@ -83,10 +83,10 @@ export default defineComponent({
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
-          <p class="perk__content__desc">
-            {{ localisingDesc(perk, "description") }}
-          </p>
-          <p class="perk__content__action">company owner</p>
+          <p
+            class="perk__content__desc"
+            v-html="localisingDesc(perk, 'description')"
+          ></p>
         </div>
       </RouterLink>
     </div>
@@ -226,31 +226,32 @@ export default defineComponent({
       line-height: 18px;
       font-family: Avenir, sans-serif;
       padding-bottom: 10px;
+      ::v-deep(u) {
+        font-weight: 800;
+        font-size: 20px;
+        line-height: 120%;
+        background: linear-gradient(
+          307.82deg,
+          #81ff81 -7.19%,
+          #fbfef9 32.88%,
+          #ff8bec 48.41%,
+          #ffffff 75.25%,
+          #3854ff 109.05%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        @media screen and (max-width: 711px) {
+          font-size: 18px;
+        }
+        @media screen and (max-width: 400px) {
+          font-size: 16px;
+        }
+      }
       @media screen and (max-width: 711px) {
         font-size: 16px;
         padding-top: 17px;
         padding-bottom: 6px;
-      }
-    }
-    &__action {
-      font-weight: 800;
-      font-size: 20px;
-      line-height: 120%;
-      background: linear-gradient(
-        307.82deg,
-        #81ff81 -7.19%,
-        #fbfef9 32.88%,
-        #ff8bec 48.41%,
-        #ffffff 75.25%,
-        #3854ff 109.05%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      @media screen and (max-width: 711px) {
-        font-size: 18px;
-      }
-      @media screen and (max-width: 400px) {
-        font-size: 16px;
       }
     }
   }
