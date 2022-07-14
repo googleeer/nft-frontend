@@ -1,10 +1,9 @@
-export interface SceneImagesProp {
+export type SceneImagesProp = Record<number, string> & {
   background?: string;
   artistLogo?: string;
   brandLogo?: string;
   cube?: string;
-  leftColumn?: string;
-  rightColumn?: string;
+  canvas?: string;
   leftCube?: string;
   rightCube?: string;
-}
+};

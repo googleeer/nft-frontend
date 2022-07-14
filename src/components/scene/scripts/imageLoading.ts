@@ -1,21 +1,33 @@
 import { computed, ref, watch } from "vue";
-import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 
-export const useImageLoading = (
-  images: SceneImagesProp,
-  emit: (event: "toActive" | "loaded", ...args: any[]) => void,
-) => {
-  const count = computed(() => Object.values(images).filter((_) => _).length);
+export const useImageLoading = (images: string[]) => {
+  const count = computed(() => images.filter((_) => _).length);
   const loadedImagesCount = ref(0);
   const isLoadedAllImages = ref(false);
-  watch(loadedImagesCount, (value) => {
-    if (value === count.value) {
-      setTimeout(() => {
-        isLoadedAllImages.value = true;
-        emit("loaded");
-      }, 420);
-    }
-  });
+
+  const asyncPreloadImage = (url: string) =>
+    new Promise((resolve) => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        loadedImagesCount.value++;
+        resolve(true);
+      };
+    });
+
+  console.time("qqq");
+
+  Promise.all(images.filter((_) => _).map(asyncPreloadImage)).then(
+    () => (isLoadedAllImages.value = true),
+  );
+
+  // watch(loadedImagesCount, (value) => {
+  //   if (value === count.value) {
+  //     setTimeout(() => {
+  //       isLoadedAllImages.value = true;
+  //     }, 420);
+  //   }
+  // });
 
   return {
     count,
