@@ -12,7 +12,7 @@ import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHidden
 export default defineComponent({
   name: "SceneView",
   components: { SceneViewLoader },
-  emits: ["toActive", "loaded"],
+  emits: ["toActive"],
   props: {
     images: {
       type: Object as PropType<SceneImagesProp>,
@@ -29,6 +29,14 @@ export default defineComponent({
       require: true,
       default: "Y",
     },
+    allCubes: {
+      type: Object as PropType<{ [id: number]: string }>,
+      default: () => ({}),
+    },
+    allCanvas: {
+      type: Object as PropType<{ [id: number]: string }>,
+      default: () => ({}),
+    },
   },
   setup(props, { emit }) {
     useOverflowHiddenBody();
@@ -39,26 +47,30 @@ export default defineComponent({
       bottomBlackout: require(`@/assets/images/scene/bottomBlackout.png`),
       light: require(`@/assets/images/scene/light.svg`),
     };
-    const { count, isLoadedAllImages, loadedImagesCount } = useImageLoading(
-      {
-        ...props.images,
-        ...defaultImages,
-      },
-      emit,
-    );
+    const { count, isLoadedAllImages, loadedImagesCount } = useImageLoading([
+      ...Object.values(props.allCubes),
+      ...Object.values(props.allCanvas),
+      ...Object.values(props.images),
+      ...Object.values(defaultImages),
+    ]);
 
     const emitToActive = (id: number) => emit("toActive", id);
-    const onSwipe = (direction: "prev" | "next") => {
+    const getIdxByDirection = (direction: "prev" | "next") => {
       const { buttons, activeId } = props;
       const currentIdx = buttons.findIndex((id) => id === activeId);
-      const nextIdx: number =
-        direction === "prev"
-          ? currentIdx === 0
-            ? buttons.length - 1
-            : currentIdx - 1
-          : currentIdx === buttons.length - 1
-          ? 0
-          : currentIdx + 1;
+      return direction === "prev"
+        ? currentIdx === 0
+          ? buttons.length - 1
+          : currentIdx - 1
+        : currentIdx === buttons.length - 1
+        ? 0
+        : currentIdx + 1;
+    };
+    const getIdByDirection = (direction: "prev" | "next") =>
+      props.buttons[getIdxByDirection(direction)];
+    const onSwipe = (direction: "prev" | "next") => {
+      const { buttons } = props;
+      const nextIdx = getIdxByDirection(direction);
       emitToActive(buttons[nextIdx]);
     };
 
@@ -68,6 +80,8 @@ export default defineComponent({
       onSwipeMove,
       onWheel,
       cubeStyles,
+      nextCubeStyles,
+      prevCubeStyles,
       wheelDirection,
     } = useSceneSwipe(props.sceneDirection, onSwipe);
     return {
@@ -80,8 +94,11 @@ export default defineComponent({
       onSwipeMove,
       onWheel,
       cubeStyles,
+      nextCubeStyles,
+      prevCubeStyles,
       wheelDirection,
       emitToActive,
+      getIdByDirection,
     };
   },
 });
@@ -101,6 +118,63 @@ export default defineComponent({
     @mouseup="onSwipeEnd"
     @wheel="onWheel"
   >
+    <template v-if="isLoadedAllImages">
+      <img
+        class="scene__img"
+        v-for="(url, key) in { ...images, ...defaultImages }"
+        :key="url"
+        :src="url"
+        :class="[key, wheelDirection]"
+        :style="key.toLocaleLowerCase().includes('cube') ? cubeStyles : null"
+        alt=""
+        v-show="url"
+      />
+
+      <transition name="test" mode="out-in">
+        <img
+          class="scene__img canvas"
+          :src="allCanvas[activeId]"
+          alt=""
+          v-if="allCanvas[activeId]"
+        />
+      </transition>
+
+      <transition name="fade" mode="out-in">
+        <img
+          :class="[wheelDirection]"
+          class="scene__img cubePrev"
+          :key="allCubes[getIdByDirection('prev')]"
+          :src="allCubes[getIdByDirection('prev')]"
+          v-if="allCubes[getIdByDirection('prev')]"
+          :style="prevCubeStyles"
+          alt=""
+        />
+      </transition>
+
+      <transition name="fade" mode="out-in">
+        <img
+          :class="[wheelDirection]"
+          class="scene__img cube"
+          :key="allCubes[activeId]"
+          :src="allCubes[activeId]"
+          v-if="allCubes[activeId]"
+          :style="cubeStyles"
+          alt=""
+        />
+      </transition>
+
+      <transition name="fade" mode="out-in">
+        <img
+          :class="[wheelDirection]"
+          class="scene__img cubeNext"
+          :key="allCubes[getIdByDirection('next')]"
+          :src="allCubes[getIdByDirection('next')]"
+          v-if="allCubes[getIdByDirection('next')]"
+          :style="nextCubeStyles"
+          alt=""
+        />
+      </transition>
+    </template>
     <div class="blur" v-if="blur"></div>
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
       <defs>
@@ -123,7 +197,7 @@ export default defineComponent({
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
-            scale="12"
+            scale="6"
             in="SourceGraphic"
           ></feDisplacementMap>
         </filter>
@@ -134,17 +208,7 @@ export default defineComponent({
       :count="loadedImagesCount"
       :visible="!isLoadedAllImages"
     />
-    <img
-      class="scene__img"
-      v-for="(url, key) in { ...images, ...defaultImages }"
-      :key="url"
-      :src="url"
-      :class="[key, wheelDirection]"
-      :style="key.toLocaleLowerCase().includes('cube') ? cubeStyles : null"
-      alt=""
-      v-show="url"
-      @load="() => ++loadedImagesCount"
-    />
+
     <slot></slot>
     <div class="pagination__wrapper flex direction-column align-center">
       <button
@@ -165,78 +229,40 @@ export default defineComponent({
     pointer-events: none;
     will-change: transform;
 
-    &.test {
-      left: 50%;
-      top: 52%;
-      transform: translate(-50%, -50%);
-      width: 1190px;
-      z-index: -4;
-      filter: url("#goovey");
+    &.canvas {
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      inset: -10px;
+      z-index: -6;
+      object-fit: cover;
+      //filter: url("#goovey");
     }
 
     &.background {
       z-index: var(--z-index-scene-background);
-      inset: var(--inset-scene);
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    &.leftColumn {
-      left: var(--inset-scene);
-      transform-origin: left;
-
-      @media screen and (max-width: 1200px) and (min-height: 700px) {
-        left: -10%;
-      }
-
-      @media screen and (max-width: 900px) and (min-height: 600px) {
-        left: -15%;
-      }
-    }
-
-    &.rightColumn {
-      right: var(--inset-scene);
-
-      transform-origin: right;
-
-      @media screen and (max-width: 1200px) and (min-height: 700px) {
-        right: -10%;
-      }
-
-      @media screen and (max-width: 900px) and (min-height: 600px) {
-        right: -15%;
-      }
-    }
-
-    &.leftColumn,
-    &.rightColumn {
-      z-index: var(--z-index-scene-column);
-      height: 100%;
-      top: var(--inset-scene);
-      bottom: var(--inset-scene);
-
-      @media (orientation: portrait) and (max-width: 1100px) {
-        display: none;
-      }
-
-      @media screen and (max-width: 768px) and (min-height: 550px) {
-        display: none;
-      }
-    }
-
-    &.cube {
+    &.cube,
+    &.cubeNext,
+    &.cubePrev {
       z-index: var(--z-index-scene-cube);
       bottom: -7.9817559863%;
       top: 10.3762827822%;
-      left: 50%;
-      transform: translateX(-50%);
       height: 100%;
       max-height: 90vh;
 
       @media screen and (max-width: 768px) {
         top: 7%;
       }
+    }
+
+    &.cube {
+      left: 50%;
+      transform: translateX(-50%);
 
       &.nextY {
         transition: transform 0.4s ease-in;
@@ -251,15 +277,51 @@ export default defineComponent({
       }
 
       &.prevX {
-        transition: transform 0.4s ease-in;
-        transform-origin: right !important;
-        transform: translateX(calc(-50% - 17px)) scale(0.8) !important;
+        transition: all 0.7s ease;
+        transform-origin: center !important;
+        transform: translateX(0) scale(0.5) !important;
+        opacity: 0;
       }
 
       &.nextX {
-        transition: transform 0.4s ease-in;
-        transform-origin: left !important;
-        transform: translateX(calc(-50% + 17px)) scale(0.8) !important;
+        transition: all 0.7s ease;
+        transform-origin: center !important;
+        transform: translateX(-100%) scale(0.5) !important;
+        opacity: 0;
+      }
+    }
+
+    &.cubeNext {
+      left: 50%;
+      transform: translateX(0) scale(0.6);
+
+      &.prevX {
+        transition: all 0.7s ease;
+        transform: translateX(120px) scale(0.3) !important;
+        opacity: 1;
+      }
+
+      &.nextX {
+        transition: all 0.7s ease;
+        transform: translateX(-50%) scale(1) !important;
+        opacity: 0;
+      }
+    }
+
+    &.cubePrev {
+      right: 50%;
+      transform: translateX(0) scale(0.6);
+
+      &.nextX {
+        transition: all 0.7s ease;
+        transform: translateX(-120px) scale(0.3) !important;
+        opacity: 0;
+      }
+
+      &.prevX {
+        transition: all 0.7s ease;
+        transform: translateX(50%) scale(1) !important;
+        opacity: 1;
       }
     }
 

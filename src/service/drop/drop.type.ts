@@ -1,4 +1,5 @@
 import {
+  CdnFile,
   ElementDescription,
   SceneImages,
 } from "@/service/commonTypes/commonTypes";
@@ -13,4 +14,6 @@ export type Drop = SceneImages &
     perks: Array<Perk>;
     canBeUsed?: boolean;
     collection: Collection;
+    dropPreview: CdnFile;
+    nftPreview: CdnFile;
   };

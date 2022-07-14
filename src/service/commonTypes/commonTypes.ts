@@ -9,8 +9,7 @@ export interface SceneImages {
   artistLogo?: CdnFile;
   brandLogo?: CdnFile;
   cube?: CdnFile;
-  leftColumn?: CdnFile;
-  rightColumn?: CdnFile;
+  canvas?: CdnFile;
 }
 
 export interface ElementDescription {
