@@ -23,9 +23,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const currentDropId = +route.params.id;
-    const currentCollectionId = +route.params.collectionId;
-    const sceneIsLoaded = ref(false);
+    const currentDropId = computed(() => +route.params.id);
+    const currentCollectionId = computed(() => +route.params.collectionId);
     const { t, locale } = useI18n();
     const localisingDesc =
       getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
@@ -36,18 +35,25 @@ export default defineComponent({
     const { drops, dropsButtons } = storeToRefs(dropsStore);
     if (!drops.value.length) {
       appState.setPreloaderValue(true);
-      getDropsByCollectionId(currentCollectionId)
-        .catch(() => {
+      getDropsByCollectionId(currentCollectionId.value)
+        .then(() => {
+          !drop.value &&
+            router.push({
+              name: ROUTES.COLLECTION.name,
+              params: { id: currentCollectionId.value },
+            });
+        })
+        .catch(() =>
           router.push({
             name: ROUTES.COLLECTION.name,
-            params: { id: currentCollectionId },
-          });
-        })
+            params: { id: currentCollectionId.value },
+          }),
+        )
         .finally(() => appState.setPreloaderValue(false));
     }
 
     const drop = computed(() =>
-      drops.value.find(({ id }) => id === currentDropId),
+      drops.value.find(({ id }) => id === currentDropId.value),
     );
 
     const properties = computed(() =>
@@ -66,22 +72,21 @@ export default defineComponent({
     };
 
     const sceneImages = computed<SceneImages>(() => ({
-      background: drop.value?.background,
-      cube: drop.value?.cube,
       artistLogo: drop.value?.collection.artistLogo,
       brandLogo: drop.value?.collection.brandLogo,
-      leftColumn: drop.value?.collection.leftColumn,
-      rightColumn: drop.value?.collection.rightColumn,
+      background: drop.value?.collection.background,
     }));
 
-    const toActive = (id: number) =>
+    const toActive = (id: number) => {
+      closeInfo();
       router.push({
         name: ROUTES.DROP.name,
         params: {
           id,
-          collectionId: currentCollectionId,
+          collectionId: currentCollectionId.value,
         },
       });
+    };
 
     return {
       closeInfo,
@@ -93,13 +98,13 @@ export default defineComponent({
       currentDropId,
       isMobile,
       drop,
+      drops,
       properties,
       dropsButtons,
       sceneImages,
       formatImages,
       toActive,
       localisingDesc,
-      sceneIsLoaded,
     };
   },
 });
@@ -113,7 +118,24 @@ export default defineComponent({
       :activeId="currentDropId"
       @toActive="toActive"
       sceneDirection="X"
-      @loaded="sceneIsLoaded = true"
+      :allCanvas="
+        drops.reduce(
+          (acc, _drop) => ({
+            ...acc,
+            [_drop.id]: _drop.canvas?.url,
+          }),
+          {},
+        )
+      "
+      :allCubes="
+        drops.reduce(
+          (acc, _drop) => ({
+            ...acc,
+            [_drop.id]: _drop.cube?.url,
+          }),
+          {},
+        )
+      "
     >
       <SceneTextContent
         button-text="drop.open"
@@ -124,22 +146,20 @@ export default defineComponent({
         :name="drop.name"
         :short-description="localisingDesc(drop, 'shortDescription')"
       />
+      <BackFixed
+        :to="{
+          name: ROUTES.COLLECTION.name,
+          params: { id: currentCollectionId },
+        }"
+        :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
+      ></BackFixed>
+      <BackFixed
+        :infoIsOpen="infoIsOpen"
+        @showInfo="showInfo"
+        :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+        arrow="right"
+      ></BackFixed>
     </SceneView>
-    <BackFixed
-      v-show="sceneIsLoaded"
-      :to="{
-        name: ROUTES.COLLECTION.name,
-        params: { id: currentCollectionId },
-      }"
-      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
-    ></BackFixed>
-    <BackFixed
-      v-show="sceneIsLoaded"
-      :infoIsOpen="infoIsOpen"
-      @showInfo="showInfo"
-      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
-      arrow="right"
-    ></BackFixed>
     <transition name="fade" mode="in-out">
       <MenuInfo
         v-click-outside:[300]="closeInfo"

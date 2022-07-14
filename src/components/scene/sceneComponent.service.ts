@@ -4,15 +4,13 @@ import { Drop } from "@/service/drop/drop.type";
 
 export const formatImages = ({
   background,
-  rightColumn,
-  leftColumn,
   artistLogo,
   brandLogo,
   cube,
+  canvas,
 }: Partial<Collection | Drop>): SceneImagesProp => ({
   background: background?.url,
-  rightColumn: rightColumn?.url,
-  leftColumn: leftColumn?.url,
+  canvas: canvas?.url,
   artistLogo: artistLogo?.url,
   brandLogo: brandLogo?.url,
   cube: cube?.url,

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import CollectionDrop from "@/components/collections/Drop.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
@@ -28,11 +28,10 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const currentCollectionId = +route.params.id;
+    const currentCollectionId = computed(() => +route.params.id);
     const { t, locale } = useI18n();
     const localisingDesc =
       getLocalisingByKey<Pick<CollectionWithDrops, LocalisingKey>>(locale);
-    const sceneIsLoaded = ref(false);
 
     const collectionStore = useCollectionsStore();
     const { collectionsButtons, collections } = storeToRefs(collectionStore);
@@ -46,7 +45,7 @@ export default defineComponent({
         .finally(() => appState.setPreloaderValue(false));
     }
     const collection = computed(() =>
-      collections.value.find(({ id }) => id === currentCollectionId),
+      collections.value.find(({ id }) => id === currentCollectionId.value),
     );
     const toActive = (id: number) =>
       router.push({
@@ -82,14 +81,17 @@ export default defineComponent({
       infoIsOpen,
       closeInfo,
       properties,
-      sceneIsLoaded,
     };
   },
 });
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1" v-if="collection">
+  <div
+    class="collection flex flex-grow-1"
+    v-if="collection"
+    :key="currentCollectionId"
+  >
     <SceneView
       :images="formatImages(collection)"
       :buttons="collectionsButtons"
@@ -97,7 +99,6 @@ export default defineComponent({
       @toActive="toActive"
       :blur="collection.isComingSoon"
       sceneDirection="Y"
-      @loaded="sceneIsLoaded = true"
     >
       <SceneTextContent
         button-text="collection.open"
@@ -109,14 +110,14 @@ export default defineComponent({
         :name="collection.name"
         :short-description="localisingDesc(collection, 'shortDescription')"
       />
+      <BackFixed
+        v-if="!collection.isComingSoon"
+        :infoIsOpen="infoIsOpen"
+        @showInfo="showInfo"
+        :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
+        arrow="right"
+      ></BackFixed>
     </SceneView>
-    <BackFixed
-      v-show="sceneIsLoaded"
-      :infoIsOpen="infoIsOpen"
-      @showInfo="showInfo"
-      :text="{ desktop: `${t('clickInfo')}`, mob: `${t('clickInfo')}` }"
-      arrow="right"
-    ></BackFixed>
     <transition name="fade" mode="in-out">
       <MenuInfo
         v-click-outside:[300]="closeInfo"
@@ -185,20 +186,9 @@ export default defineComponent({
   max-height: 100vh;
   overflow-y: auto;
   position: relative;
-  //@media screen and (max-width: 768px) {
-  //  max-width: none;
-  //  max-height: none;
-  //  .back {
-  //    top: 93px;
-  //    position: absolute;
-  //  }
-  //}
   &__img--wrap {
     width: 100%;
     position: relative;
-    //@media screen and (max-width: 768px) {
-    //  display: none;
-    //}
     &::before {
       content: "";
       position: absolute;

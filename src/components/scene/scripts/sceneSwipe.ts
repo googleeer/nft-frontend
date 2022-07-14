@@ -2,6 +2,7 @@ import { computed, reactive, ref } from "vue";
 import { useAppStateStore } from "@/store/appState.store";
 
 const defaultCubeTransformStyles = "translateX(-50%)";
+const defaultThirdPartyCubeTransformStyles = "translateX(0) scale(0.5)";
 
 export type SceneDirection = "X" | "Y";
 type SwipeEvent = MouseEvent | TouchEvent;
@@ -35,6 +36,14 @@ export const useSceneSwipe = (
     transformOrigin: "top",
   });
 
+  const prevCubeStyles = reactive({
+    transform: defaultThirdPartyCubeTransformStyles,
+  });
+
+  const nextCubeStyles = reactive({
+    transform: defaultThirdPartyCubeTransformStyles,
+  });
+
   const onSwipeStart = (event: SwipeEvent) => {
     if (targetIsLink(event.target) || wheelStarted.value) return;
     startPosition.value = getCoordinate(event, direction);
@@ -42,6 +51,8 @@ export const useSceneSwipe = (
   const onSwipeEnd = () => {
     difference.value = 0;
     cubeStyles.transform = defaultCubeTransformStyles;
+    prevCubeStyles.transform = defaultThirdPartyCubeTransformStyles;
+    nextCubeStyles.transform = defaultThirdPartyCubeTransformStyles;
     startPosition.value = null;
   };
 
@@ -63,9 +74,18 @@ export const useSceneSwipe = (
       }
     } else {
       cubeStyles.transform = `translateX(calc(-50% + ${
-        difference.value / 10
+        difference.value / 2
       }px)) scale(${1 - part})`;
       cubeStyles.transformOrigin = toPrev ? "left" : "right";
+
+      prevCubeStyles.transform = `translateX(${difference.value / 2}px) scale(${
+        toPrev ? 0.5 - part : 0.5 + part
+      })`;
+
+      nextCubeStyles.transform = `translateX(${difference.value / 2}px) scale(${
+        toPrev ? 0.5 + part : 0.5 - part
+      })`;
+
       if (Math.abs(difference.value) >= threshold.value) {
         onSwitch(!toPrev ? "prev" : "next");
         onSwipeEnd();
@@ -77,16 +97,20 @@ export const useSceneSwipe = (
   const wheelDirection = ref("");
 
   const onWheel = (event: WheelEvent) => {
-    const delta = event["deltaY"];
+    const delta = Math.abs(event["deltaY"])
+      ? event["deltaY"]
+      : -event["deltaX"];
     if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
     wheelStarted.value = true;
     const deltaDirection = delta < 0 ? "prev" : "next";
     wheelDirection.value = deltaDirection + direction;
     setTimeout(() => {
-      wheelStarted.value = false;
-      wheelDirection.value = "";
       onSwitch(deltaDirection);
-    }, 420);
+      setTimeout(() => {
+        wheelDirection.value = "";
+        wheelStarted.value = false;
+      }, 300);
+    }, 699);
   };
 
   return {
@@ -95,6 +119,8 @@ export const useSceneSwipe = (
     onSwipeMove,
     onWheel,
     cubeStyles,
+    nextCubeStyles,
+    prevCubeStyles,
     wheelDirection,
   };
 };
