@@ -104,7 +104,7 @@ export default defineComponent({
         />
       </div>
       <div class="perk__content flex direction-column align-center">
-        <SlotsBig :slots="perk.slots.count"></SlotsBig>
+        <SlotsBig :perk="perk" :slots="perk.slots.count"></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p class="perk__content__info__get">
             {{ localisingDesc(perk, "description") }}
@@ -154,7 +154,9 @@ export default defineComponent({
           >
             <img
               class="perk__nfts__need--img"
-              src="../assets/images/perks/nft1.png"
+              :src="
+                perk.image?.url || require('../assets/images/perks/nft1.png')
+              "
             />
           </div>
         </div>
@@ -399,6 +401,7 @@ export default defineComponent({
       }
     }
     &__title {
+      width: 100%;
       padding-left: 8px;
       padding-bottom: 30px;
       font-size: 20px;
@@ -409,6 +412,10 @@ export default defineComponent({
       flex-wrap: wrap;
       margin-left: auto;
       max-width: 375px;
+      &--img {
+        width: 100px;
+        border-radius: 24px;
+      }
 
       @media screen and (max-width: 1346px) {
         flex-wrap: nowrap;
