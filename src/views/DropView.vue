@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, onBeforeUnmount, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import DropPerks from "@/components/collections/Perks.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
@@ -51,6 +51,8 @@ export default defineComponent({
         )
         .finally(() => appState.setPreloaderValue(false));
     }
+
+    onBeforeUnmount(() => dropsStore.setDrops([]));
 
     const drop = computed(() =>
       drops.value.find(({ id }) => id === currentDropId.value),
@@ -111,7 +113,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="collection flex flex-grow-1" v-if="drop">
+  <div
+    class="collection flex flex-grow-1"
+    v-if="drop"
+    :key="currentCollectionId"
+  >
     <SceneView
       :images="formatImages(sceneImages)"
       :buttons="dropsButtons"
