@@ -33,6 +33,7 @@ export default defineComponent({
     getPerk(currentPerkId)
       .then((data) => {
         perk.value = data;
+        console.log(data);
       })
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
@@ -147,19 +148,28 @@ export default defineComponent({
           <h2 class="perk__nfts__title mob-none">
             {{ countOfActiveNft }}
           </h2>
-          <div
-            class="perk__nfts__need--block flex"
+          <router-link
             v-for="nft of perk.drops"
             :key="nft.id"
-            :class="{ active: nft.canBeUsed }"
+            :to="{
+              name: ROUTES.DROP.name,
+              params: { id: nft.id, collectionId: nft.collection.id },
+            }"
+            class="perk__nfts__need--link"
           >
-            <img
-              class="perk__nfts__need--img"
-              :src="
-                perk.image?.url || require('../assets/images/perks/nft1.png')
-              "
-            />
-          </div>
+            <div
+              class="perk__nfts__need--block flex"
+              :class="{ active: nft.canBeUsed }"
+            >
+              <img
+                class="perk__nfts__need--img"
+                :src="
+                  nft.dropPreview?.url ||
+                  require('../assets/images/perks/nft1.png')
+                "
+              />
+            </div>
+          </router-link>
         </div>
       </div>
       <CountDown
@@ -463,9 +473,12 @@ export default defineComponent({
           height: 36px;
         }
       }
-      &--block {
-        padding: 0 8px;
+      &--link {
         margin-bottom: 35px;
+        margin-left: 8px;
+        margin-right: 8px;
+      }
+      &--block {
         &:not(.active) {
           opacity: 0.64;
         }
