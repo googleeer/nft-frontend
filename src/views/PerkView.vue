@@ -33,7 +33,6 @@ export default defineComponent({
     getPerk(currentPerkId)
       .then((data) => {
         perk.value = data;
-        console.log(data);
       })
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
@@ -111,7 +110,6 @@ export default defineComponent({
             class="perk__content__info__get"
             v-html="localisingDesc(perk, 'description')"
           ></p>
-          <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
@@ -341,9 +339,9 @@ export default defineComponent({
         max-width: 374px;
       }
       &__get {
+        padding-bottom: 53px;
         padding-top: 40px;
         margin: 0 10px;
-        padding-bottom: 13.5px;
         font-weight: 400;
         font-size: 26px;
         line-height: 18px;
@@ -359,7 +357,6 @@ export default defineComponent({
             #ffffff 75.25%,
             #3854ff 109.05%
           );
-          padding-bottom: 53px;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           @media screen and (max-width: 1346px) {

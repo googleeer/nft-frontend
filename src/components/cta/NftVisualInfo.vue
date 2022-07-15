@@ -10,7 +10,7 @@ export default defineComponent({
   props: {
     title: String,
     desc: String,
-    shortDescItem: Object,
+    drop: Object,
     to: Object,
   },
   setup() {
@@ -34,18 +34,21 @@ export default defineComponent({
 
 <template>
   <RouterLink class="nft__link flex direction-column" :to="to">
-    <img class="nft__link__img" src="@/assets/images/mynft/1.png" />
+    <img
+      class="nft__link__img"
+      :src="drop.dropPreview?.url || require('@/assets/images/mynft/1.png')"
+    />
     <div class="nft__link__content">
       <h2 class="nft__link__content__title" v-if="title">{{ title }}</h2>
       <p class="nft__link__content__desc" v-if="desc">
         {{ desc }}
       </p>
-      <p v-else-if="shortDescItem">
+      <p v-else-if="drop">
         {{
-          localisingDesc(shortDescItem, "shortDescription").slice(
+          localisingDesc(drop, "shortDescription").slice(
             0,
             countOfMaxWordDesc,
-          ) + isMoreThanMaxWordDesc(shortDescItem.shortDescription)
+          ) + isMoreThanMaxWordDesc(drop.shortDescription)
         }}
       </p>
     </div>

@@ -42,7 +42,7 @@ export default defineComponent({
       <div class="nft" v-for="nft of nfts" :key="nft.id">
         <NftVisualInfo
           :title="nft.drop.name"
-          :shortDescItem="nft.drop"
+          :drop="nft.drop"
           :to="{
             name: ROUTES.MY_NFT.name,
             params: { id: nft.drop.id },
