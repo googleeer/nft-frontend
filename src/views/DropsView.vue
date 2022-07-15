@@ -20,6 +20,7 @@ export default defineComponent({
     getDrops()
       .then((data) => {
         drops.value = data;
+        console.log(data);
       })
       .catch(() => {
         router.push({ name: ROUTES.COLLECTIONS.name });
@@ -39,6 +40,7 @@ export default defineComponent({
         <NftVisualInfo
           :title="drop.name"
           :desc="drop.collection.name"
+          :preview="drop.nftPreview?.url"
           :to="{
             name: ROUTES.DROP.name,
             params: { id: drop.id, collectionId: drop.collection.id },

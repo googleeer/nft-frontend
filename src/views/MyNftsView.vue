@@ -47,6 +47,7 @@ export default defineComponent({
             name: ROUTES.MY_NFT.name,
             params: { id: nft.drop.id },
           }"
+          :preview="nft.drop.dropPreview?.url"
         ></NftVisualInfo>
       </div>
     </div>

@@ -12,6 +12,7 @@ export default defineComponent({
     desc: String,
     drop: Object,
     to: Object,
+    preview: String,
   },
   setup() {
     const { t, locale } = useI18n();
@@ -36,7 +37,7 @@ export default defineComponent({
   <RouterLink class="nft__link flex direction-column" :to="to">
     <img
       class="nft__link__img"
-      :src="drop.dropPreview?.url || require('@/assets/images/mynft/1.png')"
+      :src="preview || require('@/assets/images/mynft/1.png')"
     />
     <div class="nft__link__content">
       <h2 class="nft__link__content__title" v-if="title">{{ title }}</h2>
@@ -56,22 +57,16 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-//.nft {
-//  width: 100%;
-//  max-width: 322px;
-//  margin: 0 17px;
-//  padding-bottom: 56px;
-//  @media screen and (max-width: 771px) {
-//    max-width: 160px;
-//    margin: 0 7.5px;
-//    padding-bottom: 29px;
-//  }
 .nft__link {
   text-decoration: none;
   color: var(--color-white);
+  background-color: #141414;
+  height: 100%;
+  border-radius: 45px 45px 42px 42px;
 
   &__img {
     width: 322px;
+    height: 322px;
     border-radius: 42px;
     z-index: 1;
     @media screen and (max-width: 771px) {
@@ -89,17 +84,7 @@ export default defineComponent({
       padding-bottom: 17px;
       padding-left: 12px;
     }
-    &::before {
-      content: "";
-      width: 100%;
-      position: absolute;
-      background: #141414;
-      inset: 0;
-      z-index: -1;
-      top: -70px;
-      background-size: cover;
-      border-radius: 34px;
-    }
+
     &__title {
       padding-bottom: 13px;
       font-weight: 800;
