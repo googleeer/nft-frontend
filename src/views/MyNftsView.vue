@@ -41,6 +41,7 @@ export default defineComponent({
     <div class="nfts">
       <div class="nft" v-for="nft of nfts" :key="nft.id">
         <NftVisualInfo
+          :minted="nft.count"
           :title="nft.drop.name"
           :drop="nft.drop"
           :to="{

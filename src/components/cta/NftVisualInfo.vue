@@ -13,6 +13,7 @@ export default defineComponent({
     drop: Object,
     to: Object,
     preview: String,
+    minted: Number,
   },
   setup() {
     const { t, locale } = useI18n();
@@ -35,10 +36,15 @@ export default defineComponent({
 
 <template>
   <RouterLink class="nft__link flex direction-column" :to="to">
-    <img
-      class="nft__link__img"
-      :src="preview || require('@/assets/images/mynft/1.png')"
-    />
+    <div class="nft__link--wrap">
+      <img
+        class="nft__link__img"
+        :src="preview || require('@/assets/images/mynft/1.png')"
+      />
+      <span v-if="minted" class="nft__link--minted flex flexCenter">{{
+        minted
+      }}</span>
+    </div>
     <div class="nft__link__content">
       <h2 class="nft__link__content__title" v-if="title">{{ title }}</h2>
       <p class="nft__link__content__desc" v-if="desc">
@@ -63,7 +69,33 @@ export default defineComponent({
   background-color: #141414;
   height: 100%;
   border-radius: 45px 45px 42px 42px;
-
+  &--wrap {
+    position: relative;
+  }
+  &--minted {
+    position: absolute;
+    pointer-events: none;
+    bottom: -41px;
+    left: 38px;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 54px;
+    background-image: url("~@/assets/images/nftCount.png");
+    background-size: cover;
+    z-index: 1;
+    color: var(--color-black);
+    padding-top: 5px;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 150%;
+    @media screen and (max-width: 768px) {
+      width: 29px;
+      height: 29px;
+      font-size: 16px;
+      left: 12px;
+      bottom: -21px;
+    }
+  }
   &__img {
     width: 322px;
     height: 322px;
@@ -72,6 +104,7 @@ export default defineComponent({
     @media screen and (max-width: 771px) {
       max-width: 160px;
       height: 156px;
+      border-radius: 20px;
     }
   }
   &__content {
