@@ -166,9 +166,13 @@ export default defineComponent({
 }
 .img {
   width: 200px;
+  max-height: 200px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  @media screen and (max-width: 1346px) {
+    max-height: 100px;
+  }
 }
 </style>

@@ -110,7 +110,6 @@ export default defineComponent({
             class="perk__content__info__get"
             v-html="localisingDesc(perk, 'description')"
           ></p>
-          <p class="perk__content__info__condition">company owner</p>
           <span class="perk__content__info__btn">
             <BaseButton
               type="submit"
@@ -147,19 +146,28 @@ export default defineComponent({
           <h2 class="perk__nfts__title mob-none">
             {{ countOfActiveNft }}
           </h2>
-          <div
-            class="perk__nfts__need--block flex"
+          <router-link
             v-for="nft of perk.drops"
             :key="nft.id"
-            :class="{ active: nft.canBeUsed }"
+            :to="{
+              name: ROUTES.DROP.name,
+              params: { id: nft.id, collectionId: nft.collection.id },
+            }"
+            class="perk__nfts__need--link"
           >
-            <img
-              class="perk__nfts__need--img"
-              :src="
-                perk.image?.url || require('../assets/images/perks/nft1.png')
-              "
-            />
-          </div>
+            <div
+              class="perk__nfts__need--block flex"
+              :class="{ active: nft.canBeUsed }"
+            >
+              <img
+                class="perk__nfts__need--img"
+                :src="
+                  nft.dropPreview?.url ||
+                  require('../assets/images/perks/nft1.png')
+                "
+              />
+            </div>
+          </router-link>
         </div>
       </div>
       <CountDown
@@ -331,9 +339,10 @@ export default defineComponent({
         max-width: 374px;
       }
       &__get {
+        padding-bottom: 53px;
         padding-top: 40px;
-        margin: 0 10px;
-        padding-bottom: 13.5px;
+        margin: 0 20px;
+        text-align: center;
         font-weight: 400;
         font-size: 26px;
         line-height: 18px;
@@ -349,7 +358,6 @@ export default defineComponent({
             #ffffff 75.25%,
             #3854ff 109.05%
           );
-          padding-bottom: 53px;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           @media screen and (max-width: 1346px) {
@@ -366,7 +374,7 @@ export default defineComponent({
         position: absolute;
         bottom: -32px;
         @media screen and (max-width: 1346px) {
-          bottom: -45px;
+          bottom: -30px;
         }
         @media screen and (max-width: 374px) {
           .button {
@@ -463,9 +471,12 @@ export default defineComponent({
           height: 36px;
         }
       }
-      &--block {
-        padding: 0 8px;
+      &--link {
         margin-bottom: 35px;
+        margin-left: 8px;
+        margin-right: 8px;
+      }
+      &--block {
         &:not(.active) {
           opacity: 0.64;
         }

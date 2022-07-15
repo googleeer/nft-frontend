@@ -69,16 +69,20 @@ export default defineComponent({
     font-weight: 800;
     font-size: 82px;
     line-height: 110%;
+    max-width: 600px;
     @media screen and (max-width: 768px) {
       padding-top: 19px;
+      max-width: 300px;
       font-size: 42px;
     }
   }
   &-desc {
     padding-bottom: 46px;
     font-size: 22px;
+    max-width: 400px;
     @media screen and (max-width: 768px) {
       font-size: 16px;
+      max-width: 250px;
       padding-bottom: 36px;
     }
   }

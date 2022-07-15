@@ -35,6 +35,11 @@ export default defineComponent({
       logOut();
       router.push(ROUTES.LOGIN.path);
     };
+    const inactiveRoute = () => {
+      if (route.path !== ROUTES.USER_SETTINGS.path) {
+        router.push(ROUTES.USER_SETTINGS);
+      }
+    };
     return {
       t,
       ROUTES,
@@ -44,6 +49,7 @@ export default defineComponent({
       onLogOut,
       route,
       router,
+      inactiveRoute,
     };
   },
 });
@@ -69,18 +75,21 @@ export default defineComponent({
             icon="wallet.svg"
             :to="{ name: ROUTES.USER_SETTINGS_WALLET.name }"
             class="settings__menu__item"
+            @click="inactiveRoute"
           />
           <SettingsLink
             text="profile.faq"
             icon="faq.svg"
             :to="{ name: ROUTES.USER_SETTINGS_FAQ.name }"
             class="settings__menu__item"
+            @click="inactiveRoute"
           />
           <SettingsLink
             text="profile.referral"
             icon="referral.svg"
             :to="{ name: ROUTES.USER_SETTINGS_REFERRAL.name }"
             class="settings__menu__item"
+            @click="inactiveRoute"
           />
           <SettingsCheckbox
             text="profile.notification"

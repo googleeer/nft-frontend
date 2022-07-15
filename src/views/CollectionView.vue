@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { ROUTES } from "@/constants/routes.constants";
 import CollectionDrop from "@/components/collections/Drop.vue";
 import MenuInfo from "@/components/collections/MenuInfo.vue";
