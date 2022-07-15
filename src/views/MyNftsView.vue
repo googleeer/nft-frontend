@@ -20,7 +20,6 @@ export default defineComponent({
     getMintedDrops()
       .then((data) => {
         nfts.value = data;
-        console.log(data);
       })
       .catch(() => {
         router.push(ROUTES.COLLECTIONS.name);
@@ -48,7 +47,7 @@ export default defineComponent({
             name: ROUTES.MY_NFT.name,
             params: { id: nft.drop.id },
           }"
-          :preview="nft.drop.dropPreview?.url"
+          :preview="nft.drop.nftPreview?.url"
         ></NftVisualInfo>
       </div>
     </div>
