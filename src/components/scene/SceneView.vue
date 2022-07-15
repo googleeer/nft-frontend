@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, ref } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 import {
@@ -8,10 +8,11 @@ import {
 } from "@/components/scene/scripts/sceneSwipe";
 import { useImageLoading } from "@/components/scene/scripts/imageLoading";
 import { useOverflowHiddenBody } from "@/components/scene/scripts/overflowHiddenBody";
+import SceneCarousel from "@/components/scene/SceneCarousel.vue";
 
 export default defineComponent({
   name: "SceneView",
-  components: { SceneViewLoader },
+  components: { SceneCarousel, SceneViewLoader },
   emits: ["toActive"],
   props: {
     images: {
@@ -39,6 +40,7 @@ export default defineComponent({
     },
   },
   setup(props, { emit }) {
+    const carouselDirection = ref("");
     useOverflowHiddenBody();
     const defaultImages = {
       bottomLantern: require(`@/assets/images/scene/bottomLantern.png`),
@@ -71,6 +73,8 @@ export default defineComponent({
     const onSwipe = (direction: "prev" | "next") => {
       const { buttons } = props;
       const nextIdx = getIdxByDirection(direction);
+      console.log(direction);
+      carouselDirection.value = direction;
       emitToActive(buttons[nextIdx]);
     };
 
@@ -99,6 +103,7 @@ export default defineComponent({
       wheelDirection,
       emitToActive,
       getIdByDirection,
+      carouselDirection,
     };
   },
 });
@@ -138,42 +143,14 @@ export default defineComponent({
           v-if="allCanvas[activeId]"
         />
       </transition>
-
-      <transition name="fade" mode="out-in">
-        <img
-          :class="[wheelDirection]"
-          class="scene__img cubePrev"
-          :key="allCubes[getIdByDirection('prev')]"
-          :src="allCubes[getIdByDirection('prev')]"
-          v-if="allCubes[getIdByDirection('prev')]"
-          :style="prevCubeStyles"
-          alt=""
-        />
-      </transition>
-
-      <transition name="fade" mode="out-in">
-        <img
-          :class="[wheelDirection]"
-          class="scene__img cube"
-          :key="allCubes[activeId]"
-          :src="allCubes[activeId]"
-          v-if="allCubes[activeId]"
-          :style="cubeStyles"
-          alt=""
-        />
-      </transition>
-
-      <transition name="fade" mode="out-in">
-        <img
-          :class="[wheelDirection]"
-          class="scene__img cubeNext"
-          :key="allCubes[getIdByDirection('next')]"
-          :src="allCubes[getIdByDirection('next')]"
-          v-if="allCubes[getIdByDirection('next')]"
-          :style="nextCubeStyles"
-          alt=""
-        />
-      </transition>
+      <SceneCarousel
+        :all-cubes="allCubes"
+        :buttons="buttons"
+        :next-id="getIdByDirection('next')"
+        :prev-id="getIdByDirection('prev')"
+        :active-id="activeId"
+        :direction="carouselDirection"
+      />
     </template>
     <div class="blur" v-if="blur"></div>
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" hidden="hidden">
@@ -246,9 +223,9 @@ export default defineComponent({
       object-fit: cover;
     }
 
-    &.cube,
-    &.cubeNext,
-    &.cubePrev {
+    &.cube {
+      left: 50%;
+      transform: translateX(-50%);
       z-index: var(--z-index-scene-cube);
       bottom: -7.9817559863%;
       top: 10.3762827822%;
@@ -258,11 +235,6 @@ export default defineComponent({
       @media screen and (max-width: 768px) {
         top: 7%;
       }
-    }
-
-    &.cube {
-      left: 50%;
-      transform: translateX(-50%);
 
       &.nextY {
         transition: transform 0.4s ease-in;
@@ -288,40 +260,6 @@ export default defineComponent({
         transform-origin: center !important;
         transform: translateX(-100%) scale(0.5) !important;
         opacity: 0;
-      }
-    }
-
-    &.cubeNext {
-      left: 50%;
-      transform: translateX(0) scale(0.6);
-
-      &.prevX {
-        transition: all 0.7s ease;
-        transform: translateX(120px) scale(0.3) !important;
-        opacity: 1;
-      }
-
-      &.nextX {
-        transition: all 0.7s ease;
-        transform: translateX(-50%) scale(1) !important;
-        opacity: 0;
-      }
-    }
-
-    &.cubePrev {
-      right: 50%;
-      transform: translateX(0) scale(0.6);
-
-      &.nextX {
-        transition: all 0.7s ease;
-        transform: translateX(-120px) scale(0.3) !important;
-        opacity: 0;
-      }
-
-      &.prevX {
-        transition: all 0.7s ease;
-        transform: translateX(50%) scale(1) !important;
-        opacity: 1;
       }
     }
 
