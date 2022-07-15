@@ -97,6 +97,7 @@ export default defineComponent({
     }
     ::v-deep(.slots) > img {
       width: 45px;
+      max-height: 45px;
     }
   }
 }

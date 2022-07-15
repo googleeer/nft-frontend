@@ -182,11 +182,11 @@ export default defineComponent({
         font-weight: 800;
         font-size: 82px;
         line-height: 110%;
-        max-width: 350px;
+        max-width: 600px;
         @media screen and (max-width: 768px) {
           padding-top: 19px;
           font-size: 42px;
-          max-width: 180px;
+          max-width: 300px;
           padding-left: 20px;
         }
       }
