@@ -56,7 +56,10 @@ export default defineComponent({
       ...Object.values(defaultImages),
     ]);
 
-    const emitToActive = (id: number) => emit("toActive", id);
+    const emitToActive = (id: number, clearDirection = true) => {
+      clearDirection && (carouselDirection.value = "");
+      emit("toActive", id);
+    };
     const getIdxByDirection = (direction: "prev" | "next") => {
       const { buttons, activeId } = props;
       const currentIdx = buttons.findIndex((id) => id === activeId);
@@ -73,9 +76,8 @@ export default defineComponent({
     const onSwipe = (direction: "prev" | "next") => {
       const { buttons } = props;
       const nextIdx = getIdxByDirection(direction);
-      console.log(direction);
       carouselDirection.value = direction;
-      emitToActive(buttons[nextIdx]);
+      emitToActive(buttons[nextIdx], false);
     };
 
     const {
