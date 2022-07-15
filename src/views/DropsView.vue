@@ -38,6 +38,7 @@ export default defineComponent({
     <div class="nfts">
       <div class="nft" v-for="drop of drops" :key="drop.id">
         <NftVisualInfo
+          :perks="drop.perks"
           :title="drop.name"
           :desc="drop.collection.name"
           :preview="drop.nftPreview?.url"

@@ -4,9 +4,10 @@ import { ROUTES } from "@/constants/routes.constants";
 import { useI18n } from "vue-i18n";
 import { getLocalisingByKey } from "@/utils/localise";
 import { Drop } from "@/service/drop/drop.type";
+import Slots from "@/components/perks/Slots.vue";
 export default defineComponent({
   name: "NftVisualInfo",
-  components: {},
+  components: { Slots },
   props: {
     title: String,
     desc: String,
@@ -14,6 +15,7 @@ export default defineComponent({
     to: Object,
     preview: String,
     minted: Number,
+    perks: Object,
   },
   setup() {
     const { t, locale } = useI18n();
@@ -44,6 +46,15 @@ export default defineComponent({
       <span v-if="minted" class="nft__link--minted flex flexCenter">{{
         minted
       }}</span>
+      <div v-if="perks" class="nft__link--perks flex">
+        <div
+          class="nft__link--perks__wrap"
+          v-for="(perk, index) of perks"
+          :key="index"
+        >
+          <Slots :perk="perk" :slots="perk.slots.count"></Slots>
+        </div>
+      </div>
     </div>
     <div class="nft__link__content">
       <h2 class="nft__link__content__title" v-if="title">{{ title }}</h2>
@@ -69,8 +80,77 @@ export default defineComponent({
   background-color: #141414;
   height: 100%;
   border-radius: 45px 45px 42px 42px;
+  @media screen and (max-width: 771px) {
+    border-radius: 24px;
+  }
   &--wrap {
     position: relative;
+  }
+  &--perks {
+    width: 100%;
+    height: 55px;
+    position: absolute;
+    bottom: 10px;
+    @media screen and (max-width: 771px) {
+      height: 30px;
+    }
+    &__wrap {
+      position: absolute;
+      height: 55px;
+      width: 55px;
+      @media screen and (max-width: 771px) {
+        width: 30px;
+        height: 30px;
+      }
+      &:nth-child(1) {
+        left: 20px;
+        @media screen and (max-width: 771px) {
+          left: 12px;
+        }
+      }
+      &:nth-child(2) {
+        left: 63px;
+        @media screen and (max-width: 771px) {
+          left: 35px;
+        }
+      }
+      &:nth-child(3) {
+        left: 106px;
+        @media screen and (max-width: 771px) {
+          left: 58px;
+        }
+      }
+      &:nth-child(4) {
+        left: 149px;
+        @media screen and (max-width: 771px) {
+          left: 81px;
+        }
+      }
+      &:nth-child(5) {
+        left: 192px;
+        @media screen and (max-width: 771px) {
+          left: 104px;
+        }
+      }
+    }
+    ::v-deep(.slots) {
+      svg {
+        width: 55px;
+        height: 55px;
+        @media screen and (max-width: 771px) {
+          width: 30px;
+          height: 30px;
+        }
+      }
+      img {
+        width: 25px;
+        max-height: 25px;
+        @media screen and (max-width: 771px) {
+          max-height: 15px;
+          max-width: 15px;
+        }
+      }
+    }
   }
   &--minted {
     position: absolute;
@@ -88,7 +168,7 @@ export default defineComponent({
     font-weight: 500;
     font-size: 24px;
     line-height: 150%;
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 771px) {
       width: 29px;
       height: 29px;
       font-size: 16px;
