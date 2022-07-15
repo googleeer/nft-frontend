@@ -171,5 +171,8 @@ export default defineComponent({
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  @media screen and (max-width: 1346px) {
+    max-height: 100px;
+  }
 }
 </style>

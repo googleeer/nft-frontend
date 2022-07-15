@@ -71,6 +71,7 @@ export default defineComponent({
     z-index: 1;
     @media screen and (max-width: 771px) {
       max-width: 160px;
+      height: 156px;
     }
   }
   &__content {

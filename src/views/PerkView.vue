@@ -341,7 +341,8 @@ export default defineComponent({
       &__get {
         padding-bottom: 53px;
         padding-top: 40px;
-        margin: 0 10px;
+        margin: 0 20px;
+        text-align: center;
         font-weight: 400;
         font-size: 26px;
         line-height: 18px;
@@ -373,7 +374,7 @@ export default defineComponent({
         position: absolute;
         bottom: -32px;
         @media screen and (max-width: 1346px) {
-          bottom: -45px;
+          bottom: -30px;
         }
         @media screen and (max-width: 374px) {
           .button {

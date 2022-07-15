@@ -155,6 +155,10 @@ export default defineComponent({
   ::v-deep(.slots) > img {
     width: 150px;
     max-height: 150px;
+    @media screen and (max-width: 768px) {
+      max-height: 80px;
+      max-width: 80px;
+    }
   }
   @media screen and (max-width: 711px) {
     width: 100%;
