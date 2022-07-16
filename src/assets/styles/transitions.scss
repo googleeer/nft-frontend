@@ -1,8 +1,25 @@
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter-from, .fade-leave-to {
   opacity: 0;
+}
+
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+}
+
+.menuInfo-enter-active, .menuInfo-leave-active {
+  transition: transform .35s ease, opacity .4s ease;
+}
+
+.menuInfo-enter-from, .menuInfo-leave-to {
+  opacity: 0;
+  transform: translateX(50%);
+}
+
+.menuInfo-enter-to, .menuInfo-leave-from {
+  opacity: 1;
 }
 
 .fadeOut-enter-active {
@@ -14,29 +31,4 @@
 }
 .fadeOut-enter, .fadeOut-leave-to {
   opacity: 0;
-}
-
-.test-enter-active {
-  transition: all 0.3s !important;
-}
-.test-enter-from {
-  opacity: 0.4;
-  transform: translateX(-50%) translateY(20px) scale(.9) !important;
-}
-.test-enter-to {
-  opacity: 1;
-  transform: translateX(-50%) !important;
-}
-
-
-.testThird-enter-active {
-  transition: all 0.3s !important;
-}
-.testThird-enter-from {
-  opacity: 0.4;
-  transform: translateX(0) translateY(20px) scale(.4) !important;
-}
-.testThird-enter-to {
-  opacity: 1;
-  transform: translateX(0) scale(.5) !important;
 }

@@ -81,7 +81,7 @@ export default defineComponent({
   &__item {
     max-height: 90vh;
     object-fit: contain;
-    transition: all 0.3s ease-in;
+    transition: all 0.5s ease-in;
     opacity: 0;
     user-select: none;
 
@@ -89,11 +89,11 @@ export default defineComponent({
       opacity: 1;
 
       &.fromPrev {
-        animation: fromPrev ease 1s;
+        animation: fromPrev ease 1.5s;
       }
 
       &.fromNext {
-        animation: fromNext ease 1s;
+        animation: fromNext ease 1.5s;
       }
     }
 
@@ -101,7 +101,7 @@ export default defineComponent({
       opacity: 1;
 
       &.prevFromActive {
-        animation: prevFromActive ease 1s forwards;
+        animation: prevFromActive ease 1.5s forwards;
       }
     }
 
@@ -109,7 +109,7 @@ export default defineComponent({
       opacity: 1;
 
       &.nextFromActive {
-        animation: nextFromActive ease 1s forwards;
+        animation: nextFromActive ease 1.5s forwards;
       }
     }
   }
