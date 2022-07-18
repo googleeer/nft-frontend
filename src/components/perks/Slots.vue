@@ -7,12 +7,16 @@ export default defineComponent({
     slots: { type: Number, required: true },
     isNew: Boolean,
     perk: Object,
+    activated: {
+      type: Boolean,
+      required: false,
+      default: undefined,
+    },
   },
   setup(props) {
     const { t } = useI18n();
     const activePath = (order: number) => (props.slots >= order ? 1 : 0.15);
     const isBlink = (order: number) => props.isNew && props.slots === order;
-
     return {
       t,
       activePath,
@@ -25,6 +29,7 @@ export default defineComponent({
 <template>
   <div class="slots">
     <svg
+      v-if="!activated"
       width="290"
       height="290"
       viewBox="0 0 266 266"
@@ -154,6 +159,10 @@ export default defineComponent({
         />
       </defs>
     </svg>
+    <div class="activated" v-if="activated">
+      <img class="activated--img" src="../../assets/images/active-perk.png" />
+      <span class="activated--bg"></span>
+    </div>
     <img
       class="img"
       :src="
@@ -166,6 +175,52 @@ export default defineComponent({
 <style lang="scss" scoped>
 .slots {
   position: relative;
+  .activated {
+    position: relative;
+    &--img {
+      width: 290px;
+      max-height: 290px;
+      @media screen and (max-width: 711px) {
+        max-height: 157px;
+        max-width: 157px;
+      }
+    }
+    &--bg {
+      position: absolute;
+      width: 215px;
+      height: 215px;
+      background-color: black;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 100%;
+      @media screen and (max-width: 711px) {
+        max-width: 115px;
+        max-height: 115px;
+      }
+    }
+    &--img {
+      animation: 100s linear 0s normal none infinite running rot;
+      -webkit-animation: 100s linear 0s normal none infinite running rot;
+
+      @keyframes rot {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @-webkit-keyframes rot {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
   .blink {
     stroke: #e3a5b0;
     animation-name: blinker;
