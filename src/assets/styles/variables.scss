@@ -18,9 +18,11 @@
 
   // scene
   --z-index-scene-background: -5;
+  --z-index-scene-canvas: -6;
   --z-index-scene-artistLogo: -3;
   --z-index-scene-brandLogo: -3;
   --z-index-scene-cube: -1;
   --z-index-scene-light: -3;
   --z-index-scene-lantern: -2;
+  --z-index-blackout: 1;
 }

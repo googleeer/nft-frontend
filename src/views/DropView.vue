@@ -77,6 +77,8 @@ export default defineComponent({
       artistLogo: drop.value?.collection.artistLogo,
       brandLogo: drop.value?.collection.brandLogo,
       background: drop.value?.collection.background,
+      cube: drops.value.length === 1 ? drop.value?.cube : undefined,
+      canvas: drops.value.length === 1 ? drop.value?.canvas : undefined,
     }));
 
     const toActive = (id: number) => {

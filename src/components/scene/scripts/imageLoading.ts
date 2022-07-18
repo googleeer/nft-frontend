@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 export const useImageLoading = (images: string[]) => {
   const count = computed(() => images.filter((_) => _).length);
@@ -15,19 +15,9 @@ export const useImageLoading = (images: string[]) => {
       };
     });
 
-  console.time("qqq");
-
   Promise.all(images.filter((_) => _).map(asyncPreloadImage)).then(
     () => (isLoadedAllImages.value = true),
   );
-
-  // watch(loadedImagesCount, (value) => {
-  //   if (value === count.value) {
-  //     setTimeout(() => {
-  //       isLoadedAllImages.value = true;
-  //     }, 420);
-  //   }
-  // });
 
   return {
     count,

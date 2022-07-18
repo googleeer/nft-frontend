@@ -37,7 +37,7 @@ export default defineComponent({
 
         new RGBELoader()
           .setPath("./")
-          .load("venice_sunset_1k.hdr", function (texture) {
+          .load("wedar_360_2k_smallsize.hdr", function (texture) {
             let envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
             scene.background = envMap;
