@@ -79,7 +79,11 @@ export default defineComponent({
         :key="i"
       >
         <div class="perk__img">
-          <Slots :perk="perk" :slots="perk.slots.count"></Slots>
+          <Slots
+            :activated="perk.active"
+            :perk="perk"
+            :slots="perk.slots.count"
+          ></Slots>
         </div>
         <div class="perk__content">
           <h2 class="perk__content__name">{{ perk.name }}</h2>
@@ -160,6 +164,7 @@ export default defineComponent({
       max-width: 80px;
     }
   }
+
   @media screen and (max-width: 711px) {
     width: 100%;
     height: 157px;
