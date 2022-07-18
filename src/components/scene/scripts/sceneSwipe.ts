@@ -87,7 +87,7 @@ export const useSceneSwipe = (
       })`;
 
       if (Math.abs(difference.value) >= threshold.value) {
-        onSwitch(!toPrev ? "prev" : "next");
+        onSwitch(toPrev ? "prev" : "next");
         onSwipeEnd();
       }
     }

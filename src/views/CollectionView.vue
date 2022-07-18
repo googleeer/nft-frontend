@@ -35,15 +35,19 @@ export default defineComponent({
 
     const collectionStore = useCollectionsStore();
     const { collectionsButtons, collections } = storeToRefs(collectionStore);
-    if (!collections.value.length) {
-      const appState = useAppStateStore();
-      appState.setPreloaderValue(true);
-      getCollections()
-        .catch(() => {
-          router.push(ROUTES.COLLECTIONS);
-        })
-        .finally(() => appState.setPreloaderValue(false));
-    }
+    const appState = useAppStateStore();
+    appState.setPreloaderValue(true);
+
+    getCollections()
+      .then(() => {
+        console.log(collections);
+        !collection.value && router.push(ROUTES.COLLECTIONS);
+      })
+      .catch(() => {
+        router.push(ROUTES.COLLECTIONS);
+      })
+      .finally(() => appState.setPreloaderValue(false));
+
     const collection = computed(() =>
       collections.value.find(({ id }) => id === currentCollectionId.value),
     );
@@ -118,7 +122,7 @@ export default defineComponent({
         arrow="right"
       ></BackFixed>
     </SceneView>
-    <transition name="fade" mode="in-out">
+    <transition name="menuInfo">
       <MenuInfo
         v-click-outside:[300]="closeInfo"
         v-if="infoIsOpen"
@@ -184,31 +188,7 @@ export default defineComponent({
 
 .collection {
   max-height: 100vh;
-  overflow-y: auto;
   position: relative;
-  &__img--wrap {
-    width: 100%;
-    position: relative;
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: radial-gradient(
-        50% 50% at 50% 50%,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.51) 100%
-      );
-      opacity: 0.55;
-    }
-  }
-  &__img {
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    object-fit: cover;
-  }
+  overflow: hidden;
 }
 </style>
