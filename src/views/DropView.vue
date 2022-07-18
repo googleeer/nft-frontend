@@ -77,6 +77,8 @@ export default defineComponent({
       artistLogo: drop.value?.collection.artistLogo,
       brandLogo: drop.value?.collection.brandLogo,
       background: drop.value?.collection.background,
+      cube: drops.value.length === 1 ? drop.value?.cube : undefined,
+      canvas: drops.value.length === 1 ? drop.value?.canvas : undefined,
     }));
 
     const toActive = (id: number) => {
@@ -112,11 +114,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div
-    class="collection flex flex-grow-1"
-    v-if="drop"
-    :key="currentCollectionId"
-  >
+  <div class="drop flex flex-grow-1" v-if="drop">
     <SceneView
       :images="formatImages(sceneImages)"
       :buttons="dropsButtons"
@@ -181,42 +179,8 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-.collection {
+.drop {
   max-height: 100vh;
-  overflow-y: auto;
-  @media screen and (max-width: 768px) {
-    max-width: none;
-    max-height: none;
-    .back {
-      position: absolute;
-    }
-  }
-  &__img--wrap {
-    width: 100%;
-    position: relative;
-    @media screen and (max-width: 768px) {
-      display: none;
-    }
-    &::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      background: radial-gradient(
-        50% 50% at 50% 50%,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.51) 100%
-      );
-      opacity: 0.55;
-    }
-  }
-  &__img {
-    width: 100%;
-    height: 100%;
-    max-height: 100vh;
-    object-fit: cover;
-  }
+  overflow: hidden;
 }
 </style>

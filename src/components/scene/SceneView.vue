@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, PropType, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { SceneImagesProp } from "@/components/scene/sceneComponent.types";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 import {
@@ -23,7 +23,10 @@ export default defineComponent({
       type: Array as PropType<number[]>,
       required: true,
     },
-    activeId: Number,
+    activeId: {
+      type: Number,
+      required: true,
+    },
     blur: Boolean,
     sceneDirection: {
       type: String as PropType<SceneDirection>,
@@ -56,6 +59,10 @@ export default defineComponent({
       ...Object.values(defaultImages),
     ]);
 
+    const isOneCubeInCarousel = computed(
+      () => Object.values(props.allCubes).length === 1,
+    );
+
     const emitToActive = (id: number, clearDirection = true) => {
       clearDirection && (carouselDirection.value = "");
       emit("toActive", id);
@@ -76,6 +83,7 @@ export default defineComponent({
     const onSwipe = (direction: "prev" | "next") => {
       const { buttons } = props;
       const nextIdx = getIdxByDirection(direction);
+      console.log(direction);
       carouselDirection.value = direction;
       emitToActive(buttons[nextIdx], false);
     };
@@ -106,6 +114,7 @@ export default defineComponent({
       emitToActive,
       getIdByDirection,
       carouselDirection,
+      isOneCubeInCarousel,
     };
   },
 });
@@ -137,17 +146,17 @@ export default defineComponent({
         v-show="url"
       />
 
-      <transition name="test" mode="out-in">
+      <transition name="fade" mode="out-in">
         <img
           class="scene__img canvas"
           :src="allCanvas[activeId]"
           alt=""
-          v-if="allCanvas[activeId]"
+          v-if="allCanvas[activeId] && !isOneCubeInCarousel"
         />
       </transition>
       <SceneCarousel
+        v-if="!isOneCubeInCarousel"
         :all-cubes="allCubes"
-        :buttons="buttons"
         :next-id="getIdByDirection('next')"
         :prev-id="getIdByDirection('prev')"
         :active-id="activeId"
@@ -212,7 +221,7 @@ export default defineComponent({
       width: calc(100% + 20px);
       height: calc(100% + 20px);
       inset: -10px;
-      z-index: -6;
+      z-index: var(--z-index-scene-canvas);
       object-fit: cover;
       filter: url("#goovey");
     }
@@ -236,32 +245,6 @@ export default defineComponent({
 
       @media screen and (max-width: 768px) {
         top: 7%;
-      }
-
-      &.nextY {
-        transition: transform 0.4s ease-in;
-        transform-origin: top !important;
-        transform: translateX(-50%) translateY(-17px) scale(0.8) !important;
-      }
-
-      &.prevY {
-        transition: transform 0.4s ease-in;
-        transform-origin: bottom !important;
-        transform: translateX(-50%) translateY(17px) scale(0.8) !important;
-      }
-
-      &.prevX {
-        transition: all 0.7s ease;
-        transform-origin: center !important;
-        transform: translateX(0) scale(0.5) !important;
-        opacity: 0;
-      }
-
-      &.nextX {
-        transition: all 0.7s ease;
-        transform-origin: center !important;
-        transform: translateX(-100%) scale(0.5) !important;
-        opacity: 0;
       }
     }
 
@@ -324,7 +307,7 @@ export default defineComponent({
       bottom: 0;
       left: 0;
       right: 0;
-      z-index: 1;
+      z-index: var(--z-index-blackout);
       width: 100%;
       min-height: 220px;
     }
@@ -333,7 +316,7 @@ export default defineComponent({
       top: 0;
       left: 0;
       right: 0;
-      z-index: 1;
+      z-index: var(--z-index-blackout);
       width: 100%;
       min-height: 220px;
     }
@@ -351,9 +334,6 @@ export default defineComponent({
     overflow: hidden;
     z-index: 1;
     inset: 0;
-    perspective: 2000px;
-    perspective-origin: center;
-    transform-style: preserve-3d;
     user-select: none;
 
     &.loading {
