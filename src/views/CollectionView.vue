@@ -24,7 +24,7 @@ export default defineComponent({
     MenuInfo,
     CollectionDrop,
   },
-  emits: ["showInfo"],
+  emits: ["showInfo", "infoIsClose"],
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -40,7 +40,6 @@ export default defineComponent({
 
     getCollections()
       .then(() => {
-        console.log(collections);
         !collection.value && router.push(ROUTES.COLLECTIONS);
       })
       .catch(() => {
@@ -66,6 +65,7 @@ export default defineComponent({
     const closeInfo = () => {
       infoIsOpen.value = false;
     };
+
     const properties = computed(() =>
       (["brand", "artist"] as (keyof CollectionWithDrops)[]).map((key) => ({
         title: t(`collection.${key}`),
@@ -124,6 +124,7 @@ export default defineComponent({
     </SceneView>
     <transition name="menuInfo">
       <MenuInfo
+        @infoIsClose="infoIsOpen = false"
         v-click-outside:[300]="closeInfo"
         v-if="infoIsOpen"
         :properties="properties"

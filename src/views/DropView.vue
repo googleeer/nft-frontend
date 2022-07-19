@@ -20,6 +20,7 @@ import SceneTextContent from "@/components/scene/SceneTextContent.vue";
 export default defineComponent({
   name: "DropView",
   components: { SceneTextContent, SceneView, MenuInfo, DropPerks, BackFixed },
+  emits: ["infoIsClose"],
   setup() {
     const router = useRouter();
     const route = useRoute();
@@ -165,6 +166,7 @@ export default defineComponent({
     </SceneView>
     <transition name="fade" mode="in-out">
       <MenuInfo
+        @infoIsClose="infoIsOpen = false"
         v-click-outside:[300]="closeInfo"
         v-if="infoIsOpen"
         :properties="properties"

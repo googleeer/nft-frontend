@@ -6,7 +6,7 @@ import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
 import { useAppStateStore } from "@/store/appState.store";
 import { getLocalisingByKey } from "@/utils/localise";
-
+import BackFixed from "@/components/collections/BackFixed.vue";
 export default defineComponent({
   name: "MenuInfo",
   props: {
@@ -16,7 +16,7 @@ export default defineComponent({
     titleLastSection: String,
     route: Object,
   },
-  components: { CollectionProperties },
+  components: { CollectionProperties, BackFixed },
   setup() {
     const { t, locale } = useI18n();
     const appState = useAppStateStore();
@@ -30,6 +30,10 @@ export default defineComponent({
 
 <template>
   <div class="info flex flex-grow-1 direction-column" v-if="item">
+    <BackFixed
+      :infoIsOpen="true"
+      @click="$emit('infoIsClose', false)"
+    ></BackFixed>
     <div class="info__info flex align-center">
       <div>
         <div class="info__info__content">
