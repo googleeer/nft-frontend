@@ -13,9 +13,10 @@ import { getLocalisingByKey } from "@/utils/localise";
 import { useI18n } from "vue-i18n";
 import CountDown from "@/components/timer/CountDown.vue";
 import SlotsBig from "@/components/perks/SlotsBig.vue";
+import AnimationActive from "@/components/perks/AnimationActive.vue";
 export default defineComponent({
   name: "PerkView",
-  components: { BaseButton, CountDown, SlotsBig },
+  components: { BaseButton, CountDown, SlotsBig, AnimationActive },
   emits: ["auctionInactive"],
   setup() {
     const appStore = useAppStateStore();
@@ -90,6 +91,7 @@ export default defineComponent({
 
 <template>
   <div class="wrapper" v-if="perk">
+    <AnimationActive></AnimationActive>
     <div class="perk flex align-center justify-between">
       <div
         class="flex direction-column perk__left"
