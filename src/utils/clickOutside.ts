@@ -6,7 +6,6 @@ interface Element extends HTMLElement {
 
 export const clickOutside = {
   beforeMount: (el: Element, binding: DirectiveBinding) => {
-    console.log(el);
     el.clickOutsideEvent = (event: MouseEvent) => {
       if (!(el === event.target || el.contains(event.target as Node))) {
         binding.value();
