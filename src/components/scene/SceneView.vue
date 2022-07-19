@@ -155,7 +155,7 @@ export default defineComponent({
         />
       </transition>
       <SceneCarousel
-        v-if="!isOneCubeInCarousel"
+        v-if="!isOneCubeInCarousel && Object.values(allCubes).length"
         :all-cubes="allCubes"
         :next-id="getIdByDirection('next')"
         :prev-id="getIdByDirection('prev')"
