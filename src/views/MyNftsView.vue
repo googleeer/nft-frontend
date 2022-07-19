@@ -20,6 +20,7 @@ export default defineComponent({
     getMintedDrops()
       .then((data) => {
         nfts.value = data;
+        console.log(data);
       })
       .catch(() => {
         router.push(ROUTES.COLLECTIONS.name);

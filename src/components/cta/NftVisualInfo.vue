@@ -43,9 +43,10 @@ export default defineComponent({
         class="nft__link__img"
         :src="preview || require('@/assets/images/mynft/1.png')"
       />
-      <span v-if="minted" class="nft__link--minted flex flexCenter">{{
-        minted
-      }}</span>
+      <div v-if="minted" class="minted flex align-center">
+        <span class="nft__link--minted flex flexCenter">{{ minted }}</span>
+        <span class="nft__link--text">{{ t("mynfts.minted") }}</span>
+      </div>
       <div v-if="perks" class="nft__link--perks flex">
         <div
           class="nft__link--perks__wrap"
@@ -74,6 +75,16 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.minted {
+  position: absolute;
+  width: 100%;
+  left: 23px;
+  top: 23px;
+  @media screen and (max-width: 771px) {
+    left: 12px;
+    top: 12px;
+  }
+}
 .nft__link {
   text-decoration: none;
   color: var(--color-white);
@@ -152,12 +163,18 @@ export default defineComponent({
       }
     }
   }
+  &--text {
+    padding-left: 14px;
+    font-size: 18px;
+    line-height: 18px;
+    @media screen and (max-width: 771px) {
+      font-size: 12px;
+      line-height: 12px;
+      padding-left: 6px;
+    }
+  }
   &--minted {
-    position: absolute;
     pointer-events: none;
-    bottom: -41px;
-    left: 38px;
-    transform: translateY(-50%);
     width: 54px;
     height: 54px;
     background-image: url("~@/assets/images/nftCount.png");
@@ -181,6 +198,7 @@ export default defineComponent({
     height: 322px;
     border-radius: 42px;
     z-index: 1;
+    opacity: 0.8;
     @media screen and (max-width: 771px) {
       max-width: 160px;
       height: 156px;
