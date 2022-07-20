@@ -102,7 +102,7 @@ export const useSceneSwipe = (
       : -event["deltaX"];
     if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
     wheelStarted.value = true;
-    const deltaDirection = delta < 0 ? "prev" : "next";
+    const deltaDirection = delta > 0 ? "prev" : "next";
     wheelDirection.value = deltaDirection + direction;
     setTimeout(() => {
       onSwitch(deltaDirection);

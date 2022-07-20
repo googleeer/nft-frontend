@@ -24,9 +24,9 @@ export default defineComponent({
     <transition :name="direction === 'prev' ? 'leftPrev' : 'leftNext'">
       <img
         class="carousel__item left"
-        :key="prevId"
-        :src="allCubes[prevId]"
-        :alt="prevId"
+        :key="nextId"
+        :src="allCubes[nextId]"
+        :alt="nextId"
       />
     </transition>
     <transition :name="direction === 'prev' ? 'centerPrev' : 'centerNext'">
@@ -40,9 +40,9 @@ export default defineComponent({
     <transition :name="direction === 'prev' ? 'rightPrev' : 'rightNext'">
       <img
         class="carousel__item right"
-        :key="nextId"
-        :src="allCubes[nextId]"
-        :alt="nextId"
+        :key="prevId"
+        :src="allCubes[prevId]"
+        :alt="prevId"
       />
     </transition>
   </div>
