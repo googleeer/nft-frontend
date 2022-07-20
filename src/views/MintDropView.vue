@@ -98,9 +98,9 @@ export default defineComponent({
           :nft-model="mint.drop.nftModel.url"
           :nft-model-scene="mint.drop.nftModelScene.url"
         />
-        <div class="collection-content flex direction-column">
+        <div class="collection-content flex direction-column align-start">
           <h1 class="collection-content-name">{{ mint.drop.name }}</h1>
-          <p class="collection-content&#45;&#45;perks">Perks</p>
+          <p class="collection-content--perks">Perks</p>
           <DropPerks :perks="mint.userPerks"></DropPerks>
           <BaseButton
             v-if="mint.mintCount && visibleBtn"
@@ -142,6 +142,7 @@ export default defineComponent({
     width: 100%;
     flex-grow: 1;
     position: relative;
+    z-index: 0;
     &::before {
       content: "";
       position: absolute;
@@ -155,9 +156,9 @@ export default defineComponent({
         rgba(0, 0, 0, 0.51) 100%
       );
       opacity: 0.55;
+      pointer-events: none;
     }
     .collection-content {
-      width: 100%;
       padding-left: 59px;
       padding-bottom: 62px;
       z-index: var(--z-index-collections);
@@ -182,6 +183,7 @@ export default defineComponent({
         font-size: 82px;
         line-height: 110%;
         max-width: 600px;
+        pointer-events: none;
         @media screen and (max-width: 768px) {
           padding-top: 19px;
           font-size: 42px;
@@ -226,6 +228,7 @@ export default defineComponent({
         padding-top: 27px;
         font-size: 18px;
         line-height: 130%;
+        pointer-events: none;
         @media screen and (max-width: 768px) {
           padding-left: 20px;
         }
