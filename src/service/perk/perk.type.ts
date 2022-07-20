@@ -1,4 +1,5 @@
 import { Drop } from "@/service/drop/drop.type";
+import { CdnFile } from "@/service/commonTypes/commonTypes";
 
 export interface Perk {
   id: number;
@@ -8,6 +9,7 @@ export interface Perk {
   endingDate: string | null;
   slots: Slots;
   active: boolean;
+  image: CdnFile;
 }
 interface Slots {
   count: number;

@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+import { PerspectiveCamera } from "three";
 
 export default defineComponent({
   name: "ThreeView",
@@ -23,29 +24,33 @@ export default defineComponent({
     const open = ref();
 
     onMounted(() => {
-      let camera: any,
+      let camera: PerspectiveCamera,
         scene: any,
         renderer: any,
         mixer: any,
         clock: any,
-        controls: any;
+        controls: OrbitControls;
       init();
       animate();
 
       function init() {
         camera = new THREE.PerspectiveCamera(
-          15,
+          40,
           window.innerWidth / window.innerHeight,
           0.1,
           20,
         );
-        camera.position.set(-2.1, 0.6, 3.7);
+        camera.position.set(
+          0.0028091313521602023,
+          0.11605276630822155,
+          0.7428539023616042,
+        );
 
         scene = new THREE.Scene();
 
         clock = new THREE.Clock();
 
-        new RGBELoader().load(props.nftModelScene, function (texture) {
+        new RGBELoader().load(props.nftModel, function (texture) {
           let envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
           scene.background = envMap;
@@ -159,7 +164,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div ref="containerRef"></div>
+  <div class="threeViewer" ref="containerRef"></div>
   <div class="test">
     <button @click="open">open</button>
     <button @click="close">close</button>
@@ -167,6 +172,11 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.threeViewer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
 .test {
   position: fixed;
   right: 0;
