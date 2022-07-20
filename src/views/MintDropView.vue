@@ -13,9 +13,10 @@ import { storeToRefs } from "pinia";
 import { getMint, postMint } from "@/service/mint/mint.service";
 import router from "@/router";
 import { Mint } from "@/service/mint/mint.type";
+import ThreeView from "@/components/3d/ThreeView.vue";
 export default defineComponent({
   name: "CollectionsView",
-  components: { BackFixed, BaseButton, DropPerks, SucceedMint },
+  components: { ThreeView, BackFixed, BaseButton, DropPerks, SucceedMint },
   setup() {
     const { t } = useI18n();
     const currentCollectionId =
@@ -92,7 +93,11 @@ export default defineComponent({
     ></BackFixed>
     <div class="flex flex-grow-1">
       <div class="content flex align-end">
-        <img :src="require(`@/assets/images/mint.png`)" class="bg" />
+        <ThreeView
+          v-if="mint.drop.nftModel?.url && mint.drop.nftModelScene?.url"
+          :nft-model="mint.drop.nftModel.url"
+          :nft-model-scene="mint.drop.nftModelScene.url"
+        />
         <div class="collection-content flex direction-column">
           <h1 class="collection-content-name">{{ mint.drop.name }}</h1>
           <p class="collection-content&#45;&#45;perks">Perks</p>
@@ -150,12 +155,6 @@ export default defineComponent({
         rgba(0, 0, 0, 0.51) 100%
       );
       opacity: 0.55;
-    }
-    .bg {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      object-fit: cover;
     }
     .collection-content {
       width: 100%;
