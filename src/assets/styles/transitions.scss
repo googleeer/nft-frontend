@@ -47,17 +47,18 @@
 }
 
 .rightNext-leave-active,
-.rightPrev-leave-active,
-.leftNext-leave-active,
+//.rightPrev-leave-active,
+//.leftNext-leave-active,
 .leftPrev-leave-active,
-.centerPrev-leave-active,
-.centerNext-leave-active {
+//.centerPrev-leave-active,
+//.centerNext-leave-active
+  {
   transition: all 0.75s;
 }
 
 .centerNext-enter-from {
   opacity: 0;
-  transform: translateX(-75%) scale(0.8) !important;
+  transform: translateX(-100%) scale(0.8) !important;
 }
 .centerNext-enter-to, .centerNext-leave-from {
   opacity: 1;
@@ -65,13 +66,13 @@
 }
 .centerNext-leave-to {
   opacity: 0;
-  transform: translateX(-25%) scale(0.8) !important;
+  transform: translateX(0%) scale(0.8) !important;
 }
 
 // center prev
 .centerPrev-enter-from {
   opacity: 0;
-  transform: translateX(-25%) scale(0.8) !important;
+  transform: translateX(0) scale(0.8) !important;
 }
 .centerPrev-enter-to, .centerPrev-leave-from {
   opacity: 1;
@@ -79,7 +80,7 @@
 }
 .centerPrev-leave-to {
   opacity: 0;
-  transform: translateX(-75%) scale(0.8) !important;
+  transform: translateX(-100%) scale(0.8) !important;
 }
 
 // left prev
