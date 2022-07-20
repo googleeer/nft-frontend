@@ -132,7 +132,7 @@ export default defineComponent({
     top: 42px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: var(--z-index-header-logo);
+    z-index: var(--z-idx-header-items);
 
     @media screen and (max-width: 768px) {
       width: 129px;
@@ -169,7 +169,7 @@ export default defineComponent({
       right: 56px;
       top: 28px;
       @media screen and (min-width: 768px) {
-        z-index: var(--z-index-header-logo);
+        z-index: var(--z-idx-header-items);
       }
 
       @media screen and (max-width: 768px) {
