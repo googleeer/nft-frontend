@@ -34,6 +34,7 @@ export default defineComponent({
     getPerk(currentPerkId)
       .then((data) => {
         perk.value = data;
+        console.log(data);
       })
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
@@ -91,7 +92,7 @@ export default defineComponent({
 
 <template>
   <div class="wrapper" v-if="perk">
-    <AnimationActive></AnimationActive>
+    <AnimationActive v-if="perk.active"></AnimationActive>
     <div class="perk flex align-center justify-between">
       <div
         class="flex direction-column perk__left"
@@ -374,6 +375,7 @@ export default defineComponent({
 
       &__btn {
         position: absolute;
+        z-index: 4;
         bottom: -32px;
         @media screen and (max-width: 1346px) {
           bottom: -30px;
@@ -477,6 +479,7 @@ export default defineComponent({
         margin-bottom: 35px;
         margin-left: 8px;
         margin-right: 8px;
+        z-index: 4;
       }
       &--block {
         &:not(.active) {
@@ -485,5 +488,9 @@ export default defineComponent({
       }
     }
   }
+}
+
+div ::v-deep(.layout__header) {
+  background-color: red;
 }
 </style>
