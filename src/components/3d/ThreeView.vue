@@ -6,8 +6,18 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 
 export default defineComponent({
-  name: "TestView",
-  setup() {
+  name: "ThreeView",
+  props: {
+    nftModel: {
+      type: String,
+      required: true,
+    },
+    nftModelScene: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const containerRef = ref(null);
     const close = ref();
     const open = ref();
@@ -35,73 +45,71 @@ export default defineComponent({
 
         clock = new THREE.Clock();
 
-        new RGBELoader()
-          .setPath("./")
-          .load("wedar_360_2k_smallsize.hdr", function (texture) {
-            let envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        new RGBELoader().load(props.nftModelScene, function (texture) {
+          let envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
-            scene.background = envMap;
-            scene.environment = envMap;
+          scene.background = envMap;
+          scene.environment = envMap;
 
-            texture.dispose();
-            pmremGenerator.dispose();
+          texture.dispose();
+          pmremGenerator.dispose();
 
-            let loader = new GLTFLoader();
-            loader.setPath("./").load("Flower 3_5g_Alien.glb", function (gltf) {
-              scene.add(gltf.scene);
+          let loader = new GLTFLoader();
+          loader.load(props.nftModel, function (gltf) {
+            scene.add(gltf.scene);
 
-              const obj = gltf.scene;
+            const obj = gltf.scene;
 
-              const box = new THREE.Box3().setFromObject(obj);
-              const center = box.getCenter(new THREE.Vector3());
+            const box = new THREE.Box3().setFromObject(obj);
+            const center = box.getCenter(new THREE.Vector3());
 
-              controls.target.copy(center);
+            controls.target.copy(center);
 
-              controls.target.y -= 0.05;
-              controls.update();
+            controls.target.y -= 0.05;
+            controls.update();
 
-              const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+            const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
 
-              controls.minDistance = boundingSphere.radius * 5;
+            controls.minDistance = boundingSphere.radius * 5;
 
-              mixer = new THREE.AnimationMixer(gltf.scene);
+            mixer = new THREE.AnimationMixer(gltf.scene);
 
-              gltf.animations.forEach((clip) => {
-                const anim = mixer.clipAction(clip);
+            gltf.animations.forEach((clip) => {
+              const anim = mixer.clipAction(clip);
 
-                open.value = () => {
-                  anim.reset();
-                  anim.clampWhenFinished = true;
-                  anim.loop = THREE.LoopOnce;
-                  anim.paused = false;
-                  anim.play();
+              open.value = () => {
+                anim.reset();
+                anim.clampWhenFinished = true;
+                anim.loop = THREE.LoopOnce;
+                anim.paused = false;
+                anim.play();
 
-                  setTimeout(() => {
-                    anim.paused = true;
-                  }, 2300);
-                };
+                setTimeout(() => {
+                  anim.paused = true;
+                }, 2300);
+              };
 
-                close.value = () => {
-                  // anim.reset();
-                  anim.paused = false;
-                  // anim.play();
-                  // anim.clampWhenFinished = true;
-                  // anim.loop = THREE.LoopOnce;
-                  // mixer.update(
-                  //   -mixer.time + clip.duration - (clip.duration - 2.3),
-                  // );
-                };
+              close.value = () => {
+                // anim.reset();
+                anim.paused = false;
+                // anim.play();
+                // anim.clampWhenFinished = true;
+                // anim.loop = THREE.LoopOnce;
+                // mixer.update(
+                //   -mixer.time + clip.duration - (clip.duration - 2.3),
+                // );
+              };
 
-                // close();
-                //
-                // setTimeout(() => {
-                //   open();
-                // }, 5000);
+              // close();
+              //
+              // setTimeout(() => {
+              //   open();
+              // }, 5000);
 
-                // anim.paused = true;
-              });
+              // anim.paused = true;
             });
           });
+        });
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);

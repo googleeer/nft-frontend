@@ -1,3 +1,5 @@
+import { CdnFile } from "@/service/commonTypes/commonTypes";
+
 export interface Mint {
   mintCount: number;
   drop: Drop;
@@ -5,4 +7,7 @@ export interface Mint {
 interface Drop {
   name: string;
   id: number;
+  animationDuration: string;
+  nftModel: CdnFile;
+  nftModelScene: CdnFile;
 }
