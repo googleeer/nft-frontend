@@ -69,7 +69,17 @@ export default defineComponent({
     position: absolute;
   }
 
-  $colors: (#d13447, #ffbf00, #263672);
+  $colors: (
+    linear-gradient(
+      89.99deg,
+      #fcfff9 9.64%,
+      #e9eef7 44.04%,
+      #d5e7f0 61.4%,
+      #c1d8ef 95.53%
+    ),
+    #ffbf00,
+    #263672
+  );
 
   @for $i from 1 through 35 {
     $w: random(40);
@@ -77,7 +87,7 @@ export default defineComponent({
     .confettia-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -113,7 +123,7 @@ export default defineComponent({
     .confettib-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -149,7 +159,7 @@ export default defineComponent({
     .confettic-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -185,7 +195,7 @@ export default defineComponent({
     .confettid-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -222,7 +232,7 @@ export default defineComponent({
     .confettie-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -259,7 +269,7 @@ export default defineComponent({
     .confettif-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -295,7 +305,7 @@ export default defineComponent({
     .confettih-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
@@ -331,7 +341,7 @@ export default defineComponent({
     .confettig-#{$i} {
       width: #{$w}px;
       height: #{$w * 0.4}px;
-      background-color: nth($colors, random(3));
+      background: nth($colors, random(3));
       top: 110%;
       left: unquote($l + "%");
       opacity: random() + 0.5;
