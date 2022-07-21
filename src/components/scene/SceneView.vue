@@ -185,7 +185,7 @@ export default defineComponent({
           <feDisplacementMap
             xChannelSelector="R"
             yChannelSelector="G"
-            scale="6"
+            scale="12"
             in="SourceGraphic"
           ></feDisplacementMap>
         </filter>
