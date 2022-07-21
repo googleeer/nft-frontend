@@ -23,7 +23,7 @@ export const getMintedDrops = async (): Promise<Drop[]> => {
 
 export const getMintedDropsCount = async (): Promise<void> => {
   try {
-    const res = await instance.get("/nft-drop/minted/count");
+    const res = await instance.get("/nft-drop/available-for-mint");
     const userStore = useUserStore();
     userStore.setUserNftCount(res.data.count);
   } catch (e) {
