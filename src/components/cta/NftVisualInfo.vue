@@ -14,7 +14,7 @@ export default defineComponent({
     drop: Object,
     to: Object,
     preview: String,
-    minted: Number,
+    minted: Object,
     perks: Object,
   },
   setup() {
@@ -43,9 +43,11 @@ export default defineComponent({
         class="nft__link__img"
         :src="preview || require('@/assets/images/mynft/1.png')"
       />
-      <div v-if="minted" class="minted flex align-center">
-        <span class="nft__link--minted flex flexCenter">{{ minted }}</span>
-        <span class="nft__link--text">{{ t("mynfts.minted") }}</span>
+      <div v-if="minted.minted" class="minted flex align-center">
+        <span class="nft__link--minted flex flexCenter">{{
+          minted.minted
+        }}</span>
+        <span class="nft__link--text">{{ minted.text }}</span>
       </div>
       <div v-if="perks" class="nft__link--perks flex">
         <div
