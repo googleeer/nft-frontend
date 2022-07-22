@@ -19,6 +19,7 @@ export default defineComponent({
   components: { BaseButton, CountDown, SlotsBig, AnimationActive },
   emits: ["auctionInactive"],
   setup() {
+    const needCountOfDrops = 5;
     const appStore = useAppStateStore();
     const { locale, t } = useI18n();
     const { isMobile } = storeToRefs(appStore);
@@ -72,6 +73,8 @@ export default defineComponent({
     });
     const localisingDesc = getLocalisingByKey<Perk>(locale);
     return {
+      t,
+      needCountOfDrops,
       tab,
       currentIndex,
       isMobile,
@@ -160,7 +163,10 @@ export default defineComponent({
           >
             <div
               class="perk__nfts__need--block flex"
-              :class="{ active: nft.canBeUsed }"
+              :class="[
+                { active: !nft.hasMint && nft.canBeUsed },
+                { hasMint: nft.hasMint },
+              ]"
             >
               <img
                 class="perk__nfts__need--img"
@@ -169,8 +175,25 @@ export default defineComponent({
                   require('../assets/images/perks/nft1.png')
                 "
               />
+              <span
+                class="perk__nfts__need--mint flex flexCenter"
+                v-if="nft.hasMint"
+                >{{ t("perk.mint") }}
+              </span>
             </div>
           </router-link>
+
+          <div
+            class="perk__nfts__need--plug"
+            v-for="drop of needCountOfDrops - perk.drops.length"
+            :key="drop.id"
+            :class="{ none: perk.drops.length === needCountOfDrops }"
+          >
+            <img
+              class="perk__nfts__need--img"
+              :src="require('../assets/images/noDrop.png')"
+            />
+          </div>
         </div>
       </div>
       <CountDown
@@ -183,6 +206,9 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.none {
+  display: none;
+}
 .disabled {
   pointer-events: none;
 }
@@ -252,6 +278,9 @@ export default defineComponent({
       background-position: center;
       text-align: center;
       color: var(--color-black);
+      @media screen and (max-width: 768px) {
+        font-size: 18px;
+      }
     }
     &__time {
       width: 100%;
@@ -429,6 +458,9 @@ export default defineComponent({
       &--img {
         width: 100px;
         border-radius: 24px;
+        @media screen and (max-width: 768px) {
+          max-width: 74px;
+        }
       }
 
       @media screen and (max-width: 1346px) {
@@ -461,6 +493,41 @@ export default defineComponent({
         );
         border-radius: 2px;
       }
+      .hasMint {
+        position: relative;
+        &::before {
+          position: absolute;
+          content: "";
+          background-image: url("~@/assets/images/bgMint.png");
+          background-repeat: no-repeat;
+          background-size: contain;
+          bottom: -18px;
+          right: calc(50% - 41px);
+          width: 100%;
+          max-width: 82px;
+          height: 36px;
+          @media screen and (max-width: 768px) {
+            max-width: 74px;
+            right: calc(50% - 37px);
+          }
+        }
+        .perk__nfts__need--mint {
+          position: absolute;
+          bottom: -20px;
+          right: calc(50% - 41px);
+          width: 100%;
+          max-width: 82px;
+          height: 36px;
+          color: var(--color-black);
+          font-weight: 600;
+          font-size: 16px;
+          line-height: 16px;
+          @media screen and (max-width: 768px) {
+            max-width: 74px;
+            right: calc(50% - 37px);
+          }
+        }
+      }
       .active {
         position: relative;
 
@@ -473,17 +540,25 @@ export default defineComponent({
           width: 100%;
           max-width: 36px;
           height: 36px;
+          background-size: contain;
+          background-repeat: no-repeat;
+          @media screen and (max-width: 768px) {
+            max-width: 24px;
+            width: calc(50% - 12px);
+            right: calc(50% - 12px);
+          }
         }
       }
-      &--link {
+      &--link,
+      &--plug {
         margin-bottom: 35px;
         margin-left: 8px;
         margin-right: 8px;
         z-index: 3;
       }
-      &--block {
-        &:not(.active) {
-          opacity: 0.64;
+      &--plug {
+        @media screen and (max-width: 768px) {
+          max-width: 74px;
         }
       }
     }
