@@ -67,7 +67,8 @@
   "perk": {
     "perks": "Perks",
     "count":"Need {need} out of {length} NFTs",
-    "success": "NFTs collected successfully"
+    "success": "NFTs collected successfully",
+    "mint": "Mint"
   },
   "collection": {
     "open": "Open Collection",
