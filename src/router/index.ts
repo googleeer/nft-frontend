@@ -11,6 +11,7 @@ declare module "vue-router" {
     layout?: string;
     bgRightHeader?: boolean;
     bgAllHeader?: boolean;
+    headerIndex?: boolean;
   }
 }
 
@@ -103,6 +104,7 @@ const routes: Array<RouteRecordRaw> = [
       isAuth: true,
       layout: "base",
       bgAllHeader: true,
+      headerIndex: true,
     },
   },
   {

@@ -37,6 +37,9 @@ export default defineComponent({
     const bgAllHeader = computed(
       () => useRouter().currentRoute.value.meta.bgAllHeader,
     );
+    const headerIndex = computed(
+      () => useRouter().currentRoute.value.meta.bgAllHeader,
+    );
     watch(
       () => route.name,
       () => {
@@ -54,6 +57,7 @@ export default defineComponent({
       ROUTES,
       bgRightHeader,
       bgAllHeader,
+      headerIndex,
     };
   },
 });
@@ -71,14 +75,17 @@ export default defineComponent({
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
       <span class="layout__empty"></span>
-      <router-link :to="{ name: ROUTES.COLLECTIONS.name }">
+      <router-link
+        :to="{ name: ROUTES.COLLECTIONS.name }"
+        :class="{ headerIndex }"
+      >
         <img
           src="../assets/images/weedar.png"
           :alt="t('logo')"
           class="layout__logo"
         />
       </router-link>
-      <div class="flex layout__header__right">
+      <div class="flex layout__header__right" :class="{ headerIndex }">
         <LocaleSwitcher v-if="!isMobile || (isMobile && isOpenMenu)" />
         <UserAvatar
           class="avatar"
@@ -132,7 +139,7 @@ export default defineComponent({
     top: 42px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: var(--z-idx-header-items);
+    z-index: var(--z-index-header-logo);
 
     @media screen and (max-width: 768px) {
       width: 129px;
@@ -169,11 +176,16 @@ export default defineComponent({
       right: 56px;
       top: 28px;
       @media screen and (min-width: 768px) {
-        z-index: var(--z-idx-header-items);
+        z-index: var(--z-index-header-logo);
       }
 
       @media screen and (max-width: 768px) {
         position: static;
+      }
+    }
+    .headerIndex {
+      @media screen and (min-width: 768px) {
+        z-index: 6;
       }
     }
   }

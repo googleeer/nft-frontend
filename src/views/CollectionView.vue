@@ -135,6 +135,7 @@ export default defineComponent({
         <div class="drops">
           <template v-for="drop of collection.drops" :key="drop.id">
             <CollectionDrop
+              :minted="{ minted: drop.mintCount, text: t('mynfts.readymint') }"
               :collectionId="collection.id"
               :drop="drop"
             ></CollectionDrop>
