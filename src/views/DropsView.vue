@@ -42,7 +42,7 @@ export default defineComponent({
           :perks="drop.perks"
           :title="drop.name"
           :desc="drop.collection.name"
-          :preview="drop.nftPreview?.url"
+          :preview="drop.dropPreview?.url"
           :to="{
             name: ROUTES.DROP.name,
             params: { id: drop.id, collectionId: drop.collection.id },

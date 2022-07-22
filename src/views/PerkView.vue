@@ -92,7 +92,7 @@ export default defineComponent({
 
 <template>
   <div class="wrapper" v-if="perk">
-    <AnimationActive v-if="perk.active"></AnimationActive>
+    <AnimationActive></AnimationActive>
     <div class="perk flex align-center justify-between">
       <div
         class="flex direction-column perk__left"
@@ -375,7 +375,7 @@ export default defineComponent({
 
       &__btn {
         position: absolute;
-        z-index: 4;
+        z-index: 3;
         bottom: -32px;
         @media screen and (max-width: 1346px) {
           bottom: -30px;
@@ -479,7 +479,7 @@ export default defineComponent({
         margin-bottom: 35px;
         margin-left: 8px;
         margin-right: 8px;
-        z-index: 4;
+        z-index: 3;
       }
       &--block {
         &:not(.active) {
