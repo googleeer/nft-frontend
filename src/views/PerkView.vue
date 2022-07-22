@@ -92,7 +92,7 @@ export default defineComponent({
 
 <template>
   <div class="wrapper" v-if="perk">
-    <AnimationActive></AnimationActive>
+    <AnimationActive v-if="perk.active"></AnimationActive>
     <div class="perk flex align-center justify-between">
       <div
         class="flex direction-column perk__left"
