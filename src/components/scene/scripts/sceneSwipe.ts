@@ -100,7 +100,7 @@ export const useSceneSwipe = (
     const delta = Math.abs(event["deltaY"])
       ? event["deltaY"]
       : -event["deltaX"];
-    if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
+    if (wheelStarted.value || startPosition.value) return;
     console.count("counter =>");
     console.log({
       delta,
