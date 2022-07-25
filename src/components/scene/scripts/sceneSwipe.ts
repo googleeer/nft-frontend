@@ -97,17 +97,19 @@ export const useSceneSwipe = (
   const wheelDirection = ref("");
 
   const onWheel = (event: WheelEvent) => {
-    console.log("onWheel event", event);
     const delta = Math.abs(event["deltaY"])
       ? event["deltaY"]
       : -event["deltaX"];
+    if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
+    console.count("counter =>");
     console.log({
       delta,
       startPosition: startPosition.value,
       wheelStarted: wheelStarted.value,
       match: !Math.abs(delta),
+      deltaY: event.deltaY,
+      deltaX: event.deltaX,
     });
-    if (wheelStarted.value || startPosition.value || !Math.abs(delta)) return;
     wheelStarted.value = true;
     const deltaDirection = delta > 0 ? "prev" : "next";
     wheelDirection.value = deltaDirection + direction;
