@@ -50,7 +50,8 @@ export default defineComponent({
 
         clock = new THREE.Clock();
 
-        new RGBELoader().load(props.nftModel, function (texture) {
+        new RGBELoader().load(props.nftModelScene, function (texture) {
+          console.log("nftModelScene", texture);
           let envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
           scene.background = envMap;
@@ -61,6 +62,7 @@ export default defineComponent({
 
           let loader = new GLTFLoader();
           loader.load(props.nftModel, function (gltf) {
+            console.log("nftModel", gltf);
             scene.add(gltf.scene);
 
             const obj = gltf.scene;
