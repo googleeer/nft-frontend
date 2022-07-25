@@ -83,7 +83,6 @@ export default defineComponent({
     const onSwipe = (direction: "prev" | "next") => {
       const { buttons } = props;
       const nextIdx = getIdxByDirection(direction);
-      console.log(direction);
       carouselDirection.value = direction;
       emitToActive(buttons[nextIdx], false);
     };
