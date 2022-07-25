@@ -8,6 +8,8 @@ import { clickOutside } from "@/utils/clickOutside";
 const pinia = createPinia();
 pinia.use(resetStorePlugin);
 
+import "./utils/prost";
+
 createApp(App)
   .use(router)
   .use(pinia)
