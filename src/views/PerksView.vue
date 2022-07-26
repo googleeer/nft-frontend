@@ -53,7 +53,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper flex direction-column justify-center align-center">
+  <div class="wrapper flex direction-column justify-center">
     <ul class="filter flex">
       <li
         class="filter__item"
@@ -65,17 +65,13 @@ export default defineComponent({
         {{ rule }}
       </li>
     </ul>
-    <div
-      class="perks flex justify-center"
-      :class="{ 'align-center': !isMobile }"
-      v-if="perks"
-    >
+    <div class="perks flex justify-center" v-if="perks">
       <RouterLink
         :to="{
           name: ROUTES.PERK.name,
           params: { id: perk.id },
         }"
-        class="perk"
+        class="perk flex direction-column"
         v-for="(perk, i) of filteredData()"
         :key="i"
       >
@@ -101,9 +97,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .filter {
   padding-bottom: 60px;
-  @media screen and (max-width: 768px) {
-    margin: 0 auto;
-  }
+  margin: 0 auto;
   &__item {
     font-family: CoreSansC, sans-serif;
     font-style: normal;
@@ -142,81 +136,91 @@ export default defineComponent({
 }
 .perks {
   width: 100%;
-  //justify-content: space-between;
   flex-wrap: wrap;
   @media screen and (max-width: 1280px) {
     justify-content: center;
   }
 }
 .perk {
-  box-sizing: content-box;
-  width: 290px;
-  height: calc(376px - 182px);
   position: relative;
+  width: 100%;
+  max-width: 290px;
   text-decoration: none;
   color: var(--color-white);
-  z-index: 0;
   margin: 50px 33px;
-  ::v-deep(.slots) > img {
-    width: 150px;
-    max-height: 150px;
-    @media screen and (max-width: 768px) {
-      max-height: 80px;
-      max-width: 80px;
-    }
+
+  @media screen and (max-width: 768px) {
+    margin: 25px 10px;
   }
 
-  @media screen and (max-width: 711px) {
-    width: 100%;
-    height: 157px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: flex-end;
-    max-width: 375px;
-    ::v-deep(svg) {
-      width: 157px;
-      height: 157px;
-    }
-    ::v-deep(img) {
-      width: 100px;
-    }
-    .perk__img {
-      width: 100%;
-      max-width: 157px;
-      height: auto;
-      &__icon {
-        width: 100%;
-        max-width: 157px;
-        ::v-deep(path) {
-          stroke-opacity: 1;
-        }
+  &__img {
+    height: 290px;
+  }
+
+  &:nth-child(even) {
+    flex-direction: column-reverse;
+
+    .perk__content {
+      padding-top: 28px;
+      padding-bottom: 37px;
+      border-radius: 15px 15px 0px 0px;
+      @media screen and (max-width: 400px) {
+        padding-right: 25px;
+      }
+
+      &::before {
+        top: auto;
+        bottom: -145px;
       }
     }
   }
+
+  &:nth-child(odd) {
+    .perk__content {
+      padding-top: 37px;
+      padding-bottom: 28px;
+    }
+  }
+
+  ::v-deep(.slots) {
+    z-index: 1;
+    height: 290px;
+
+    .img {
+      width: 150px;
+      max-height: 150px;
+    }
+  }
+
   &__content {
-    width: 100%;
-    max-width: 240px;
+    max-width: 280px;
+    margin: 0 auto;
+    z-index: 0;
     position: relative;
+    height: 100%;
+    background: radial-gradient(
+      113.12% 113.12% at 50.52% 50.52%,
+      #292929 0%,
+      #000000 100%
+    );
+    padding-bottom: 10px;
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
     display: inline-block;
     padding-left: 34px;
-    @media screen and (max-width: 711px) {
-      display: inline-block;
-      max-width: 180px;
-      padding-left: 0;
-    }
+    padding-right: 34px;
+
     &__name {
       position: relative;
       font-weight: 800;
       font-size: 32px;
       line-height: 110%;
-      @media screen and (max-width: 768px) {
-        display: inline;
-      }
+      display: inline-block;
+
       &::after {
         position: absolute;
         content: "";
         width: 100%;
-        //max-width: 145px;
         height: 2px;
         background: linear-gradient(
           307.82deg,
@@ -230,6 +234,7 @@ export default defineComponent({
         left: 0;
       }
     }
+
     &__desc {
       font-weight: 500;
       padding-top: 27px;
@@ -237,6 +242,7 @@ export default defineComponent({
       line-height: 18px;
       font-family: Avenir, sans-serif;
       padding-bottom: 10px;
+
       ::v-deep(u) {
         font-weight: 800;
         font-size: 20px;
@@ -251,14 +257,8 @@ export default defineComponent({
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-
-        @media screen and (max-width: 711px) {
-          font-size: 18px;
-        }
-        @media screen and (max-width: 400px) {
-          font-size: 16px;
-        }
       }
+
       @media screen and (max-width: 711px) {
         font-size: 16px;
         padding-top: 17px;
@@ -266,109 +266,21 @@ export default defineComponent({
       }
     }
   }
-  &:after {
+
+  &__content::before {
+    position: absolute;
     content: "";
-    border-radius: 15px;
+    width: 100%;
+    height: 145px;
+    z-index: -1;
+    top: -145px;
     background: radial-gradient(
       113.12% 113.12% at 50.52% 50.52%,
       #292929 0%,
       #000000 100%
     );
-    position: absolute;
-    z-index: -1;
+    background-size: 100%;
     left: 0;
-    right: 0;
-  }
-
-  &:nth-child(odd) {
-    padding-top: 290px;
-    @media screen and (max-width: 711px) {
-      margin: 7px 0 7px 10px;
-      padding: 23px 28px 23px 0px;
-    }
-    @media screen and (max-width: 374px) {
-      padding: 23px 10px 23px 0px;
-    }
-    @media screen and (max-width: 711px) {
-      .perk__content {
-        margin: 0 0 0 165px;
-      }
-    }
-    .perk__content__name {
-      padding-top: 28px;
-      display: inline-block;
-      @media screen and (max-width: 711px) {
-        padding-top: 0;
-        font-size: 24px;
-      }
-    }
-    &:after {
-      top: 145px;
-      bottom: 0;
-      @media screen and (max-width: 711px) {
-        left: 80px;
-        top: 0;
-      }
-    }
-
-    .perk__img {
-      top: 0;
-      @media screen and (max-width: 711px) {
-        bottom: 0;
-        top: auto;
-      }
-    }
-  }
-
-  &:nth-child(even) {
-    padding-bottom: 290px;
-    @media screen and (max-width: 711px) {
-      display: flex;
-      justify-content: flex-start;
-      margin: 7px 10px 7px 0;
-      padding: 33px 0 33px 28px;
-    }
-    @media screen and (max-width: 374px) {
-      padding: 33px 0 33px 10px;
-    }
-    .perk__content__name {
-      padding-top: 34px;
-      display: inline-block;
-      @media screen and (max-width: 711px) {
-        padding-top: 0;
-        font-size: 24px;
-      }
-    }
-    @media screen and (max-width: 711px) {
-      .perk__content {
-        margin-right: 165px;
-      }
-    }
-    &:after {
-      top: 0;
-      bottom: 145px;
-      @media screen and (max-width: 711px) {
-        right: 80px;
-        bottom: 0;
-      }
-    }
-
-    .perk__img {
-      bottom: 0;
-      @media screen and (max-width: 711px) {
-        right: 0;
-        left: auto;
-      }
-    }
-  }
-
-  &__img {
-    width: 290px;
-    height: 290px;
-    border-radius: 100%;
-    position: absolute;
-    left: 0;
-    right: 0;
   }
 }
 </style>
