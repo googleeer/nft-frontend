@@ -180,10 +180,6 @@ export default defineComponent({
     &--img {
       width: 290px;
       max-height: 290px;
-      @media screen and (max-width: 711px) {
-        max-height: 157px;
-        max-width: 157px;
-      }
     }
     &--bg {
       position: absolute;
@@ -194,10 +190,6 @@ export default defineComponent({
       top: 50%;
       transform: translate(-50%, -50%);
       border-radius: 100%;
-      @media screen and (max-width: 711px) {
-        max-width: 115px;
-        max-height: 115px;
-      }
     }
     &--img {
       animation: 100s linear 0s normal none infinite running rot;

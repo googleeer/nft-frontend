@@ -173,6 +173,14 @@ export default defineComponent({
         :item="drop"
         :btn-text="'redeem'"
         :title-last-section="t('perk.perks')"
+        :route="{
+          name: ROUTES.COLLECTION.name,
+          params: { id: currentCollectionId },
+        }"
+        :routeText="{
+          desktop: `${t('desktopBack')}`,
+          mob: `${t('mobileBack')}`,
+        }"
       >
         <DropPerks :perks="drop.perks"></DropPerks>
       </MenuInfo>
@@ -184,5 +192,11 @@ export default defineComponent({
 .drop {
   max-height: 100vh;
   overflow: hidden;
+
+  .back__left {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
 }
 </style>

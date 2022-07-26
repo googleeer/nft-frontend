@@ -8,9 +8,18 @@
 .fade-enter-to, .fade-leave-from {
   opacity: 1;
 }
+.perk-enter-active {
+  transition: opacity 0.3s;
 
+}
+.perk-enter-from {
+  opacity: 0;
+}
+.perk-enter-to {
+  opacity: 1;
+}
 .menuInfo-enter-active, .menuInfo-leave-active {
-  transition: transform .35s ease, opacity .4s ease;
+  transition: opacity .4s ease;
 }
 
 .menuInfo-enter-from, .menuInfo-leave-to {
@@ -21,7 +30,6 @@
 .menuInfo-enter-to, .menuInfo-leave-from {
   opacity: 1;
 }
-
 .fadeOut-enter-active {
   transition: opacity 0.3s ease;
 }
