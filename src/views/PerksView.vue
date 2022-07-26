@@ -142,57 +142,28 @@ export default defineComponent({
   }
 }
 .perk {
-  @media screen and (max-width: 768px) {
-    &:nth-child(even) {
-      margin: 7px 10px 7px 0;
-    }
-    &:nth-child(odd) {
-      margin: 7px 0 7px 10px;
-    }
-  }
-
   position: relative;
   width: 100%;
   max-width: 290px;
   text-decoration: none;
   color: var(--color-white);
   margin: 50px 33px;
+
   @media screen and (max-width: 768px) {
-    flex-direction: row;
-    max-width: none;
-    align-items: center;
+    margin: 25px 10px;
   }
 
   &__img {
     height: 290px;
-    @media screen and (max-width: 768px) {
-      height: 157px;
-      ::v-deep(.slots) {
-        svg {
-          width: 157px;
-          @media screen and (max-width: 768px) {
-            height: 157px;
-          }
-        }
-      }
-    }
   }
 
   &:nth-child(even) {
     flex-direction: column-reverse;
-    @media screen and (max-width: 768px) {
-      flex-direction: row-reverse;
-    }
 
     .perk__content {
-      padding-top: 34px;
+      padding-top: 28px;
+      padding-bottom: 37px;
       border-radius: 15px 15px 0px 0px;
-      @media screen and (max-width: 768px) {
-        border-top-right-radius: 0;
-        border-top-left-radius: 32px;
-        border-bottom-left-radius: 32px;
-        padding-left: 25px;
-      }
       @media screen and (max-width: 400px) {
         padding-right: 25px;
       }
@@ -200,14 +171,6 @@ export default defineComponent({
       &::before {
         top: auto;
         bottom: -145px;
-        @media screen and (max-width: 768px) {
-          top: 50%;
-          transform: translateY(-50%);
-          right: -76px;
-          width: 76px;
-          left: auto;
-          height: 100%;
-        }
       }
     }
   }
@@ -216,44 +179,16 @@ export default defineComponent({
     .perk__content {
       padding-top: 37px;
       padding-bottom: 28px;
-      @media screen and (max-width: 768px) {
-        border-bottom-left-radius: 0;
-        border-top-right-radius: 32px;
-        border-bottom-right-radius: 32px;
-        padding-top: 18px;
-        padding-bottom: 18px;
-        padding-left: 21px;
-      }
-      @media screen and (max-width: 400px) {
-        padding-right: 25px;
-      }
-
-      &::before {
-        @media screen and (max-width: 768px) {
-          top: 50%;
-          transform: translateY(-50%);
-          left: -76px;
-          height: 100%;
-          width: 76px;
-        }
-      }
     }
   }
 
   ::v-deep(.slots) {
     z-index: 1;
     height: 290px;
-    @media screen and (max-width: 768px) {
-      height: 157px;
-    }
 
     .img {
       width: 150px;
       max-height: 150px;
-      @media screen and (max-width: 768px) {
-        max-height: 80px;
-        max-width: 80px;
-      }
     }
   }
 
@@ -274,12 +209,6 @@ export default defineComponent({
     display: inline-block;
     padding-left: 34px;
     padding-right: 34px;
-    @media screen and (max-width: 768px) {
-      display: inline-block;
-      padding-left: 0;
-      margin: 0;
-      max-width: 320px;
-    }
 
     &__name {
       position: relative;
@@ -287,10 +216,6 @@ export default defineComponent({
       font-size: 32px;
       line-height: 110%;
       display: inline-block;
-      @media screen and (max-width: 768px) {
-        display: inline;
-        font-size: 26px;
-      }
 
       &::after {
         position: absolute;
@@ -332,13 +257,6 @@ export default defineComponent({
         );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-
-        @media screen and (max-width: 711px) {
-          font-size: 18px;
-        }
-        @media screen and (max-width: 400px) {
-          font-size: 16px;
-        }
       }
 
       @media screen and (max-width: 711px) {
