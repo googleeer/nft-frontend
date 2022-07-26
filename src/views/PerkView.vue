@@ -164,8 +164,11 @@ export default defineComponent({
             <div
               class="perk__nfts__need--block flex"
               :class="[
-                { active: !nft.hasMint && nft.canBeUsed },
-                { hasMint: nft.hasMint },
+                {
+                  active:
+                    (!nft.hasMint && nft.canBeUsed) || perk.slots.count === 5,
+                },
+                { hasMint: nft.hasMint && perk.slots.count !== 5 },
               ]"
             >
               <img
@@ -177,7 +180,7 @@ export default defineComponent({
               />
               <span
                 class="perk__nfts__need--mint flex flexCenter"
-                v-if="nft.hasMint"
+                v-if="nft.hasMint && perk.slots.count !== 5"
                 >{{ t("perk.mint") }}
               </span>
             </div>
@@ -351,7 +354,8 @@ export default defineComponent({
         max-height: 266px;
       }
       ::v-deep(.img) {
-        max-width: 150px;
+        max-width: 130px;
+        max-height: 130px;
       }
       @media screen and (max-width: 374px) {
         max-width: 320px;
