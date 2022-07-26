@@ -64,12 +64,12 @@ export default defineComponent({
             >{{ t(`menu.${link.name}`) }}
             <span class="line"></span>
           </span>
-          <!--          <span-->
-          <!--            v-if="link.name === 'myNft' && !!nftCount"-->
-          <!--            class="nftCount flex flexCenter"-->
-          <!--          >-->
-          <!--            {{ userNftCount }}-->
-          <!--          </span>-->
+          <span
+            v-if="link.name === 'drops' && !!nftCount"
+            class="nftCount flex flexCenter"
+          >
+            {{ userNftCount }}
+          </span>
         </router-link>
       </li>
     </ul>
