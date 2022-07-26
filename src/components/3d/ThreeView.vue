@@ -3,7 +3,6 @@ import { defineComponent, onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { PerspectiveCamera } from "three";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 
@@ -19,7 +18,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup() {
     const containerRef = ref(null);
     const close = ref();
     const open = ref();
