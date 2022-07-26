@@ -110,7 +110,11 @@ export default defineComponent({
         />
       </div>
       <div class="perk__content flex direction-column align-center">
-        <SlotsBig :perk="perk" :slots="perk.slots.count"></SlotsBig>
+        <SlotsBig
+          :perk="perk"
+          :slots="perk.slots.count"
+          :activated="perk.active"
+        ></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p
             class="perk__content__info__get"
@@ -164,8 +168,11 @@ export default defineComponent({
             <div
               class="perk__nfts__need--block flex"
               :class="[
-                { active: !nft.hasMint && nft.canBeUsed },
-                { hasMint: nft.hasMint },
+                {
+                  active:
+                    (!nft.hasMint && nft.canBeUsed) || perk.slots.count === 5,
+                },
+                { hasMint: nft.hasMint && perk.slots.count !== 5 },
               ]"
             >
               <img
@@ -177,7 +184,7 @@ export default defineComponent({
               />
               <span
                 class="perk__nfts__need--mint flex flexCenter"
-                v-if="nft.hasMint"
+                v-if="nft.hasMint && perk.slots.count !== 5"
                 >{{ t("perk.mint") }}
               </span>
             </div>
@@ -351,7 +358,8 @@ export default defineComponent({
         max-height: 266px;
       }
       ::v-deep(.img) {
-        max-width: 150px;
+        max-width: 130px;
+        max-height: 130px;
       }
       @media screen and (max-width: 374px) {
         max-width: 320px;

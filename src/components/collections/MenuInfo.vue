@@ -15,6 +15,7 @@ export default defineComponent({
     btnText: String,
     titleLastSection: String,
     route: Object,
+    routeText: Object,
   },
   components: { CollectionProperties, BackFixed },
   setup() {
@@ -30,6 +31,18 @@ export default defineComponent({
 
 <template>
   <div class="info flex flex-grow-1 direction-column" v-if="item">
+    <!--    <BackFixed-->
+    <!--      :to="{-->
+    <!--        name: ROUTES.COLLECTION.name,-->
+    <!--        params: { id: currentCollectionId },-->
+    <!--      }"-->
+    <!--      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"-->
+    <!--    ></BackFixed>-->
+    <BackFixed
+      v-if="route && routeText"
+      :to="route"
+      :text="routeText"
+    ></BackFixed>
     <BackFixed
       :infoIsOpen="true"
       @click="$emit('infoIsClose', false)"
@@ -104,7 +117,6 @@ export default defineComponent({
   min-width: 523px;
   padding-top: 118px;
   position: absolute;
-  z-index: 1;
   right: 0;
   top: 0;
   bottom: 0;
@@ -123,7 +135,13 @@ export default defineComponent({
   //  right: 0;
   //  top: 0;
   //}
-
+  ::v-deep(.RouterLink) {
+    @media screen and (max-width: 768px) {
+      position: absolute;
+      left: 109px;
+      top: 81px;
+    }
+  }
   @media screen and (max-width: 523px) {
     min-width: auto;
   }
