@@ -110,7 +110,11 @@ export default defineComponent({
         />
       </div>
       <div class="perk__content flex direction-column align-center">
-        <SlotsBig :perk="perk" :slots="perk.slots.count"></SlotsBig>
+        <SlotsBig
+          :perk="perk"
+          :slots="perk.slots.count"
+          :activated="perk.active"
+        ></SlotsBig>
         <div class="perk__content__info flex direction-column align-center">
           <p
             class="perk__content__info__get"
