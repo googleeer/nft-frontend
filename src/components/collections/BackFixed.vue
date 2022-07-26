@@ -47,7 +47,11 @@ export default defineComponent({
   <component
     :is="currentComponent"
     class="back"
-    :class="['back__' + arrow, { info__open: infoIsOpen }]"
+    :class="[
+      'back__' + arrow,
+      { info__open: infoIsOpen },
+      `${currentComponent}`,
+    ]"
     :to="to"
     @click="showInfo()"
   >
@@ -99,9 +103,8 @@ button {
   z-index: 2;
   text-decoration: none;
   @media screen and (max-width: 768px) {
-    left: 50%;
+    left: 64px;
     top: 94px;
-    transform: translateX(-50%);
   }
   &__right {
     top: auto;
@@ -109,9 +112,9 @@ button {
     left: auto;
     right: 90px;
     @media screen and (max-width: 768px) {
-      bottom: 280px;
-      left: 20px;
-      right: auto;
+      top: 94px;
+      right: 45px;
+      height: 22px;
       transform: translateX(0);
     }
   }
@@ -123,7 +126,9 @@ button {
     font-weight: 400;
     .right {
       transform: rotate(180deg);
-      left: 100px;
+      left: 80px;
+      background-image: url("~@/assets/images/info.svg");
+      max-width: 30px;
     }
     .left {
       left: -32px;
