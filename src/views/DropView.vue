@@ -158,7 +158,6 @@ export default defineComponent({
         }"
         :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"
       ></BackFixed>
-      {{ infoIsOpen }}
       <BackFixed
         :infoIsOpen="infoIsOpen"
         @showInfo="showInfo"

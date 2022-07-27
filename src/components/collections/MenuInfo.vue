@@ -45,6 +45,7 @@ export default defineComponent({
     <!--      }"-->
     <!--      :text="{ desktop: `${t('desktopBack')}`, mob: `${t('mobileBack')}` }"-->
     <!--    ></BackFixed>-->
+    <!--    <div style="height: 118px; background-color: black; width: 100%"></div>-->
     <BackFixed
       v-if="route && routeText"
       :to="route"
@@ -147,6 +148,10 @@ export default defineComponent({
     position: absolute;
     left: 66px;
     top: 81px;
+    @media screen and (max-width: 574px) {
+      left: 50%;
+      transform: translateX(-50%);
+    }
   }
   @media screen and (max-width: 523px) {
     min-width: auto;
