@@ -16,6 +16,7 @@ export default defineComponent({
     titleLastSection: String,
     route: Object,
     routeText: Object,
+    infoIsOpen: Boolean,
   },
   components: { CollectionProperties, BackFixed },
   setup() {
@@ -24,7 +25,13 @@ export default defineComponent({
     const { isMobile } = storeToRefs(appState);
     const readMoreActive = ref(false);
     const localisingDesc = getLocalisingByKey(locale);
-    return { ROUTES, t, isMobile, readMoreActive, localisingDesc };
+    return {
+      ROUTES,
+      t,
+      isMobile,
+      readMoreActive,
+      localisingDesc,
+    };
   },
 });
 </script>
@@ -43,6 +50,7 @@ export default defineComponent({
       :to="route"
       :text="routeText"
     ></BackFixed>
+
     <BackFixed
       :infoIsOpen="true"
       @click="$emit('infoIsClose', false)"
@@ -136,11 +144,9 @@ export default defineComponent({
   //  top: 0;
   //}
   ::v-deep(.RouterLink) {
-    @media screen and (max-width: 768px) {
-      position: absolute;
-      left: 109px;
-      top: 81px;
-    }
+    position: absolute;
+    left: 66px;
+    top: 81px;
   }
   @media screen and (max-width: 523px) {
     min-width: auto;
