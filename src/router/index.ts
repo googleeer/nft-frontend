@@ -154,6 +154,12 @@ const routes: Array<RouteRecordRaw> = [
         /* webpackChunkName: "verifyLogin" */ "../views/VerifyLoginView.vue"
       ),
   },
+
+  {
+    path: "/test",
+    name: "test",
+    component: () => import("../views/GGGhhhHHH.vue"),
+  },
   {
     path: "/:pathMatch(.*)*",
     redirect: ROUTES.COLLECTIONS.path,
