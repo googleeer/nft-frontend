@@ -3,12 +3,13 @@ import { defineComponent, onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 import { PerspectiveCamera } from "three";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
+import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 
 export default defineComponent({
   name: "ThreeView",
+  components: { SceneViewLoader },
   props: {
     nftModel: {
       type: String,
@@ -23,6 +24,9 @@ export default defineComponent({
     const containerRef = ref(null);
     const close = ref();
     const open = ref();
+    const animationState = ref<"close" | "open" | "running">("close");
+    const onClick = ref();
+    const loadedModelsCount = ref(0);
 
     onMounted(() => {
       let camera: PerspectiveCamera,
@@ -51,75 +55,78 @@ export default defineComponent({
 
         clock = new THREE.Clock();
 
-        new EXRLoader()
-          .setPath("/")
-          .load("wedar_360_2k_smallsize_v2.exr", function (texture) {
-            console.log("nftModelScene", texture);
-            let envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        new EXRLoader().load(props.nftModelScene, function (texture) {
+          loadedModelsCount.value++;
+          let envMap = pmremGenerator.fromEquirectangular(texture).texture;
 
-            scene.background = envMap;
-            scene.environment = envMap;
+          scene.background = envMap;
+          scene.environment = envMap;
 
-            texture.dispose();
-            pmremGenerator.dispose();
+          texture.dispose();
+          pmremGenerator.dispose();
 
-            let loader = new GLTFLoader();
-            loader.setPath("/").load("Flower 3_5g_Alien.glb", function (gltf) {
-              console.log("nftModel", gltf);
-              scene.add(gltf.scene);
+          let loader = new GLTFLoader();
+          loader.load(props.nftModel, function (gltf) {
+            loadedModelsCount.value++;
+            scene.add(gltf.scene);
 
-              const obj = gltf.scene;
+            const obj = gltf.scene;
 
-              const box = new THREE.Box3().setFromObject(obj);
-              const center = box.getCenter(new THREE.Vector3());
+            const box = new THREE.Box3().setFromObject(obj);
+            const center = box.getCenter(new THREE.Vector3());
 
-              controls.target.copy(center);
+            controls.target.copy(center);
 
-              controls.target.y -= 0.05;
-              controls.update();
+            controls.target.y -= 0.05;
+            controls.update();
 
-              const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+            const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
 
-              controls.minDistance = boundingSphere.radius * 5;
+            controls.minDistance = boundingSphere.radius * 5;
 
-              mixer = new THREE.AnimationMixer(gltf.scene);
+            mixer = new THREE.AnimationMixer(gltf.scene);
 
-              gltf.animations.forEach((clip) => {
-                const anim = mixer.clipAction(clip);
+            gltf.animations.forEach((clip) => {
+              const anim = mixer.clipAction(clip);
 
-                open.value = () => {
-                  anim.reset();
-                  anim.clampWhenFinished = true;
-                  anim.loop = THREE.LoopOnce;
-                  anim.paused = false;
-                  anim.play();
+              open.value = () => {
+                animationState.value = "running";
+                anim.reset();
+                anim.clampWhenFinished = true;
+                anim.loop = THREE.LoopOnce;
+                anim.paused = false;
+                anim.play();
 
-                  setTimeout(() => {
-                    anim.paused = true;
-                  }, 2300);
-                };
+                setTimeout(() => {
+                  anim.paused = true;
+                  animationState.value = "open";
+                }, 2300);
+              };
 
-                close.value = () => {
-                  // anim.reset();
-                  anim.paused = false;
-                  // anim.play();
-                  // anim.clampWhenFinished = true;
-                  // anim.loop = THREE.LoopOnce;
-                  // mixer.update(
-                  //   -mixer.time + clip.duration - (clip.duration - 2.3),
-                  // );
-                };
-
-                // close();
-                //
-                // setTimeout(() => {
-                //   open();
-                // }, 5000);
-
-                // anim.paused = true;
-              });
+              close.value = () => {
+                anim.paused = false;
+                animationState.value = "close";
+              };
             });
+
+            onClick.value = (event: MouseEvent) => {
+              const x = (event.clientX / window.innerWidth) * 2 - 1;
+              const y = -(event.clientY / window.innerHeight) * 2 + 1;
+              const rayCaster = new THREE.Raycaster();
+              rayCaster.setFromCamera({ x, y }, camera);
+              const intersects = rayCaster.intersectObjects(
+                [scene.children[0]],
+                true,
+              );
+              !!intersects[0] &&
+                (animationState.value === "close"
+                  ? open.value()
+                  : animationState.value === "open"
+                  ? close.value()
+                  : null);
+            };
           });
+        });
 
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -163,17 +170,20 @@ export default defineComponent({
       containerRef,
       close,
       open,
+      onClick,
+      loadedModelsCount,
     };
   },
 });
 </script>
 
 <template>
-  <div class="threeViewer" ref="containerRef"></div>
-  <div class="test">
-    <button @click="open">open</button>
-    <button @click="close">close</button>
-  </div>
+  <SceneViewLoader
+    :visible="loadedModelsCount !== 2"
+    :count="loadedModelsCount"
+    :count-of="2"
+  />
+  <div class="threeViewer" ref="containerRef" @click="onClick"></div>
 </template>
 
 <style lang="scss" scoped>
