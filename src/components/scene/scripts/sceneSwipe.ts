@@ -120,7 +120,7 @@ export const useSceneSwipe = (
         console.log("clear");
         wheelDirection.value = "";
         wheelStarted.value = false;
-      }, 300);
+      }, 749);
     }, 699);
   };
 
