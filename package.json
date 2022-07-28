@@ -12,6 +12,7 @@
     "core-js": "^3.8.3",
     "lodash.clonedeep": "^4.5.0",
     "maska": "^1.5.0",
+    "moment-timezone": "^0.5.34",
     "pinia": "^2.0.13",
     "three": "^0.140.2",
     "vue": "^3.2.13",

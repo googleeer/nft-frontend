@@ -1,21 +1,28 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
+import moment from "moment-timezone";
+import router from "@/router";
+import { ROUTES } from "@/constants/routes.constants";
 export default defineComponent({
   name: "PerkView",
   props: { endDate: String },
   setup(props, context) {
     const timeObj: any = ref({ dd: "00", hh: "00", mm: "00", ss: "00" });
     const endTime = ref(0);
-
     const interval = ref(0);
     const currentDate = ref("0");
 
     const getDiffTime = (endingDate: any) => {
       interval.value = setInterval(() => {
-        currentDate.value = new Date().toString();
+        // currentDate.value = moment(new Date().toString())
+        //   .tz("America/Los_Angeles")
+        //   .format();
+        currentDate.value = new Date().toLocaleString("en-US", {
+          timeZone: "America/Los_Angeles",
+        });
         endTime.value =
           Date.parse(endingDate || "0") - Date.parse(currentDate.value);
-
+        console.log(currentDate.value, endingDate);
         const seconds = Math.floor((endTime.value / 1000) % 60);
         const minutes = Math.floor((endTime.value / 1000 / 60) % 60);
         const hours = Math.floor((endTime.value / (1000 * 60 * 60)) % 24);
@@ -27,18 +34,25 @@ export default defineComponent({
         if (endTime.value <= 0) {
           context.emit("auctionInactive", true);
           clearInterval(interval.value);
+          router.push(ROUTES.PERKS.path);
         }
       }, 1000);
     };
 
     onMounted(() => {
-      const endingDate = props?.endDate?.toString();
-      currentDate.value = new Date().toString();
+      const endingDate = moment(props?.endDate?.toString())
+        .tz("America/Los_Angeles")
+        .format();
+      console.log("asdas", props?.endDate);
+      // const endingDate = props?.endDate?.toString();
+      currentDate.value = moment(new Date().toString())
+        .tz("America/Los_Angeles")
+        .format();
       endTime.value =
         Date.parse(endingDate || "0") - Date.parse(currentDate.value);
       getDiffTime(endingDate);
+      // console.log("End date", Date.parse(endingDate || "0"), "end", e);
     });
-
     onBeforeUnmount(() => {
       clearInterval(interval.value);
     });
