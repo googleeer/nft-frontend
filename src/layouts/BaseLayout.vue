@@ -119,7 +119,7 @@ export default defineComponent({
   position: fixed;
   width: 100%;
   right: 0;
-  height: 110px;
+  height: 91px;
   background-color: var(--color-black);
   z-index: var(--z-index-header-logo);
   inset: 0;

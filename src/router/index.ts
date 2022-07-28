@@ -122,6 +122,7 @@ const routes: Array<RouteRecordRaw> = [
       isAuth: true,
       layout: "base",
       bgAllHeader: true,
+      mobHeader: true,
     },
     children: [
       {

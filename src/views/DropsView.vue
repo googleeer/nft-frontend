@@ -70,7 +70,7 @@ export default defineComponent({
   padding-left: 43px;
   padding-top: 105px;
   @media screen and (max-width: 771px) {
-    padding-top: 110px;
+    padding-top: 93px;
     padding-left: 15.5px;
   }
 }
