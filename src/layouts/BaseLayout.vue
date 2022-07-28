@@ -37,6 +37,9 @@ export default defineComponent({
     const bgAllHeader = computed(
       () => useRouter().currentRoute.value.meta.bgAllHeader,
     );
+    const mobHeader = computed(
+      () => useRouter().currentRoute.value.meta.mobHeader,
+    );
     const headerIndex = computed(
       () => useRouter().currentRoute.value.meta.bgAllHeader,
     );
@@ -58,6 +61,7 @@ export default defineComponent({
       bgRightHeader,
       bgAllHeader,
       headerIndex,
+      mobHeader,
     };
   },
 });
@@ -71,6 +75,7 @@ export default defineComponent({
       :class="[
         { isRightBg: bgRightHeader && !isMobile },
         { isAllBg: bgAllHeader && !isMobile },
+        { mobHeader: mobHeader && isMobile },
       ]"
     >
       <BaseBurger v-model:is-open="isOpenMenu" />
@@ -109,6 +114,16 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.mobHeader:before {
+  content: "";
+  position: fixed;
+  width: 100%;
+  right: 0;
+  height: 110px;
+  background-color: var(--color-black);
+  z-index: var(--z-index-header-logo);
+  inset: 0;
+}
 .isRightBg::before {
   content: "";
   position: fixed;
