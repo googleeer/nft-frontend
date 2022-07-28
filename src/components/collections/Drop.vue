@@ -76,7 +76,7 @@ export default defineComponent({
   color: var(--color-white);
   z-index: 1;
   @media screen and (max-width: 768px) {
-    max-width: 50px;
+    max-width: 53px;
   }
 }
 .drop {

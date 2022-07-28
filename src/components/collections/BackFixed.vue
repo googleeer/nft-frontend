@@ -31,6 +31,7 @@ export default defineComponent({
       isOpen.value = true;
       context.emit("showInfo", isOpen.value);
     };
+    console.log(isOpen.value);
     return {
       ROUTES,
       t,
@@ -155,8 +156,9 @@ button {
   }
 }
 .info__open {
+  position: absolute;
   z-index: var(--z-idx-main-menu-blur);
-  top: 50px;
+  top: 46px;
   bottom: auto;
   right: 20px;
   left: auto;

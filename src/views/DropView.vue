@@ -151,6 +151,7 @@ export default defineComponent({
         :short-description="localisingDesc(drop, 'shortDescription')"
       />
       <BackFixed
+        v-if="!infoIsOpen"
         :to="{
           name: ROUTES.COLLECTION.name,
           params: { id: currentCollectionId },
@@ -166,6 +167,7 @@ export default defineComponent({
     </SceneView>
     <transition name="fade" mode="in-out">
       <MenuInfo
+        :infoIsOpen="infoIsOpen"
         @infoIsClose="infoIsOpen = false"
         v-click-outside:[300]="closeInfo"
         v-if="infoIsOpen"
@@ -192,11 +194,5 @@ export default defineComponent({
 .drop {
   max-height: 100vh;
   overflow: hidden;
-
-  .back__left {
-    @media screen and (max-width: 768px) {
-      display: none;
-    }
-  }
 }
 </style>
