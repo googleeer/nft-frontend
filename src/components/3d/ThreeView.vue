@@ -20,7 +20,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  setup(props) {
     const containerRef = ref(null);
     const close = ref();
     const open = ref();
