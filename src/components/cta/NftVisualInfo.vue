@@ -201,6 +201,10 @@ export default defineComponent({
     border-radius: 42px;
     z-index: 1;
     opacity: 0.8;
+    @media screen and (min-width: 1200px) {
+      width: 100%;
+      height: 100%;
+    }
     @media screen and (max-width: 771px) {
       max-width: 160px;
       height: 156px;
@@ -209,10 +213,8 @@ export default defineComponent({
   }
   &__content {
     position: relative;
-    padding-top: 33px;
-    padding-bottom: 35px;
-    padding-left: 26px;
     z-index: 0;
+    padding: 33px 10px 35px 26px;
     @media screen and (max-width: 771px) {
       padding-top: 12px;
       padding-bottom: 17px;
