@@ -61,6 +61,11 @@ export default defineComponent({
   max-width: 322px;
   margin: 0 17px;
   padding-bottom: 56px;
+  @media screen and (min-width: 1200px) {
+    width: calc((100% / 4) - (17 * 6px));
+    max-width: none;
+    min-width: 322px;
+  }
   @media screen and (max-width: 771px) {
     max-width: 160px;
     margin: 0 7.5px;
@@ -106,7 +111,6 @@ export default defineComponent({
 }
 .nfts {
   width: 100%;
-  max-width: 1426px;
   display: flex;
   flex-wrap: wrap;
   padding-top: 30px;
