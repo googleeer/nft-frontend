@@ -42,7 +42,8 @@ export default defineComponent({
           :perks="drop.perks"
           :title="drop.name"
           :desc="drop.collection.name"
-          :preview="drop.dropPreview?.url"
+          :preview="drop.cube?.url"
+          :cube="true"
           :to="{
             name: ROUTES.DROP.name,
             params: { id: drop.id, collectionId: drop.collection.id },

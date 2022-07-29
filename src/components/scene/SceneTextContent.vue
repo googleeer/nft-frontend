@@ -70,6 +70,11 @@ export default defineComponent({
     font-size: 82px;
     line-height: 110%;
     max-width: 600px;
+    @media screen and (max-width: 1350px) {
+      padding-top: 19px;
+      max-width: 350px;
+      font-size: 42px;
+    }
     @media screen and (max-width: 768px) {
       padding-top: 19px;
       max-width: 300px;
@@ -80,6 +85,9 @@ export default defineComponent({
     padding-bottom: 46px;
     font-size: 22px;
     max-width: 400px;
+    @media screen and (max-width: 1350px) {
+      font-size: 18px;
+    }
     @media screen and (max-width: 768px) {
       font-size: 16px;
       max-width: 250px;
