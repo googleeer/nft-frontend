@@ -16,6 +16,10 @@ export default defineComponent({
     preview: String,
     minted: Object,
     perks: Object,
+    cube: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const { t, locale } = useI18n();
@@ -41,6 +45,7 @@ export default defineComponent({
     <div class="nft__link--wrap">
       <img
         class="nft__link__img"
+        :class="{ cube }"
         :src="preview || require('@/assets/images/mynft/1.png')"
       />
       <div v-if="minted.minted" class="minted flex align-center">
@@ -98,6 +103,11 @@ export default defineComponent({
   }
   &--wrap {
     position: relative;
+    overflow: hidden;
+    border-radius: 42px;
+    @media screen and (max-width: 771px) {
+      border-radius: 20px;
+    }
   }
   &--perks {
     width: 100%;
@@ -195,24 +205,32 @@ export default defineComponent({
       bottom: -21px;
     }
   }
+  .cube {
+    background-color: black;
+    transform: scale(1.5);
+  }
   &__img {
     width: 322px;
     height: 322px;
-    border-radius: 42px;
+    //border-radius: 42px;
     z-index: 1;
     opacity: 0.8;
+    background-color: black;
+
+    @media screen and (min-width: 1200px) {
+      width: 100%;
+      height: 100%;
+    }
     @media screen and (max-width: 771px) {
       max-width: 160px;
       height: 156px;
-      border-radius: 20px;
+      //border-radius: 20px;
     }
   }
   &__content {
     position: relative;
-    padding-top: 33px;
-    padding-bottom: 35px;
-    padding-left: 26px;
     z-index: 0;
+    padding: 33px 10px 35px 26px;
     @media screen and (max-width: 771px) {
       padding-top: 12px;
       padding-bottom: 17px;
