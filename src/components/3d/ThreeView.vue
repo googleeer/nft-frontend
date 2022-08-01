@@ -3,9 +3,10 @@ import { defineComponent, onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Scene } from "three";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 
 export default defineComponent({
   name: "ThreeView",
@@ -30,7 +31,7 @@ export default defineComponent({
 
     onMounted(() => {
       let camera: PerspectiveCamera,
-        scene: any,
+        scene: Scene,
         renderer: any,
         mixer: any,
         clock: any,
@@ -52,83 +53,99 @@ export default defineComponent({
         );
 
         scene = new THREE.Scene();
+        const textureLoader = new THREE.TextureLoader();
+
+        textureLoader.setPath("/").load("texture.jpg", (texture) => {
+          const canvasAspect =
+            document.documentElement.clientWidth /
+            document.documentElement.clientHeight;
+          const imageAspect = texture.image
+            ? texture.image.width / texture.image.height
+            : 1;
+          const aspect = imageAspect / canvasAspect;
+
+          texture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
+          texture.repeat.x = aspect > 1 ? 1 / aspect : 1;
+
+          texture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
+          texture.repeat.y = aspect > 1 ? 1 : aspect;
+          let envMap = pmremGenerator.fromEquirectangular(texture).texture;
+          scene.background = texture;
+          scene.environment = envMap;
+          texture.dispose();
+          pmremGenerator.dispose();
+        });
 
         clock = new THREE.Clock();
 
-        new EXRLoader().load(props.nftModelScene, function (texture) {
+        new FBXLoader().setPath("/").load("podium.FBX", (object) => {
+          console.log(object);
+          object.scale.multiplyScalar(0.001);
+          scene.add(object);
           loadedModelsCount.value++;
-          let envMap = pmremGenerator.fromEquirectangular(texture).texture;
+        });
+        new GLTFLoader().load(props.nftModel, function (gltf) {
+          loadedModelsCount.value++;
+          scene.add(gltf.scene);
 
-          scene.background = envMap;
-          scene.environment = envMap;
+          const obj = gltf.scene;
 
-          texture.dispose();
-          pmremGenerator.dispose();
+          const box = new THREE.Box3().setFromObject(obj);
+          const center = box.getCenter(new THREE.Vector3());
 
-          let loader = new GLTFLoader();
-          loader.load(props.nftModel, function (gltf) {
-            loadedModelsCount.value++;
-            scene.add(gltf.scene);
+          controls.target.copy(center);
 
-            const obj = gltf.scene;
+          controls.target.y -= 0.05;
+          controls.update();
 
-            const box = new THREE.Box3().setFromObject(obj);
-            const center = box.getCenter(new THREE.Vector3());
+          const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
 
-            controls.target.copy(center);
+          controls.minDistance = boundingSphere.radius * 5;
 
-            controls.target.y -= 0.05;
-            controls.update();
+          mixer = new THREE.AnimationMixer(gltf.scene);
 
-            const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+          gltf.animations.forEach((clip) => {
+            const anim = mixer.clipAction(clip);
 
-            controls.minDistance = boundingSphere.radius * 5;
+            open.value = () => {
+              animationState.value = "running";
+              anim.reset();
+              anim.clampWhenFinished = true;
+              anim.loop = THREE.LoopOnce;
+              anim.paused = false;
+              anim.play();
 
-            mixer = new THREE.AnimationMixer(gltf.scene);
+              setTimeout(() => {
+                anim.paused = true;
+                animationState.value = "open";
+              }, 2300);
+            };
 
-            gltf.animations.forEach((clip) => {
-              const anim = mixer.clipAction(clip);
-
-              open.value = () => {
-                animationState.value = "running";
-                anim.reset();
-                anim.clampWhenFinished = true;
-                anim.loop = THREE.LoopOnce;
-                anim.paused = false;
-                anim.play();
-
-                setTimeout(() => {
-                  anim.paused = true;
-                  animationState.value = "open";
-                }, 2300);
-              };
-
-              close.value = () => {
-                anim.paused = false;
-                animationState.value = "close";
-              };
-            });
-
-            onClick.value = (event: MouseEvent) => {
-              const x = (event.clientX / window.innerWidth) * 2 - 1;
-              const y = -(event.clientY / window.innerHeight) * 2 + 1;
-              const rayCaster = new THREE.Raycaster();
-              rayCaster.setFromCamera({ x, y }, camera);
-              const intersects = rayCaster.intersectObjects(
-                [scene.children[0]],
-                true,
-              );
-              !!intersects[0] &&
-                (animationState.value === "close"
-                  ? open.value()
-                  : animationState.value === "open"
-                  ? close.value()
-                  : null);
+            close.value = () => {
+              anim.paused = false;
+              animationState.value = "close";
             };
           });
+
+          onClick.value = (event: MouseEvent) => {
+            const x = (event.clientX / window.innerWidth) * 2 - 1;
+            const y = -(event.clientY / window.innerHeight) * 2 + 1;
+            const rayCaster = new THREE.Raycaster();
+            rayCaster.setFromCamera({ x, y }, camera);
+            const intersects = rayCaster.intersectObjects(
+              [scene.children[0]],
+              true,
+            );
+            !!intersects[0] &&
+              (animationState.value === "close"
+                ? open.value()
+                : animationState.value === "open"
+                ? close.value()
+                : null);
+          };
         });
 
-        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -191,12 +208,5 @@ export default defineComponent({
   position: absolute;
   inset: 0;
   z-index: -1;
-}
-.test {
-  position: fixed;
-  right: 0;
-  top: 0;
-  padding: 10px;
-  background-color: var(--color-eerie);
 }
 </style>
