@@ -3,10 +3,11 @@ import { defineComponent, onMounted, ref } from "vue";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { PerspectiveCamera } from "three";
-import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader";
+import { PerspectiveCamera, Scene } from "three";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
-
+import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
+import { SpinControls } from "./test";
 export default defineComponent({
   name: "ThreeView",
   components: { SceneViewLoader },
@@ -30,11 +31,14 @@ export default defineComponent({
 
     onMounted(() => {
       let camera: PerspectiveCamera,
-        scene: any,
+        scene: Scene,
         renderer: any,
         mixer: any,
         clock: any,
-        controls: OrbitControls;
+        controls: OrbitControls,
+        podium: any,
+        spinControl: any,
+        cube: any;
       init();
       animate();
 
@@ -53,82 +57,123 @@ export default defineComponent({
 
         scene = new THREE.Scene();
 
-        clock = new THREE.Clock();
+        new FBXLoader().setPath("/").load("podium.FBX", (object) => {
+          object.scale.multiplyScalar(0.001);
+          object.traverse(function (child) {
+            if (child.type === "Mesh") {
+              child.castShadow = true;
+              child.receiveShadow = true;
 
-        new EXRLoader().load(props.nftModelScene, function (texture) {
-          loadedModelsCount.value++;
-          let envMap = pmremGenerator.fromEquirectangular(texture).texture;
+              // child.material = new THREE.MeshStandardMaterial({ })
+            }
 
-          scene.background = envMap;
-          scene.environment = envMap;
+            console.log(child.type);
+            /* max to webgl 회전 보정 */
+            if (child.type === "Group") {
+              console.log(child);
+              child.rotation.x = Math.PI;
+              child.rotation.y = Math.PI;
+              child.rotation.z = Math.PI;
+            }
 
-          texture.dispose();
-          pmremGenerator.dispose();
-
-          let loader = new GLTFLoader();
-          loader.load(props.nftModel, function (gltf) {
-            loadedModelsCount.value++;
-            scene.add(gltf.scene);
-
-            const obj = gltf.scene;
-
-            const box = new THREE.Box3().setFromObject(obj);
-            const center = box.getCenter(new THREE.Vector3());
-
-            controls.target.copy(center);
-
-            controls.target.y -= 0.05;
-            controls.update();
-
-            const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
-
-            controls.minDistance = boundingSphere.radius * 5;
-
-            mixer = new THREE.AnimationMixer(gltf.scene);
-
-            gltf.animations.forEach((clip) => {
-              const anim = mixer.clipAction(clip);
-
-              open.value = () => {
-                animationState.value = "running";
-                anim.reset();
-                anim.clampWhenFinished = true;
-                anim.loop = THREE.LoopOnce;
-                anim.paused = false;
-                anim.play();
-
-                setTimeout(() => {
-                  anim.paused = true;
-                  animationState.value = "open";
-                }, 2300);
-              };
-
-              close.value = () => {
-                anim.paused = false;
-                animationState.value = "close";
-              };
-            });
-
-            onClick.value = (event: MouseEvent) => {
-              const x = (event.clientX / window.innerWidth) * 2 - 1;
-              const y = -(event.clientY / window.innerHeight) * 2 + 1;
-              const rayCaster = new THREE.Raycaster();
-              rayCaster.setFromCamera({ x, y }, camera);
-              const intersects = rayCaster.intersectObjects(
-                [scene.children[0]],
-                true,
-              );
-              !!intersects[0] &&
-                (animationState.value === "close"
-                  ? open.value()
-                  : animationState.value === "open"
-                  ? close.value()
-                  : null);
-            };
+            if ((child as any).intensity) {
+              (child as any).parent.remove(child);
+            }
           });
+
+          const light = new THREE.DirectionalLight(0xffffff, 1);
+          scene.add(light);
+          light.position.set(1, 5, 10);
+
+          podium = object;
+          scene.add(object);
+
+          const light2 = new THREE.DirectionalLight(0xffffff, 1);
+          scene.add(light2);
+          light.position.set(-1, 5, -10);
+          scene.add(object);
+          loadedModelsCount.value++;
         });
 
-        renderer = new THREE.WebGLRenderer({ antialias: true });
+        new GLTFLoader().load(props.nftModel, function (gltf) {
+          loadedModelsCount.value++;
+          scene.add(gltf.scene);
+
+          const obj = gltf.scene;
+          cube = obj;
+          obj.position.y += 0.1;
+
+          const box = new THREE.Box3().setFromObject(obj);
+          const center = box.getCenter(new THREE.Vector3());
+
+          // controls.target.copy(center);
+          //
+          // controls.target.y -= 0.05;
+          // controls.update();
+
+          const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+
+          // controls.minDistance = boundingSphere.radius * 5;
+
+          mixer = new THREE.AnimationMixer(gltf.scene);
+
+          gltf.animations.forEach((clip) => {
+            const anim = mixer.clipAction(clip);
+
+            open.value = () => {
+              animationState.value = "running";
+              anim.reset();
+              anim.clampWhenFinished = true;
+              anim.loop = THREE.LoopOnce;
+              anim.paused = false;
+              anim.play();
+
+              setTimeout(() => {
+                anim.paused = true;
+                animationState.value = "open";
+              }, 2300);
+            };
+
+            close.value = () => {
+              anim.paused = false;
+              animationState.value = "close";
+            };
+          });
+
+          onClick.value = (event: MouseEvent) => {
+            const x = (event.clientX / window.innerWidth) * 2 - 1;
+            const y = -(event.clientY / window.innerHeight) * 2 + 1;
+            const rayCaster = new THREE.Raycaster();
+            rayCaster.setFromCamera({ x, y }, camera);
+            const intersects = rayCaster.intersectObjects([cube], true);
+
+            // console.log(intersects);
+            // !!intersects[0] &&
+            //   (animationState.value === "close"
+            //     ? open.value()
+            //     : animationState.value === "open"
+            //     ? close.value()
+            //     : null);
+          };
+
+          spinControl = new (SpinControls as any)(
+            cube,
+            1,
+            camera,
+            renderer.domElement,
+          );
+          spinControl.rotateSensitivity = -3;
+          // spinControl.dampingFactor = 20;
+
+          // smooth options combo
+          // spinControl.setPointerToSphereMapping(
+          //   spinControl.POINTER_SPHERE_MAPPING.HOLROYD,
+          // );
+        });
+
+        clock = new THREE.Clock();
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -139,11 +184,16 @@ export default defineComponent({
         const pmremGenerator = new THREE.PMREMGenerator(renderer);
         pmremGenerator.compileEquirectangularShader();
 
-        controls = new OrbitControls(camera, renderer.domElement);
-        controls.minDistance = 0.1;
-        controls.maxDistance = 4;
-        controls.target.set(0, 0, -0.2);
-        controls.update();
+        scene.environment = pmremGenerator.fromScene(
+          new RoomEnvironment(),
+          0.04,
+        ).texture;
+
+        // controls = new OrbitControls(camera, renderer.domElement);
+        // controls.minDistance = 0.1;
+        // controls.maxDistance = 4;
+        // controls.target.set(0, 0, -0.2);
+        // controls.update();
 
         window.addEventListener("resize", onWindowResize, false);
       }
@@ -151,7 +201,7 @@ export default defineComponent({
       function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
-
+        spinControl.onWindowResize();
         renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
@@ -161,7 +211,11 @@ export default defineComponent({
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
         if (mixer) mixer.update(delta);
+        if (spinControl) spinControl.update();
 
+        // if (cube) {
+        //   cube.rotation.y += Math.sin(delta);
+        // }
         renderer.render(scene, camera);
       }
     });
@@ -191,12 +245,9 @@ export default defineComponent({
   position: absolute;
   inset: 0;
   z-index: -1;
-}
-.test {
-  position: fixed;
-  right: 0;
-  top: 0;
-  padding: 10px;
-  background-color: var(--color-eerie);
+  background-image: url("~@/assets/images/texture.jpg");
+  background-size: cover;
+  background-position: center bottom;
+  height: 100%;
 }
 </style>
