@@ -175,13 +175,14 @@ export default defineComponent({
                 { hasMint: nft.hasMint && perk.slots.count !== 5 },
               ]"
             >
-              <img
-                class="perk__nfts__need--img"
-                :src="
-                  nft.dropPreview?.url ||
-                  require('../assets/images/perks/nft1.png')
-                "
-              />
+              <div class="overflow">
+                <img
+                  class="perk__nfts__need--img"
+                  :src="
+                    nft.cube?.url || require('../assets/images/perks/nft1.png')
+                  "
+                />
+              </div>
               <span
                 class="perk__nfts__need--mint flex flexCenter"
                 v-if="nft.hasMint && perk.slots.count !== 5"
@@ -213,6 +214,9 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+.overflow {
+  overflow: hidden;
+}
 .none {
   display: none;
 }
@@ -463,9 +467,11 @@ export default defineComponent({
       flex-wrap: wrap;
       margin-left: auto;
       max-width: 375px;
+
       &--img {
         width: 100px;
         border-radius: 24px;
+        transform: scale(1.5) translateY(-5px);
         @media screen and (max-width: 768px) {
           max-width: 74px;
         }

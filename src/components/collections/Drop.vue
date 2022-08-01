@@ -11,8 +11,9 @@ export default defineComponent({
     collectionId: Number,
     minted: Object,
   },
-  setup() {
+  setup(props) {
     const { t } = useI18n();
+    console.log(props.drop);
     return {
       ROUTES,
       t,
@@ -35,7 +36,7 @@ export default defineComponent({
     </div>
     <img
       class="drop__img"
-      :src="drop.dropPreview?.url || require('@/assets/images/drop.png')"
+      :src="drop.cube?.url || require('@/assets/images/drop.png')"
     />
     <p class="drop__content--name">{{ drop.name }}</p>
   </router-link>
@@ -84,6 +85,10 @@ export default defineComponent({
   display: flex;
   align-self: flex-start;
   text-decoration: none;
+  text-align: center;
+  overflow: hidden;
+  min-width: 148px;
+
   &:not(:last-child) {
     margin-right: 20px;
   }
@@ -92,6 +97,7 @@ export default defineComponent({
     height: 148px;
     border-radius: 24px;
     opacity: 0.8;
+    transform: scale(1.5) translateY(15px);
   }
   &__content {
     padding-left: 16px;
