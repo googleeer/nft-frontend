@@ -1,0 +1,77 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - staging
+      - develop
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 14.x
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Map variables
+      uses: kanga333/variable-mapper@master
+      with:
+        key: "${{github.ref}}"
+        map: |
+          {
+            "refs/heads/main": {
+              "API_ENDPOINT": "https://api.weedar.tech",
+              "AWS_S3_BUCKET": "weedar-nft-prod",
+              "AWS_CLOUDFRONT_ALIAS": "nft.weedar.io"
+            },
+            "refs/heads/staging": {
+              "API_ENDPOINT": "https://api-stage.weedar.tech",
+              "AWS_S3_BUCKET": "weedar-nft-stage",
+              "AWS_CLOUDFRONT_ALIAS": "nft-stage.weedar.io"
+            },
+            ".*": {
+              "API_ENDPOINT": "https://api-dev.weedar.tech",
+              "AWS_S3_BUCKET": "weedar-nft-dev",
+              "AWS_CLOUDFRONT_ALIAS": "nft-dev.weedar.io"
+            }
+          }
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Setup env file
+      run: echo 'VUE_APP_WEEDAR_API_URL=${{ env.API_ENDPOINT }}' > .env
+
+    - name: Install
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Upload
+      run: aws s3 sync dist/ s3://${{ env.AWS_S3_BUCKET }} --delete
+
+    - name: Get distribution ID
+      run: |
+        echo 'AWS_CLOUDFRONT_ID<<EOF' >> $GITHUB_ENV
+        aws cloudfront list-distributions --output text --query "DistributionList.Items[?contains(Aliases.Items, '${{ env.AWS_CLOUDFRONT_ALIAS }}')].Id" >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
+
+    - name: Invalidate
+      run: aws cloudfront create-invalidation --distribution-id ${{ env.AWS_CLOUDFRONT_ID }} --paths "/index.html"
