@@ -184,7 +184,7 @@ export default defineComponent({
         line-height: 110%;
         max-width: 600px;
         pointer-events: none;
-        @media screen and (max-width: 1350px) {
+        @media screen and (max-width: 1400px), (max-height: 900px) {
           padding-top: 19px;
           max-width: 350px;
           font-size: 42px;
@@ -199,7 +199,7 @@ export default defineComponent({
       &-desc {
         padding-bottom: 46px;
         font-size: 22px;
-        @media screen and (max-width: 1350px) {
+        @media screen and (max-width: 1400px), (max-height: 900px) {
           font-size: 18px;
         }
 
