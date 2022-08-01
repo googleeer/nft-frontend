@@ -72,7 +72,6 @@ export default defineComponent({
         value: collection.value?.[key],
       })),
     );
-    console.log(collection);
     return {
       currentCollectionId,
       ROUTES,

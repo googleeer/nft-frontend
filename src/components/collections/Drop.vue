@@ -11,9 +11,8 @@ export default defineComponent({
     collectionId: Number,
     minted: Object,
   },
-  setup(props) {
+  setup() {
     const { t } = useI18n();
-    console.log(props.drop);
     return {
       ROUTES,
       t,
