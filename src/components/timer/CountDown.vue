@@ -1,68 +1,48 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 import moment from "moment-timezone";
-import router from "@/router";
-import { ROUTES } from "@/constants/routes.constants";
+
 export default defineComponent({
   name: "PerkView",
   props: { endDate: String },
   setup(props, context) {
-    const timeObj: any = ref({ dd: "00", hh: "00", mm: "00", ss: "00" });
-    const endTime = ref(0);
+    const timeObj = ref<Record<string, string>>({
+      dd: "00",
+      hh: "00",
+      mm: "00",
+      ss: "00",
+    });
     const interval = ref(0);
-    const currentDate = ref("0");
 
-    const getDiffTime = (endingDate: any) => {
+    const endingDate = moment(props?.endDate).tz("America/Los_Angeles");
+
+    const utcOffset = endingDate.utcOffset() * 60 * 1000;
+    const formattedEndingDate = endingDate.format();
+
+    const startInterval = () => {
       interval.value = setInterval(() => {
-        // currentDate.value = moment(new Date().toString())
-        //   .tz("America/Los_Angeles")
-        //   .format();
-        currentDate.value = new Date().toLocaleString("en-US", {
-          timeZone: "America/Los_Angeles",
-        });
-        endTime.value =
-          Date.parse(endingDate || "0") - Date.parse(currentDate.value);
-        console.log(currentDate.value, endingDate);
-        const seconds = Math.floor((endTime.value / 1000) % 60);
-        const minutes = Math.floor((endTime.value / 1000 / 60) % 60);
-        const hours = Math.floor((endTime.value / (1000 * 60 * 60)) % 24);
-        const days = Math.floor(endTime.value / (1000 * 60 * 60 * 24));
-        timeObj.value.ss = seconds < 10 ? "0" + seconds : seconds;
-        timeObj.value.mm = minutes < 10 ? "0" + minutes : minutes;
-        timeObj.value.hh = hours < 10 ? "0" + hours : hours;
-        timeObj.value.dd = days < 10 ? "0" + days : days;
-        if (endTime.value <= 0) {
+        const diff = moment(new Date().toUTCString()).diff(formattedEndingDate);
+
+        const duration = moment.duration(diff).asMilliseconds();
+        const durationWithTimezone = duration + utcOffset;
+        const endTime = Math.abs(durationWithTimezone);
+        const seconds = Math.floor((endTime / 1000) % 60);
+        const minutes = Math.floor((endTime / 1000 / 60) % 60);
+        const hours = Math.floor((endTime / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(endTime / (1000 * 60 * 60 * 24));
+        timeObj.value.ss = seconds < 10 ? "0" + seconds : seconds.toString();
+        timeObj.value.mm = minutes < 10 ? "0" + minutes : minutes.toString();
+        timeObj.value.hh = hours < 10 ? "0" + hours : hours.toString();
+        timeObj.value.dd = days < 10 ? "0" + days : days.toString();
+        if (durationWithTimezone >= 0) {
           context.emit("auctionInactive", true);
           clearInterval(interval.value);
-          router.push(ROUTES.PERKS.path);
         }
       }, 1000);
     };
 
     onMounted(() => {
-      const endingDate = moment(props?.endDate).tz("America/Los_Angeles");
-
-      const utcOffset = endingDate.utcOffset() * 60 * 1000;
-      const formattedEndingDate = endingDate.format();
-
-      const diff = moment(new Date().toUTCString()).diff(formattedEndingDate);
-
-      const duration = moment.duration(diff).asMilliseconds();
-      const durationWithTimezone = duration + utcOffset;
-      console.log({ durationWithTimezone });
-      if (durationWithTimezone === 1) {
-        getDiffTime(endingDate); // чтобы вебпак не ругался))
-      }
-      // console.log(2, { endingDate, now, duration });
-      // console.log("asdas", props?.endDate);
-      // // const endingDate = props?.endDate?.toString();
-      // currentDate.value = moment(new Date().toString())
-      //   .tz("America/Los_Angeles")
-      //   .format();
-      // endTime.value =
-      //   Date.parse(endingDate || "0") - Date.parse(currentDate.value);
-      // getDiffTime(endingDate);
-      // console.log("End date", Date.parse(endingDate || "0"), "end", e);
+      startInterval();
     });
     onBeforeUnmount(() => {
       clearInterval(interval.value);
