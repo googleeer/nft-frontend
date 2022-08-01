@@ -40,17 +40,28 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      const endingDate = moment(props?.endDate?.toString())
-        .tz("America/Los_Angeles")
-        .format();
-      console.log("asdas", props?.endDate);
-      // const endingDate = props?.endDate?.toString();
-      currentDate.value = moment(new Date().toString())
-        .tz("America/Los_Angeles")
-        .format();
-      endTime.value =
-        Date.parse(endingDate || "0") - Date.parse(currentDate.value);
-      getDiffTime(endingDate);
+      const endingDate = moment(props?.endDate).tz("America/Los_Angeles");
+
+      const utcOffset = endingDate.utcOffset() * 60 * 1000;
+      const formattedEndingDate = endingDate.format();
+
+      const diff = moment(new Date().toUTCString()).diff(formattedEndingDate);
+
+      const duration = moment.duration(diff).asMilliseconds();
+      const durationWithTimezone = duration + utcOffset;
+      console.log({ durationWithTimezone });
+      if (durationWithTimezone === 1) {
+        getDiffTime(endingDate); // чтобы вебпак не ругался))
+      }
+      // console.log(2, { endingDate, now, duration });
+      // console.log("asdas", props?.endDate);
+      // // const endingDate = props?.endDate?.toString();
+      // currentDate.value = moment(new Date().toString())
+      //   .tz("America/Los_Angeles")
+      //   .format();
+      // endTime.value =
+      //   Date.parse(endingDate || "0") - Date.parse(currentDate.value);
+      // getDiffTime(endingDate);
       // console.log("End date", Date.parse(endingDate || "0"), "end", e);
     });
     onBeforeUnmount(() => {
