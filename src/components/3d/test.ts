@@ -8,7 +8,13 @@
  * @author Paul Elliott / http://vizworkshop.com
  */
 import * as THREE from "three";
-const SpinControls = function (object, trackBallRadius, camera, domElement) {
+const SpinControls = function (
+  object,
+  trackBallRadius,
+  camera,
+  domElement,
+  clickCb,
+) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const _this = this;
 
@@ -69,7 +75,9 @@ const SpinControls = function (object, trackBallRadius, camera, domElement) {
     _wasLastPointerEventOnSphere = false,
     _isPointerDown = false,
     // eslint-disable-next-line prefer-const
-    _EPS = 0.000001;
+    _EPS = 0.000001,
+    // eslint-disable-next-line prefer-const
+    _isMove = false;
 
   const changeEvent = { type: "change" };
   const startEvent = { type: "start" };
@@ -535,7 +543,7 @@ const SpinControls = function (object, trackBallRadius, camera, domElement) {
 
   function onMouseMove(event) {
     if (_this.enabled === false) return;
-
+    _isMove = true;
     event.preventDefault();
 
     _this.onPointerMove(event.pageX, event.pageY, event.timeStamp);
@@ -543,7 +551,8 @@ const SpinControls = function (object, trackBallRadius, camera, domElement) {
 
   function onMouseUp(event) {
     if (_this.enabled === false) return;
-
+    !_isMove && clickCb(event);
+    _isMove = false;
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
 
@@ -563,15 +572,13 @@ const SpinControls = function (object, trackBallRadius, camera, domElement) {
 
   function onTouchStart(event) {
     if (_this.enabled === false) return;
-
     _this.handleTouchStart(event);
-
     _this.handlePointerDown(event);
   }
 
   function onTouchMove(event) {
     if (_this.enabled === false || !_isPointerDown) return;
-
+    _isMove = true;
     event.preventDefault();
     event.stopImmediatePropagation(); // Prevent other controls from working.
 
@@ -584,9 +591,9 @@ const SpinControls = function (object, trackBallRadius, camera, domElement) {
 
   function onTouchEnd(event) {
     if (_this.enabled === false) return;
-
     _this.handlePointerUp(event);
-
+    !_isMove && clickCb(event);
+    _isMove = false;
     // override handlePointerUp if finger still down
     if (event.touches.length > 0) {
       _isPointerDown = true;
