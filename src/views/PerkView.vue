@@ -31,11 +31,13 @@ export default defineComponent({
     appStore.setPreloaderValue(true);
     const auctionInactive = () => {
       inactiveTimer.value = true;
+      router.push({
+        name: ROUTES.PERKS.name,
+      });
     };
     getPerk(currentPerkId)
       .then((data) => {
         perk.value = data;
-        console.log(data);
       })
       .catch(() => router.push({ name: ROUTES.PERKS.name }))
       .finally(() => appStore.setPreloaderValue(false));
