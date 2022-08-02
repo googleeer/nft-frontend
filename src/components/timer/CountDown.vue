@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, onBeforeUnmount, onMounted, ref } from "vue";
 import moment from "moment-timezone";
-import router from "@/router";
 
 export default defineComponent({
   name: "PerkView",
@@ -35,10 +34,6 @@ export default defineComponent({
         timeObj.value.mm = minutes < 10 ? "0" + minutes : minutes.toString();
         timeObj.value.hh = hours < 10 ? "0" + hours : hours.toString();
         timeObj.value.dd = days < 10 ? "0" + days : days.toString();
-        console.log(durationWithTimezone);
-        if (durationWithTimezone >= -1961289000) {
-          context.emit("auctionInactive", true);
-        }
         if (durationWithTimezone >= 0) {
           context.emit("auctionInactive", true);
           clearInterval(interval.value);
