@@ -28,6 +28,8 @@ export default defineComponent({
     const animationState = ref<"close" | "open" | "running">("close");
     const onClick = ref();
     const loadedModelsCount = ref(0);
+    const count = ref(0);
+    const messages = ref<any[]>([]);
 
     onMounted(() => {
       let camera: PerspectiveCamera,
@@ -156,11 +158,14 @@ export default defineComponent({
           });
 
           onClick.value = (event: MouseEvent) => {
+            count.value++;
             const x = (event.clientX / window.innerWidth) * 2 - 1;
             const y = -(event.clientY / window.innerHeight) * 2 + 1;
             const rayCaster = new THREE.Raycaster();
             rayCaster.setFromCamera({ x, y }, camera);
             const intersects = rayCaster.intersectObjects([cube], true);
+
+            messages.value.push(intersects.length);
 
             console.log(intersects);
             !!intersects[0] &&
@@ -232,6 +237,8 @@ export default defineComponent({
       open,
       onClick,
       loadedModelsCount,
+      count,
+      messages,
     };
   },
 });
@@ -243,6 +250,8 @@ export default defineComponent({
     :count="loadedModelsCount"
     :count-of="2"
   />
+  {{ count }}
+  {{ messages }}
   <div class="threeViewer" ref="containerRef" @click="onClick"></div>
 </template>
 
