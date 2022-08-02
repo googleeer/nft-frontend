@@ -100,18 +100,17 @@ export default defineComponent({
 
     @keyframes dropa-#{$i} {
       from {
-        bottom: 0;
         opacity: 1;
+        //bottom: 0;
         transform: rotate(#{random(4)}deg);
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
       }
 
       100% {
-        //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -147,7 +146,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -183,7 +182,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -219,7 +218,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -256,7 +255,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -293,7 +292,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -329,7 +328,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
@@ -365,7 +364,7 @@ export default defineComponent({
         //top: -1%;
         left: unquote($l + random(4) + "%");
         right: unquote($l + random(4) + "%");
-        top: 0%;
+        top: -5%;
         opacity: 0.3;
       }
     }
