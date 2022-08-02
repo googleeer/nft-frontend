@@ -34,7 +34,6 @@ export default defineComponent({
         timeObj.value.mm = minutes < 10 ? "0" + minutes : minutes.toString();
         timeObj.value.hh = hours < 10 ? "0" + hours : hours.toString();
         timeObj.value.dd = days < 10 ? "0" + days : days.toString();
-
         if (durationWithTimezone >= 0) {
           context.emit("auctionInactive", true);
           clearInterval(interval.value);
