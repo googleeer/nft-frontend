@@ -250,9 +250,11 @@ export default defineComponent({
     :count="loadedModelsCount"
     :count-of="2"
   />
-  {{ count }}
-  {{ messages }}
   <div class="threeViewer" ref="containerRef" @click="onClick"></div>
+  <div class="test" @click="onClick">
+    {{ count }}
+    {{ messages }}
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -264,5 +266,16 @@ export default defineComponent({
   background-size: cover;
   background-position: center bottom;
   height: 100%;
+}
+
+.test {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 300px;
+  height: 300px;
+  background: green;
+  opacity: 0.3;
+  z-index: 1;
 }
 </style>
