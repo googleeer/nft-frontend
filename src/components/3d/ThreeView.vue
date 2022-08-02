@@ -44,7 +44,7 @@ export default defineComponent({
 
       function init() {
         camera = new THREE.PerspectiveCamera(
-          40,
+          45,
           window.innerWidth / window.innerHeight,
           0.1,
           20,
@@ -55,22 +55,22 @@ export default defineComponent({
           0.7428539023616042,
         );
 
+        console.log({ camera });
+
         scene = new THREE.Scene();
 
         new FBXLoader().setPath("/").load("podium.FBX", (object) => {
-          object.scale.multiplyScalar(0.001);
+          object.scale.multiplyScalar(0.0016);
+          object.position.set(0, -0.16, -0.3);
+          console.log("2q31232131231");
+
           object.traverse(function (child) {
             if (child.type === "Mesh") {
               child.castShadow = true;
               child.receiveShadow = true;
-
-              // child.material = new THREE.MeshStandardMaterial({ })
             }
 
-            console.log(child.type);
-            /* max to webgl 회전 보정 */
             if (child.type === "Group") {
-              console.log(child);
               child.rotation.x = Math.PI;
               child.rotation.y = Math.PI;
               child.rotation.z = Math.PI;
@@ -83,37 +83,43 @@ export default defineComponent({
 
           const light = new THREE.DirectionalLight(0xffffff, 1);
           scene.add(light);
-          light.position.set(1, 5, 10);
-
+          light.position.set(1, 5, 3);
+          //
           podium = object;
-          scene.add(object);
+          //
 
           const light2 = new THREE.DirectionalLight(0xffffff, 1);
           scene.add(light2);
-          light.position.set(-1, 5, -10);
+          light2.position.set(-1, 5, -10);
           scene.add(object);
+          console.log(scene.children);
+          object.rotation.x = 3.2;
           loadedModelsCount.value++;
         });
 
         new GLTFLoader().load(props.nftModel, function (gltf) {
           loadedModelsCount.value++;
-          scene.add(gltf.scene);
-
           const obj = gltf.scene;
-          cube = obj;
           obj.position.y += 0.1;
-
           const box = new THREE.Box3().setFromObject(obj);
           const center = box.getCenter(new THREE.Vector3());
-
-          // controls.target.copy(center);
-          //
-          // controls.target.y -= 0.05;
-          // controls.update();
-
           const boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+          const pivot = new THREE.Mesh(
+            new THREE.BoxGeometry(0.25, 0.25, 0.25),
+            new THREE.MeshBasicMaterial({
+              color: 0xff0000,
+              transparent: true,
+              visible: false,
+              opacity: 0.5,
+            }),
+          );
+          scene.add(pivot);
+          pivot.add(obj);
 
-          // controls.minDistance = boundingSphere.radius * 5;
+          cube = pivot;
+          pivot.position.y += 0.15;
+          pivot.rotation.x = 0.3;
+          obj.position.y -= center.y;
 
           mixer = new THREE.AnimationMixer(gltf.scene);
 
@@ -122,12 +128,15 @@ export default defineComponent({
 
             open.value = () => {
               animationState.value = "running";
+              cube.rotation.set(0, 0, 0);
+              cube.position.z = -0.4;
+              cube.position.y += 0.04;
+              cube.scale.set(1.1, 1.1, 1.1);
               anim.reset();
               anim.clampWhenFinished = true;
               anim.loop = THREE.LoopOnce;
               anim.paused = false;
               anim.play();
-
               setTimeout(() => {
                 anim.paused = true;
                 animationState.value = "open";
@@ -137,6 +146,12 @@ export default defineComponent({
             close.value = () => {
               anim.paused = false;
               animationState.value = "close";
+              setTimeout(() => {
+                cube.rotation.set(0, 0, 0);
+                cube.position.z = 0;
+                cube.position.y -= 0.04;
+                cube.scale.set(1, 1, 1);
+              }, 2000);
             };
           });
 
@@ -147,28 +162,24 @@ export default defineComponent({
             rayCaster.setFromCamera({ x, y }, camera);
             const intersects = rayCaster.intersectObjects([cube], true);
 
-            // console.log(intersects);
-            // !!intersects[0] &&
-            //   (animationState.value === "close"
-            //     ? open.value()
-            //     : animationState.value === "open"
-            //     ? close.value()
-            //     : null);
+            console.log(intersects);
+            !!intersects[0] &&
+              (animationState.value === "close"
+                ? open.value()
+                : animationState.value === "open"
+                ? close.value()
+                : null);
           };
 
           spinControl = new (SpinControls as any)(
             cube,
-            1,
+            boundingSphere.radius,
             camera,
             renderer.domElement,
           );
-          spinControl.rotateSensitivity = -3;
-          // spinControl.dampingFactor = 20;
-
-          // smooth options combo
-          // spinControl.setPointerToSphereMapping(
-          //   spinControl.POINTER_SPHERE_MAPPING.HOLROYD,
-          // );
+          // spinControl.spinAxisConstraint = new THREE.Vector3(1, 1, 1);
+          spinControl.dampingFactor = 0.5; // Decreases to keep spinning longer after pointer release. Default is 1.0
+          spinControl.rotateSensitivity = 0.3;
         });
 
         clock = new THREE.Clock();
@@ -188,12 +199,6 @@ export default defineComponent({
           new RoomEnvironment(),
           0.04,
         ).texture;
-
-        // controls = new OrbitControls(camera, renderer.domElement);
-        // controls.minDistance = 0.1;
-        // controls.maxDistance = 4;
-        // controls.target.set(0, 0, -0.2);
-        // controls.update();
 
         window.addEventListener("resize", onWindowResize, false);
       }
@@ -215,6 +220,7 @@ export default defineComponent({
 
         // if (cube) {
         //   cube.rotation.y += Math.sin(delta);
+        //   cube.rotation.z += Math.sin(delta) / 10;
         // }
         renderer.render(scene, camera);
       }
