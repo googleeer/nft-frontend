@@ -1,13 +1,14 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { PerspectiveCamera, Scene } from "three";
 import SceneViewLoader from "@/components/scene/SceneViewLoader.vue";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { SpinControls } from "./test";
+type SwipeEvent = MouseEvent | TouchEvent;
+
 export default defineComponent({
   name: "ThreeView",
   components: { SceneViewLoader },
@@ -28,8 +29,6 @@ export default defineComponent({
     const animationState = ref<"close" | "open" | "running">("close");
     const onClick = ref();
     const loadedModelsCount = ref(0);
-    const count = ref(0);
-    const messages = ref<any[]>([]);
 
     onMounted(() => {
       let camera: PerspectiveCamera,
@@ -37,8 +36,6 @@ export default defineComponent({
         renderer: any,
         mixer: any,
         clock: any,
-        controls: OrbitControls,
-        podium: any,
         spinControl: any,
         cube: any;
       init();
@@ -57,14 +54,11 @@ export default defineComponent({
           0.7428539023616042,
         );
 
-        console.log({ camera });
-
         scene = new THREE.Scene();
 
         new FBXLoader().setPath("/").load("podium.FBX", (object) => {
           object.scale.multiplyScalar(0.0016);
           object.position.set(0, -0.16, -0.3);
-          console.log("2q31232131231");
 
           object.traverse(function (child) {
             if (child.type === "Mesh") {
@@ -86,9 +80,6 @@ export default defineComponent({
           const light = new THREE.DirectionalLight(0xffffff, 1);
           scene.add(light);
           light.position.set(1, 5, 3);
-          //
-          podium = object;
-          //
 
           const light2 = new THREE.DirectionalLight(0xffffff, 1);
           scene.add(light2);
@@ -129,6 +120,7 @@ export default defineComponent({
             const anim = mixer.clipAction(clip);
 
             open.value = () => {
+              if (animationState.value === "running") return;
               animationState.value = "running";
               cube.rotation.set(0, 0, 0);
               cube.position.z = -0.4;
@@ -143,31 +135,32 @@ export default defineComponent({
                 anim.paused = true;
                 animationState.value = "open";
               }, 2300);
+              console.log(cube.rotation);
             };
 
             close.value = () => {
+              if (animationState.value === "running") return;
+              animationState.value = "running";
               anim.paused = false;
-              animationState.value = "close";
               setTimeout(() => {
                 cube.rotation.set(0, 0, 0);
                 cube.position.z = 0;
-                cube.position.y -= 0.04;
                 cube.scale.set(1, 1, 1);
-              }, 2000);
+                cube.position.y -= 0.04;
+                animationState.value = "close";
+              }, 1400);
             };
           });
 
-          onClick.value = (event: MouseEvent) => {
-            count.value++;
-            const x = (event.clientX / window.innerWidth) * 2 - 1;
-            const y = -(event.clientY / window.innerHeight) * 2 + 1;
+          onClick.value = (event: SwipeEvent) => {
+            const getCoordinate = () =>
+              "changedTouches" in event ? event?.changedTouches?.[0] : event;
+            const x = (getCoordinate().pageX / window.innerWidth) * 2 - 1;
+            const y = -(getCoordinate().pageY / window.innerHeight) * 2 + 1;
             const rayCaster = new THREE.Raycaster();
             rayCaster.setFromCamera({ x, y }, camera);
             const intersects = rayCaster.intersectObjects([cube], true);
 
-            messages.value.push(intersects.length);
-
-            console.log(intersects);
             !!intersects[0] &&
               (animationState.value === "close"
                 ? open.value()
@@ -181,8 +174,8 @@ export default defineComponent({
             boundingSphere.radius,
             camera,
             renderer.domElement,
+            onClick.value,
           );
-          // spinControl.spinAxisConstraint = new THREE.Vector3(1, 1, 1);
           spinControl.dampingFactor = 0.5; // Decreases to keep spinning longer after pointer release. Default is 1.0
           spinControl.rotateSensitivity = 0.3;
         });
@@ -233,12 +226,7 @@ export default defineComponent({
 
     return {
       containerRef,
-      close,
-      open,
-      onClick,
       loadedModelsCount,
-      count,
-      messages,
     };
   },
 });
@@ -250,11 +238,7 @@ export default defineComponent({
     :count="loadedModelsCount"
     :count-of="2"
   />
-  <div class="threeViewer" ref="containerRef" @click="onClick"></div>
-  <div class="test" @click="onClick">
-    {{ count }}
-    {{ messages }}
-  </div>
+  <div class="threeViewer" ref="containerRef"></div>
 </template>
 
 <style lang="scss" scoped>
@@ -266,16 +250,5 @@ export default defineComponent({
   background-size: cover;
   background-position: center bottom;
   height: 100%;
-}
-
-.test {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 300px;
-  height: 300px;
-  background: green;
-  opacity: 0.3;
-  z-index: 1;
 }
 </style>
